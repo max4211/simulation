@@ -3,20 +3,22 @@ package simulation;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Simulate {
+public class Simulation {
 
     // Simulation dynamic variables
     private Cell[][] myGrid;
     private int myStep;
+    private double animationRate;
 
     // Simulation constant variables
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
-    public Simulate(Cell[][] grid, int[] rDelta, int[] cDelta) {
+    public Simulation(Cell[][] grid, int[] rDelta, int[] cDelta, int speed) {
         this.myGrid = grid;
         this.ROW_DELTA = rDelta;
         this.COL_DELTA = cDelta;
+        this.animationRate = speed;
     }
 
     private void updateGrid() {

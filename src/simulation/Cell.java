@@ -6,6 +6,10 @@ public abstract class Cell {
     private int myState;
     private int nextState;
 
+    public Cell(int initialState) {
+        this.myState = initialState;
+    }
+
     public abstract void determineState(Collection<Integer> neighborStates);
 
     public void updateState() { this.myState = this.nextState; }
