@@ -12,7 +12,6 @@ The cell has an update method that is determined by the simulation's rules.
 
 - What is the grid? Does it have any behaviors? Who needs to know about it?
 
-
 - What information about a simulation needs to be the configuration file?
 
 - How is the graphical view of the simulation updated after all the cells have been updated?
