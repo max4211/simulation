@@ -1,12 +1,9 @@
 package cellsociety;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
 /**
  * Feel free to completely change this code or delete it entirely. 
  */
-public class Main extends Application {
+public class Main {
     /**
      * Start of the program.
      */
@@ -14,8 +11,4 @@ public class Main extends Application {
         System.out.println("Hello world");
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        
-    }
 }

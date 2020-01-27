@@ -3,10 +3,14 @@ package simulation;
 import java.util.Collection;
 
 public abstract class Cell {
-    private int myState;
-    private int nextState;
+    private double myState;
+    private double nextState;
 
-    public Cell(int initialState) {
+    /**
+     *
+     * @param initialState cell of set initial state
+     */
+    public Cell(double initialState) {
         this.myState = initialState;
     }
 
@@ -14,5 +18,5 @@ public abstract class Cell {
 
     public void updateState() { this.myState = this.nextState; }
 
-    public int getState() { return this.myState; }
+    public double getState() { return this.myState; }
 }

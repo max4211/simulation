@@ -7,27 +7,41 @@ public class Simulation {
 
     // Simulation dynamic variables
     private Cell[][] myGrid;
-    private int myStep;
-    private double animationRate;
 
     // Simulation constant variables
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
-    public Simulation(Cell[][] grid, int[] rDelta, int[] cDelta, int speed) {
+    public Simulation(String fileName) {
+        readFile(fileName);
+    }
+
+    private void readFile(String fileName) {
+        // Parse XML file, create pseudo constrsuctor
+        String type = ""; // Read from file
+        if (type.equals("Fire")) {
+            createFireSim(fileName);
+        } else {
+
+        }
+
+        /*
+        Cell[][] grid; int[] rDelta; int[] cDelta;
         this.myGrid = grid;
         this.ROW_DELTA = rDelta;
         this.COL_DELTA = cDelta;
-        this.animationRate = speed;
+         */
     }
 
-    private void updateGrid() {
-        Cell cell;
-        // Iterate through cells, first determining updates, then doing them
+    private void createFireSim(String fileName) {
     }
 
-    private Collection<Integer> getNeighborStates(int row, int col) {
-        Collection<Integer> neighborStates = new ArrayList<Integer>();
+    public double[][] updateGrid() {
+        return new double[0][0];
+    }
+
+    private Collection<Double> getNeighborStates(int row, int col) {
+        Collection<Double> neighborStates = new ArrayList<Double>();
         int r2; int c2;
         for (int i = 0; i < ROW_DELTA.length; i ++) {
             r2 = row + ROW_DELTA[i]; c2 = col + COL_DELTA[i];
