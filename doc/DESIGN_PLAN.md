@@ -175,10 +175,12 @@ We wanted to create a cell whose implementation is flexible enough to be applied
 We have talked about using ints instead of doubles. This would probably simplify things and would work for most cases, but we wanted to leave the option open to create cells for which the state can be a value on a continuous gradient.
 
 ### Grid Design
-We decided thae the best way to store the grid would be as a 2D array. We chose this because it is easier to work with than other possible data structures and it makes it easy to a Cells and its neighbors.
+We decided that the best way to store the grid would be as a 2D array. We chose this because it is easier to work with than other possible data structures and it makes it easy to call a Cell and its neighbors.
 
 ### Cell Updates
-If the Simulation updated the states of the cells as it scanned through them, it would call errors as following cells used the updated data instead of the previous data. To avoid this problem, we decided to split the updating into two steps. In one step, each cell checks what its next state will be and 
+If the Simulation updated the states of the cells as it scanned through them, it would call errors as following cells used the updated data instead of the previous data. To avoid this problem, we decided to split the updating into two steps. First, each cell checks what its next state will be and then second, each cell updates itself to its next state. This way all the cells are updated at the same time. Additionally, Cell upates are only dependent on the state of its neighbors, not on the full object itself, so to preserve Cell integrity we only pass in a collection of neighborStates to determine what the next state should be.
+
+Another posibility would be to make a second Cell[][] grid that would hold the next state of the entire grid. The program could continuously update this grade based and then afterwords set the current grid equal to the second grid. The problem with this is that holding an entire other grid of Cell objects starts to use a lot of memory when the grid sizes get very large. The strategy we settled on seems to be a much less memory consuming and overall cleaner way of solving the problem. 
 
 
 ## Team Responsibilities
