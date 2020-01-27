@@ -178,28 +178,29 @@ We have talked about using ints instead of doubles. This would probably simplify
 We decided thae the best way to store the grid would be as a 2D array. We chose this because it is easier to work with than other possible data structures and it makes it easy to a Cells and its neighbors.
 
 ### Cell Updates
-If as the Simulation scanned through each cell, it also asked the cell to update, 
+If the Simulation updated the states of the cells as it scanned through them, it would call errors as following cells used the updated data instead of the previous data. To avoid this problem, we decided to split the updating into two steps. In one step, each cell checks what its next state will be and 
 
 
 ## Team Responsibilities
 
  * James - Back End
-
- * Max - Front End 
-
  * Braeden - Back End
+ * Max - Front End
+
+
+During the first sprint, James and Braeden will work on the first four steps under Simulation below together and divide the four remaining simulation types equally between us. Max will be working on the front-end visualization. When we are ready to integrate, the three of us will be working together.
 
 ### Basic Project Steps
 #### Simulation (Back End)
-Step 1: Figure out how we're creating .XML files
-Step 2: Figure out how we're reading .XML files
-Step 3: Implement Cell abstract class and Game of Life Cell class
-Step 4: Implement Simulation class
-Step 5: Divide and implement other cell/simulation types
+1. Figure out how we're creating .XML files
+2. Figure out how we're reading .XML files
+3. Implement Cell abstract class and Game of Life Cell class
+4. Implement Simulation class
+5. Divide and implement other cell/simulation types
 
 #### Visualization (Front End)
-Step 1: Research panes to determine concrete implementation
-Step 2: Create pane layout draft, approve with rest of team
-Step 3: Get user input to update Visualization instance variables and step rate
-Step 4: Populate graphical interface with 2D Color Array
-Step 5: Integrate with Simulation
+1. Research panes to determine concrete implementation
+2. Create pane layout draft, approve with rest of team
+3. Get user input to update Visualization instance variables and step rate
+4. Populate graphical interface with 2D Color Array
+5. Integrate with Simulation
