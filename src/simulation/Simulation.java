@@ -13,6 +13,7 @@ public class Simulation {
     public Simulation(String configFile){
         // Construct myGrid here depending on simulation type
         // Assign neighborhoods based on neighborhood attributes
+
     }
 
     public Color[][] getColorGrid() {
