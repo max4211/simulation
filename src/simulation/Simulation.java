@@ -1,43 +1,32 @@
 package simulation;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Simulation {
 
-    // Simulation dynamic variables
     private Cell[][] myGrid;
-
-    // Simulation constant variables
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
-    public Simulation(String fileName) {
-        readFile(fileName);
+    public Simulation(String configFile){
+        // Construct myGrid here depending on simulation type
+        // Assign neighborhoods based on neighborhood attributes
     }
 
-    private void readFile(String fileName) {
-        // Parse XML file, create pseudo constrsuctor
-        String type = ""; // Read from file
-        if (type.equals("Fire")) {
-            createFireSim(fileName);
-        } else {
-
-        }
-
-        /*
-        Cell[][] grid; int[] rDelta; int[] cDelta;
-        this.myGrid = grid;
-        this.ROW_DELTA = rDelta;
-        this.COL_DELTA = cDelta;
-         */
+    public Color[][] getColorGrid() {
+        updateGrid();
+        return new Color[0][0];
     }
 
-    private void createFireSim(String fileName) {
+    private void updateGrid() {
+        // Determine Cell updates
+        // Implement cell updates
     }
 
-    public double[][] updateGrid() {
-        return new double[0][0];
+    private boolean inBounds(int row, int col) {
+        return (row <= myGrid.length) && (col <= myGrid[0].length);
     }
 
     private Collection<Double> getNeighborStates(int row, int col) {
@@ -50,10 +39,6 @@ public class Simulation {
             }
         }
         return neighborStates;
-    }
-
-    private boolean inBounds(int r2, int c2) {
-        return (r2 <= myGrid.length) && (c2 <= myGrid[0].length);
     }
 
 }

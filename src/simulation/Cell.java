@@ -1,22 +1,33 @@
 package simulation;
 
+import java.awt.*;
 import java.util.Collection;
+import java.util.Map;
 
 public abstract class Cell {
     private double myState;
     private double nextState;
+    private Map<Double, Color> myColorMap;
 
-    /**
-     *
-     * @param initialState cell of set initial state
-     */
     public Cell(double initialState) {
         this.myState = initialState;
+        createColorMap();
     }
 
-    public abstract void determineState(Collection<Integer> neighborStates);
+    public abstract void createColorMap();
 
-    public void updateState() { this.myState = this.nextState; }
+    public abstract void determineState(Collection<Double> neighborStates);
+
+    public abstract double mapKey(double myState);
+
+    public void updateState() {
+        this.myState = this.nextState;
+    }
 
     public double getState() { return this.myState; }
+
+    public Color getColor() {
+        double key = mapKey(this.myState);
+        return this.myColorMap.get(key);
+    }
 }

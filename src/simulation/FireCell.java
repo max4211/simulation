@@ -12,8 +12,19 @@ public class FireCell extends Cell {
     }
 
     @Override
-    public void determineState(Collection<Integer> neighborStates) {
+    public void determineState(Collection<Double> neighborStates) {
 
+    }
+
+    @Override
+    public void createColorMap() {
+
+    }
+
+    @Override
+    public double mapKey(double myState) {
+
+        return myState;
     }
 }
 
