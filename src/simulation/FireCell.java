@@ -6,8 +6,8 @@ public class FireCell extends Cell {
 
     private double PROB_CATCH;
 
-    public FireCell(double initialState, double probCatch) {
-        super(initialState);
+    public FireCell(double initialState, int x, int y, double probCatch) {
+        super(initialState, x, y);
         this.PROB_CATCH = probCatch;
     }
 

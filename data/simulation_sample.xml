@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<class>
+    <SimulationConfig>
+        <height>1</height>
+        <width>1</width>
+        <type>DummyCell</type>
+        <neighborType>Moore</neighborType>
+        <cell>0 0 0</cell>
+        <cell>0 1 0</cell>
+    </SimulationConfig>
+</class>
