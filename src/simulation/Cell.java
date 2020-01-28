@@ -8,9 +8,13 @@ public abstract class Cell {
     private double myState;
     private double nextState;
     private Map<Double, Color> myColorMap;
+    private int myX;
+    private int myY;
 
-    public Cell(double initialState) {
+    public Cell(double initialState, int x, int y) {
         this.myState = initialState;
+        this.myX = x;
+        this.myY = y;
         createColorMap();
     }
 
