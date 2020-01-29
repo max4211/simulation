@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -21,21 +20,28 @@ import simulation.Simulation;
 
 public class Visualization extends Application {
 
+    // Sim and scene metadata
     private final int SCENE_HEIGHT = 500;
     private final int SCENE_WIDTH = 500;
-    private final int SIM_HEIGHT = 300;
-    private final int SIM_WIDTH = 300;
-    private final int TOP_PAD = 20;
-    private final int BOTTOM_PAD = 20;
-    private final int LEFT_PAD = 20;
-    private final int RIGHT_PAD = 20;
+    private final int SIM_HEIGHT = 400;
+    private final int SIM_WIDTH = 400;
+    private final Color STROKE_FILL = Color.BLACK;
+    private final double STROKE_WIDTH = 3;
+
+    // Padding values
+    private final int TOP_PAD = 5;
+    private final int BOTTOM_PAD = 5;
+    private final int LEFT_PAD = 5;
+    private final int RIGHT_PAD = 5;
     private final int H_GAP = 10;
     private final int V_GAP = 10;
     private final int BUTTON_SPACING = 10;
+
+    // Slider metadata
     private final int SLIDER_MIN = 0;
-    private final int SLIDER_MAX = 100;
-    private final int SLIDER_MAJOR_TICK = 20;
-    private final int SLIDER_MINOR_TICK = 5;
+    private final int SLIDER_MAX = 20;
+    private final int SLIDER_MAJOR_TICK = 5;
+    private final int SLIDER_MINOR_TICK = 1;
     private Simulation mySim;
 
     @Override
@@ -46,7 +52,7 @@ public class Visualization extends Application {
         GridPane myGrid = createSim();
 
         root.add(myGrid, 0, 0, 2, 4);
-        root.add(myHBox, 3, 5, 2, 1);
+        root.add(myHBox, 0, 5, 2, 1);
         root.setHalignment(myGrid, HPos.CENTER);
 
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
@@ -70,6 +76,8 @@ public class Visualization extends Application {
         for (int row = 0; row < totalRows; row ++) {
             for (int col = 0; col < totalCols; col ++) {
                 Rectangle myRectangle = new Rectangle(rectangleWidth, rectangleHeight);
+                myRectangle.setStroke(STROKE_FILL);
+                myRectangle.setStrokeWidth(STROKE_WIDTH);
                 myRectangle.setFill(colorGrid[row][col]);
                 grid.add(myRectangle, col, row, 1, 1);
             }
@@ -133,7 +141,7 @@ public class Visualization extends Application {
         slider.setMin(SLIDER_MIN);
         slider.setMax(SLIDER_MAX);
         slider.setValue((SLIDER_MAX + SLIDER_MIN)/2);
-        slider.setShowTickMarks(true);
+        slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         slider.setMajorTickUnit(SLIDER_MAJOR_TICK);
         slider.setMinorTickCount(SLIDER_MINOR_TICK);
