@@ -1,14 +1,13 @@
 package visualization;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -27,6 +26,7 @@ public class Visualization extends Application {
     private final int SIM_WIDTH = 400;
     private final Color STROKE_FILL = Color.BLACK;
     private final double STROKE_WIDTH = 3;
+    private int SLIDER_SPEED;
 
     // Padding values
     private final int TOP_PAD = 5;
@@ -42,18 +42,20 @@ public class Visualization extends Application {
     private final int SLIDER_MAX = 20;
     private final int SLIDER_MAJOR_TICK = 5;
     private final int SLIDER_MINOR_TICK = 1;
+    private final int SLIDER_SPACING = 20;
     private Simulation mySim;
 
     @Override
     public void start(Stage primaryStage) {
 
         GridPane root = createGrid();
-        HBox myHBox = createHBox();
+        HBox topHBox = createTopHBox();
+        HBox botHBox = createBottomHBox();
         GridPane myGrid = createSim();
 
         root.add(myGrid, 0, 0, 2, 4);
-        root.add(myHBox, 0, 5, 2, 1);
-        root.setHalignment(myGrid, HPos.CENTER);
+        root.add(topHBox, 0, 5, 2, 1);
+        root.add(botHBox, 0, 6, 2, 1);
 
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
 
@@ -93,17 +95,6 @@ public class Visualization extends Application {
         return myColors;
     }
 
-    private ImageView createSimView() {
-        ImageView imageView = new ImageView();
-        Image myImage = new Image("simulation_test.JPG");
-        imageView.setImage(myImage);
-        imageView.setFitWidth(SCENE_WIDTH/1.5);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        imageView.setCache(true);
-        return imageView;
-    }
-
     private GridPane createGrid() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -113,9 +104,24 @@ public class Visualization extends Application {
         return grid;
     }
 
-    private HBox createHBox() {
+    private HBox createBottomHBox() {
+        HBox box = new HBox(SLIDER_SPACING);
+        box.setAlignment((Pos.CENTER));
+        Slider mySlider = createSlider();
+        Label sliderLabel = new Label("speed");
+        mySlider.valueProperty().addListener((
+                ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) -> {
+            sliderLabel.setText(String.format("%.2f", new_val));
+        });
+        box.getChildren().add(mySlider);
+        box.getChildren().add(sliderLabel);
+        return box;
+    }
+
+    private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
-        box.setAlignment((Pos.BOTTOM_CENTER));
+        box.setAlignment((Pos.CENTER));
         Button pauseButton = createButton("Pause", "Pressed Pause");
         Button playButton = createButton("Play", "Pressed Play");
         Button stepButton = createButton("Step", "Pressed Step");
@@ -124,7 +130,6 @@ public class Visualization extends Application {
         box.getChildren().add(playButton);
         box.getChildren().add(stepButton);
         box.getChildren().add(loadButton);
-        box.getChildren().add(createSlider());
         return box;
     }
 
