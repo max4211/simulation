@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import simulation.Simulation;
@@ -44,6 +45,10 @@ public class Visualization extends Application {
     private final int SLIDER_MAJOR_TICK = 4;
     private final int SLIDER_MINOR_TICK = 1;
     private final int SLIDER_SPACING = 20;
+
+    // Simulation metadata
+    private boolean SIM_PAUSED = true;
+    private boolean SIM_STEP = false;
     private Simulation mySim;
 
     @Override
@@ -126,10 +131,10 @@ public class Visualization extends Application {
     private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
-        Button pauseButton = createButton("Pause", "Pressed Pause");
-        Button playButton = createButton("Play", "Pressed Play");
-        Button stepButton = createButton("Step", "Pressed Step");
-        Button loadButton = createButton("Load", "Pressed Load");
+        Button pauseButton = createButton("Pause");
+        Button playButton = createButton("Play");
+        Button stepButton = createButton("Step");
+        Button loadButton = createButton("Load");
         box.getChildren().add(pauseButton);
         box.getChildren().add(playButton);
         box.getChildren().add(stepButton);
@@ -137,11 +142,35 @@ public class Visualization extends Application {
         return box;
     }
 
-    private Button createButton(String text, String action) {
+    private Button createButton(String text) {
         Button btn = new Button(text);
-        btn.setOnAction((ActionEvent e) -> {
-            System.out.println(action);
-        });
+        switch (text) {
+            case("Pause"):
+                btn.setOnAction((ActionEvent e) -> {
+                    SIM_PAUSED = true;
+                    System.out.println("Pausing Simulation");
+                });
+                break;
+            case("Play"):
+                btn.setOnAction((ActionEvent e) -> {
+                    SIM_PAUSED = false;
+                    System.out.println("Playing Simulation");
+                });
+                break;
+            case("Step"):
+                btn.setOnAction((ActionEvent e) -> {
+                    SIM_STEP = true;
+                    System.out.println("Stepping Simulation");
+                });
+                break;
+            case("Load"):
+                btn.setOnAction((ActionEvent e) -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Open Simulation XML File");
+                    System.out.println("Trying to open FileChooser");
+                });
+                break;
+        }
         return btn;
     }
 
