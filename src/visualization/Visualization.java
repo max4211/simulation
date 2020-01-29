@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import simulation.Simulation;
@@ -20,8 +21,8 @@ import simulation.Simulation;
 public class Visualization extends Application {
 
     // Sim and scene metadata
-    private final int SCENE_HEIGHT = 500;
-    private final int SCENE_WIDTH = 500;
+    private final int SCENE_HEIGHT = 550;
+    private final int SCENE_WIDTH = 550;
     private final int SIM_HEIGHT = 400;
     private final int SIM_WIDTH = 400;
     private final Color STROKE_FILL = Color.BLACK;
@@ -35,12 +36,12 @@ public class Visualization extends Application {
     private final int RIGHT_PAD = 5;
     private final int H_GAP = 10;
     private final int V_GAP = 10;
-    private final int BUTTON_SPACING = 10;
+    private final int BUTTON_SPACING = 20;
 
     // Slider metadata
     private final int SLIDER_MIN = 0;
     private final int SLIDER_MAX = 20;
-    private final int SLIDER_MAJOR_TICK = 5;
+    private final int SLIDER_MAJOR_TICK = 4;
     private final int SLIDER_MINOR_TICK = 1;
     private final int SLIDER_SPACING = 20;
     private Simulation mySim;
@@ -81,7 +82,7 @@ public class Visualization extends Application {
                 myRectangle.setStroke(STROKE_FILL);
                 myRectangle.setStrokeWidth(STROKE_WIDTH);
                 myRectangle.setFill(colorGrid[row][col]);
-                grid.add(myRectangle, col, row, 1, 1);
+                grid.add(myRectangle, col, row ); // Default to col:row span = 1
             }
         }
         return grid;
@@ -108,14 +109,17 @@ public class Visualization extends Application {
         HBox box = new HBox(SLIDER_SPACING);
         box.setAlignment((Pos.CENTER));
         Slider mySlider = createSlider();
-        Label sliderLabel = new Label("speed");
+        Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
+        sliderLabel.setFont(Font.font(24));
+        Label sliderUnits = new Label ("animations/second");
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
-            sliderLabel.setText(String.format("%.2f", new_val));
+            sliderLabel.setText(String.format("%.0f", new_val));
         });
         box.getChildren().add(mySlider);
         box.getChildren().add(sliderLabel);
+        box.getChildren().add(sliderUnits);
         return box;
     }
 
@@ -145,7 +149,8 @@ public class Visualization extends Application {
         Slider slider = new Slider();
         slider.setMin(SLIDER_MIN);
         slider.setMax(SLIDER_MAX);
-        slider.setValue((SLIDER_MAX + SLIDER_MIN)/2);
+        slider.setValue(((double) SLIDER_MAX + SLIDER_MIN)/2);
+        slider.setSnapToTicks(true);
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         slider.setMajorTickUnit(SLIDER_MAJOR_TICK);
@@ -154,6 +159,9 @@ public class Visualization extends Application {
         return slider;
     }
 
+    // TODO: Implement step with lambda animation functionality
+    // IDEA: Implement updates similar to MIPS processor
+    // Set flag property to update grid, then once update is done set this to off
     private void step() {
 
     }
