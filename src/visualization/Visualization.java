@@ -26,8 +26,8 @@ import java.util.TimerTask;
 public class Visualization extends Application {
 
     // Sim and scene metadata
-    private final int SCENE_HEIGHT = 550;
-    private final int SCENE_WIDTH = 550;
+    private final int SCENE_HEIGHT = 520;
+    private final int SCENE_WIDTH = 420;
     private final int SIM_HEIGHT = 400;
     private final int SIM_WIDTH = 400;
     private final Color STROKE_FILL = Color.BLACK;
@@ -41,6 +41,7 @@ public class Visualization extends Application {
     private final int H_GAP = 10;
     private final int V_GAP = 10;
     private final int BUTTON_SPACING = 20;
+    private final int SLIDER_SPACING = 20;
 
     // Viewer objects
     private Slider mySlider;
@@ -48,13 +49,6 @@ public class Visualization extends Application {
     private ToggleButton myPlayButton;
     private ToggleButton myStepButton;
     private ToggleButton myLoadButton;
-
-    // Slider metadata
-    private final int SLIDER_MIN = 0;
-    private final int SLIDER_MAX = 20;
-    private final int SLIDER_MAJOR_TICK = 4;
-    private final int SLIDER_MINOR_TICK = 1;
-    private final int SLIDER_SPACING = 20;
 
     // Simulation metadata
     private final int FRAME_RATE = 10;
@@ -119,14 +113,14 @@ public class Visualization extends Application {
     private HBox createBottomHBox() {
         HBox box = new HBox(SLIDER_SPACING);
         box.setAlignment((Pos.CENTER));
-        mySlider = createSlider();
+        mySlider = new AnimationSlider();
         Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
         sliderLabel.setFont(Font.font(24));
         Label sliderUnits = new Label ("animations/second");
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
-            sliderLabel.setText(String.format("%.0f", new_val));
+            sliderLabel.setText(String.format("%.2f", new_val));
             myPlayButton.setSelected(true);
             clearTimer();
         });
@@ -185,20 +179,6 @@ public class Visualization extends Application {
                 break;
         }
         return btn;
-    }
-
-    private Slider createSlider() {
-        Slider slider = new Slider();
-        slider.setMin(SLIDER_MIN);
-        slider.setMax(SLIDER_MAX);
-        slider.setValue(SLIDER_MIN); //((double) SLIDER_MAX + SLIDER_MIN)/2);
-        slider.setSnapToTicks(true);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(true);
-        slider.setMajorTickUnit(SLIDER_MAJOR_TICK);
-        slider.setMinorTickCount(SLIDER_MINOR_TICK);
-        slider.setBlockIncrement(SLIDER_MINOR_TICK);
-        return slider;
     }
 
     private void step() {
@@ -280,6 +260,7 @@ public class Visualization extends Application {
         fileStage.setTitle("Open Simulation XML File");
         FileChooser fileChooser = new FileChooser();
         mySimulation = new Simulation(fileChooser.showOpenDialog(fileStage));
+        myPauseButton.setSelected(true);
         System.out.println("Created simulation from fileChooser");
     }
 
