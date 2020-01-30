@@ -1,5 +1,7 @@
 package visualization;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import simulation.Simulation;
 
 
@@ -51,29 +54,35 @@ public class Visualization extends Application {
     private final int SLIDER_SPACING = 20;
 
     // Simulation metadata
-    private boolean SIM_PAUSED = true;
-    private boolean SIM_STEP = false;
+    private final int FRAME_RATE = 10;
     private int ANIMATION_RATE;
     private Simulation mySim;
+    private Color[][] myColorGrid;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
+        Scene myScene = createScene();
+        stage.setTitle("CA Simulation Test");
+        stage.setScene(myScene);
+        stage.sizeToScene();
+        stage.show();
+        KeyFrame frame = new KeyFrame(Duration.millis(FRAME_RATE), e -> step());
+        Timeline animation = new Timeline();
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.getKeyFrames().add(frame);
+        animation.play();
+    }
 
+    private Scene createScene() {
         GridPane root = createGrid();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
         GridPane myGrid = createSim();
-
         root.add(myGrid, 0, 0, 2, 4);
         root.add(topHBox, 0, 5, 2, 1);
         root.add(botHBox, 0, 6, 2, 1);
-
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-
-        primaryStage.setTitle("CA Simulation Test");
-        primaryStage.setScene(scene);
-        primaryStage.sizeToScene();
-        primaryStage.show();
+        return scene;
     }
 
     private GridPane createSim() {
@@ -126,6 +135,7 @@ public class Visualization extends Application {
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
             sliderLabel.setText(String.format("%.0f", new_val));
+            myPlayButton.setSelected(true);
         });
         box.getChildren().add(mySlider);
         box.getChildren().add(sliderLabel);
@@ -166,26 +176,21 @@ public class Visualization extends Application {
         switch (text) {
             case("Pause"):
                 btn.setOnAction((ActionEvent e) -> {
-                    SIM_PAUSED = true;
                     System.out.println("Pausing Simulation");
                 });
                 break;
             case("Play"):
                 btn.setOnAction((ActionEvent e) -> {
-                    SIM_PAUSED = false;
                     System.out.println("Playing Simulation");
                 });
                 break;
             case("Step"):
                 btn.setOnAction((ActionEvent e) -> {
-                    SIM_STEP = true;
                     System.out.println("Stepping Simulation");
                 });
                 break;
             case("Load"):
                 btn.setOnAction((ActionEvent e) -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Open Simulation XML File");
                     System.out.println("Trying to open FileChooser");
                 });
                 break;
@@ -211,6 +216,37 @@ public class Visualization extends Application {
     // IDEA: Implement updates similar to MIPS processor
     // Set flag property to update grid, then once update is done set this to off
     private void step() {
+        if (myStepButton.isSelected()) {
+            stepSelected();
+        } else if (myPauseButton.isSelected()) {
+            pauseSelected();
+        } else if (myPlayButton.isSelected()) {
+            playSelected();
+        } else if (myLoadButton.isSelected()) {
+            loadSelected();
+        }
+    }
 
+    private void stepSelected() {
+        // myColorGrid = mySim.getColorGrid();
+        myStepButton.setSelected(false);
+        System.out.println("myStepButton deselected");
+    }
+
+    private void pauseSelected() {
+        ANIMATION_RATE = Integer.MAX_VALUE;
+    }
+
+    private void playSelected() {
+        ANIMATION_RATE = (int) mySlider.getValue();
+    }
+
+    private void loadSelected() {
+        myLoadButton.setSelected(false);
+        Stage fileStage = new Stage();
+        fileStage.setTitle("Open Simulation XML File");
+        FileChooser fileChooser = new FileChooser();
+        mySim = new Simulation(fileChooser.showOpenDialog(fileStage));
+        System.out.println("Created simulation from fileChooser");
     }
 }

@@ -1,8 +1,10 @@
 package simulation;
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import javafx.scene.paint.Color;
 
 public class Simulation {
 
@@ -10,7 +12,7 @@ public class Simulation {
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
-    public Simulation(String configFile){
+    public Simulation(File configFile){
         // Construct myGrid here depending on simulation type
         // Assign neighborhoods based on neighborhood attributes
 
