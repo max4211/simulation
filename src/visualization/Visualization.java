@@ -6,9 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -16,7 +14,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
 import simulation.Simulation;
 
 
@@ -41,11 +38,10 @@ public class Visualization extends Application {
 
     // Viewer objects
     private Slider mySlider;
-    private Button myPauseButton;
-    private Button myPlayButton;
-    private Button myStepButton;
-    private Button myLoadButton;
-    private ToggleButton myToggleButton;
+    private ToggleButton myPauseButton;
+    private ToggleButton myPlayButton;
+    private ToggleButton myStepButton;
+    private ToggleButton myLoadButton;
 
     // Slider metadata
     private final int SLIDER_MIN = 0;
@@ -153,12 +149,20 @@ public class Visualization extends Application {
         box.getChildren().add(myPlayButton);
         box.getChildren().add(myStepButton);
         box.getChildren().add(myLoadButton);
-
+        createToggleGroup();
         return box;
     }
 
-    private Button createButton(String text) {
-        Button btn = new Button(text);
+    private void createToggleGroup() {
+        ToggleGroup myToggleGroup = new ToggleGroup();
+        myPauseButton.setToggleGroup(myToggleGroup);
+        myPlayButton.setToggleGroup(myToggleGroup);
+        myStepButton.setToggleGroup(myToggleGroup);
+        myLoadButton.setToggleGroup(myToggleGroup);
+    }
+
+    private ToggleButton createButton(String text) {
+        ToggleButton btn = new ToggleButton(text);
         switch (text) {
             case("Pause"):
                 btn.setOnAction((ActionEvent e) -> {
