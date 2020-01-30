@@ -29,6 +29,7 @@ public class DummySimulationConfig {
         initialCells.addAll(Arrays.asList(cells));
     }
 
+
     public Object[] returnData(){
         Object[] ret = {height, width, simType, neighborType, initialCells};
         return ret;

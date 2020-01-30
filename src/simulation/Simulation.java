@@ -14,7 +14,7 @@ public class Simulation {
     public Simulation(String configFile){
         // Construct myGrid here depending on simulation type
         // Assign neighborhoods based on neighborhood attributes
-        SimulationConfig simCon  = new SimulationConfig(configFile);
+        DummySimulationConfig simCon  = new DummySimulationConfig(configFile);
         Object[] data = simCon.returnData();
         int height = (int)data[0];
         int width = (int)data[1];
