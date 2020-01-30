@@ -3,6 +3,7 @@ package simulation;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Simulation {
 
@@ -13,6 +14,13 @@ public class Simulation {
     public Simulation(String configFile){
         // Construct myGrid here depending on simulation type
         // Assign neighborhoods based on neighborhood attributes
+        SimulationConfig simCon  = new SimulationConfig(configFile);
+        Object[] data = simCon.returnData();
+        int height = (int)data[0];
+        int width = (int)data[1];
+        String simType = (String)data[2];
+        String neighborType = (String) data[3];
+        List<String> initialCells = (List<String>) data[4];
 
     }
 
