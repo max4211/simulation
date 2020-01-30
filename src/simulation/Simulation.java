@@ -58,7 +58,13 @@ public class Simulation {
 
     public Color[][] getColorGrid() {
         updateGrid();
-        return new Color[0][0];
+        Color[][] colorGrid = new Color[myGrid.length][myGrid[0].length];
+        for(int row=0; row<colorGrid.length; row++){
+            for(int col=0; col<colorGrid.length; col++){
+                colorGrid[row][col] = myGrid[row][col].getColor();
+            }
+        }
+        return colorGrid;
     }
 
     private void updateGrid() {
@@ -91,6 +97,7 @@ public class Simulation {
         return neighborStates;
     }
 
+    // this main method is here for testing - not supposed to be part of the final build
     public static void main(String[] args) throws Exception {
         // filename doesn't matter for now because the program never actually uses it
         Simulation sim = new Simulation(new File("blah blah blah"));
@@ -108,7 +115,6 @@ public class Simulation {
         System.out.println();
         System.out.println("Row Delta:  "+ Arrays.toString(sim.ROW_DELTA));
         System.out.println("Col Delta:  "+ Arrays.toString(sim.COL_DELTA));
-
     }
 
 }
