@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -28,7 +29,6 @@ public class Visualization extends Application {
     private final int SIM_WIDTH = 400;
     private final Color STROKE_FILL = Color.BLACK;
     private final double STROKE_WIDTH = 3;
-    private int SLIDER_SPEED;
 
     // Padding values
     private final int TOP_PAD = 5;
@@ -38,6 +38,14 @@ public class Visualization extends Application {
     private final int H_GAP = 10;
     private final int V_GAP = 10;
     private final int BUTTON_SPACING = 20;
+
+    // Viewer objects
+    private Slider mySlider;
+    private Button myPauseButton;
+    private Button myPlayButton;
+    private Button myStepButton;
+    private Button myLoadButton;
+    private ToggleButton myToggleButton;
 
     // Slider metadata
     private final int SLIDER_MIN = 0;
@@ -49,6 +57,7 @@ public class Visualization extends Application {
     // Simulation metadata
     private boolean SIM_PAUSED = true;
     private boolean SIM_STEP = false;
+    private int ANIMATION_RATE;
     private Simulation mySim;
 
     @Override
@@ -113,7 +122,7 @@ public class Visualization extends Application {
     private HBox createBottomHBox() {
         HBox box = new HBox(SLIDER_SPACING);
         box.setAlignment((Pos.CENTER));
-        Slider mySlider = createSlider();
+        mySlider = createSlider();
         Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
         sliderLabel.setFont(Font.font(24));
         Label sliderUnits = new Label ("animations/second");
@@ -128,17 +137,23 @@ public class Visualization extends Application {
         return box;
     }
 
+    private ToggleButton createToggleButton() {
+        ToggleButton toggleButton = new ToggleButton("Animate");
+        return toggleButton;
+    }
+
     private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
-        Button pauseButton = createButton("Pause");
-        Button playButton = createButton("Play");
-        Button stepButton = createButton("Step");
-        Button loadButton = createButton("Load");
-        box.getChildren().add(pauseButton);
-        box.getChildren().add(playButton);
-        box.getChildren().add(stepButton);
-        box.getChildren().add(loadButton);
+        myPauseButton = createButton("Pause");
+        myPlayButton = createButton("Play");
+        myStepButton = createButton("Step");
+        myLoadButton = createButton("Load");
+        box.getChildren().add(myPauseButton);
+        box.getChildren().add(myPlayButton);
+        box.getChildren().add(myStepButton);
+        box.getChildren().add(myLoadButton);
+
         return box;
     }
 
@@ -178,7 +193,7 @@ public class Visualization extends Application {
         Slider slider = new Slider();
         slider.setMin(SLIDER_MIN);
         slider.setMax(SLIDER_MAX);
-        slider.setValue(((double) SLIDER_MAX + SLIDER_MIN)/2);
+        slider.setValue(SLIDER_MIN); //((double) SLIDER_MAX + SLIDER_MIN)/2);
         slider.setSnapToTicks(true);
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
