@@ -13,10 +13,14 @@ public class Simulation {
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
+    /**
+     * Constructs myGrid depending on the simulation type and according to the
+     * information from SimulationConfig. Also builds ROW_DELTA and COL_DELTA.
+     *
+     * @param configFile the .XML file to build the simulation from
+     * @throws Exception if simType or neighborType are unexpected values
+     */
     public Simulation(File configFile) throws Exception {
-        // Construct myGrid here depending on simulation type
-        // Assign neighborhoods based on neighborhood attributes
-
         // get data from the SimulationConfig class
         // ~~~~~ this chunk should be changed when I get a working SimulationConfig ~~~~~
         DummySimulationConfig simCon  = new DummySimulationConfig(configFile);
@@ -30,6 +34,11 @@ public class Simulation {
 
         // loop through initialCells and fill myGrid
         myGrid = new Cell[height][width];
+        fillGrid(simType, initialCells);
+        createDeltaArrays(neighborType);
+    }
+
+    private void fillGrid(String simType, List<String> initialCells) throws Exception {
         for (String cellString : initialCells){
             String[] cellData = cellString.split(" ");
 
@@ -43,8 +52,9 @@ public class Simulation {
             }else throw new Exception("Simulation Type Not Accepted");
             myGrid[x][y] = newCell;
         }
+    }
 
-        // create set ROW_DELTA and COL_DELTA based on neighborType
+    private void createDeltaArrays(String neighborType) throws Exception {
         if(neighborType.equals("MOORE")){
             COL_DELTA = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
             ROW_DELTA = new int[]{0, -1, -1, -1, 0, 1, 1, 1};
@@ -69,16 +79,25 @@ public class Simulation {
 
     private void updateGrid() {
         // Determine Cell updates
+        for(int row=0; row<myGrid.length; row++){
+            for(int col=0; col<myGrid[0].length; col++){
+                myGrid[row][col].determineState(getNeighborStates(row, col));
+            }
+        }
+
         // Implement cell updates
+        for(int row=0; row<myGrid.length; row++){
+            for(int col=0; col<myGrid[0].length; col++){
+                myGrid[row][col].updateState();
+            }
+        }
 
     }
-
 
     private boolean inBounds(int row, int col) {
         return (row <= myGrid.length) && (col <= myGrid[0].length)
                 && (row >= 0) && (col >= 0);
     }
-
 
     /**
      * @param row row cell whose neighbors are being requested
