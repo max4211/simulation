@@ -50,7 +50,7 @@ public class SimulationConfig {
                     NodeList cellList = eElement.getElementsByTagName("cell");
                     for(int cellItr = 0; cellItr < cellList.getLength(); cellItr++){
                         Element initialCell = (Element) cellList.item(cellItr);
-                        System.out.println(initialCell.);
+                        System.out.println(initialCell);
 
                     }
 

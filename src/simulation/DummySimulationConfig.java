@@ -13,20 +13,22 @@ import java.util.List;
 
 public class DummySimulationConfig {
 
-    private int height;
-    private int width;
-    private String simType;
-    private String neighborType;
-    private List<String> initialCells;
+    public int height;
+    public int width;
+    public String simType;
+    public String neighborType;
+    public List<String> initialCells;
 
-    public DummySimulationConfig(String filename){
+    public DummySimulationConfig(File configFile){
         height = 3;
         width = 3;
-        simType = "MOORE";
+        simType = "Spreading of Fire";
         neighborType = "MOORE";
-        String[] cells = {"0 0 "};
+        String[] cells = {"0 0 1", "0 1 1", "0 2 1",
+                          "1 0 1", "1 1 2", "1 2 1",
+                          "2 0 1", "2 1 1", "2 2 1",};
 
-        initialCells.addAll(Arrays.asList(cells));
+        initialCells = new ArrayList<>(Arrays.asList(cells));
     }
 
 
