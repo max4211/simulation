@@ -21,7 +21,6 @@ import simulation.Simulation;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 public class Visualization extends Application {
 
     // Sim and scene metadata
@@ -144,21 +143,6 @@ public class Visualization extends Application {
         return box;
     }
 
-    private void step() {
-        if (myStepButton.isSelected()) {
-            stepSelected();
-        } else if (myPauseButton.isSelected()) {
-            pauseSelected();
-        } else if (myPlayButton.isSelected()) {
-            playSelected();
-        } else if (myLoadButton.isSelected()) {
-            loadSelected();
-        }
-        if (updateSimFlag) {
-            updateSimGrid(mySimGrid);
-        }
-    }
-
     private GridPane updateSimGrid(GridPane grid) {
         updateSimFlag = false;
         System.out.println("Updating simulation grid");
@@ -180,6 +164,21 @@ public class Visualization extends Application {
         return grid;
     }
 
+    private void step() {
+        if (myStepButton.isSelected()) {
+            stepSelected();
+        } else if (myPauseButton.isSelected()) {
+            pauseSelected();
+        } else if (myPlayButton.isSelected()) {
+            playSelected();
+        } else if (myLoadButton.isSelected()) {
+            loadSelected();
+        }
+        if (updateSimFlag) {
+            updateSimGrid(mySimGrid);
+        }
+    }
+
     private void stepSelected() {
         updateSimFlag = true;
         myStepButton.setSelected(false);
@@ -190,10 +189,11 @@ public class Visualization extends Application {
         myTimer.schedule(new UpdateSimulationReminder(), Integer.MAX_VALUE);
     }
 
+    // TODO: Fix myTimer timing, currently too frequent
     private void playSelected() {
         if (!timerOn) {
             System.out.println("Scheduling timer action");
-            myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate());
+            myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate() * 1000);
             timerOn = true;         // May be unnecessary
         }
     }
@@ -206,7 +206,7 @@ public class Visualization extends Application {
         } else {
             guy = Math.pow(val, -1);
         }
-        System.out.println("slider value: " + val);
+        System.out.println("Slider Value: " + val);
         System.out.println("Animation Rate set to: " + guy);
         return guy;
     }
@@ -227,7 +227,7 @@ public class Visualization extends Application {
         System.out.println("Created simulation from fileChooser");
     }
 
-    class UpdateSimulationReminder extends TimerTask {
+    private class UpdateSimulationReminder extends TimerTask {
 
         /**
          * The action to be performed by this timer task.
