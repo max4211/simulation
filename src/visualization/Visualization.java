@@ -19,6 +19,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class Visualization extends Application {
 
@@ -55,14 +58,17 @@ public class Visualization extends Application {
 
     // Simulation metadata
     private final int FRAME_RATE = 10;
-    private int ANIMATION_RATE;
-    private Simulation mySim;
+    private Timer myTimer = new Timer();
+    private boolean timerOn = false;
+    private boolean updateSimFlag = true;
+    private Simulation mySimulation;
+    private GridPane mySimGrid;
     private Color[][] myColorGrid;
 
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
-        stage.setTitle("CA Simulation Test");
+        stage.setTitle("CA Simulation Project");
         stage.setScene(myScene);
         stage.sizeToScene();
         stage.show();
@@ -77,8 +83,8 @@ public class Visualization extends Application {
         GridPane root = createGrid();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
-        GridPane myGrid = createSim();
-        root.add(myGrid, 0, 0, 2, 4);
+        mySimGrid = createSim();
+        root.add(mySimGrid, 0, 0, 2, 4);
         root.add(topHBox, 0, 5, 2, 1);
         root.add(botHBox, 0, 6, 2, 1);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
@@ -90,20 +96,6 @@ public class Visualization extends Application {
         grid.setAlignment(Pos.CENTER);
         grid.setMinWidth(200);
         grid.setMinHeight(200);
-        Color[][] colorGrid = createColors();
-        int totalRows = colorGrid.length;
-        int totalCols = colorGrid[0].length;
-        double rectangleHeight = SIM_HEIGHT / totalRows;
-        double rectangleWidth = SIM_WIDTH / totalCols;
-        for (int row = 0; row < totalRows; row ++) {
-            for (int col = 0; col < totalCols; col ++) {
-                Rectangle myRectangle = new Rectangle(rectangleWidth, rectangleHeight);
-                myRectangle.setStroke(STROKE_FILL);
-                myRectangle.setStrokeWidth(STROKE_WIDTH);
-                myRectangle.setFill(colorGrid[row][col]);
-                grid.add(myRectangle, col, row ); // Default to col:row span = 1
-            }
-        }
         return grid;
     }
 
@@ -136,16 +128,12 @@ public class Visualization extends Application {
                 Number old_val, Number new_val) -> {
             sliderLabel.setText(String.format("%.0f", new_val));
             myPlayButton.setSelected(true);
+            clearTimer();
         });
         box.getChildren().add(mySlider);
         box.getChildren().add(sliderLabel);
         box.getChildren().add(sliderUnits);
         return box;
-    }
-
-    private ToggleButton createToggleButton() {
-        ToggleButton toggleButton = new ToggleButton("Animate");
-        return toggleButton;
     }
 
     private HBox createTopHBox() {
@@ -178,6 +166,7 @@ public class Visualization extends Application {
                 btn.setOnAction((ActionEvent e) -> {
                     System.out.println("Pausing Simulation");
                 });
+                btn.setSelected(true);
                 break;
             case("Play"):
                 btn.setOnAction((ActionEvent e) -> {
@@ -212,9 +201,6 @@ public class Visualization extends Application {
         return slider;
     }
 
-    // TODO: Implement step with lambda animation functionality
-    // IDEA: Implement updates similar to MIPS processor
-    // Set flag property to update grid, then once update is done set this to off
     private void step() {
         if (myStepButton.isSelected()) {
             stepSelected();
@@ -225,20 +211,67 @@ public class Visualization extends Application {
         } else if (myLoadButton.isSelected()) {
             loadSelected();
         }
+        if (updateSimFlag) {
+            updateSimGrid(mySimGrid);
+        }
+    }
+
+    private GridPane updateSimGrid(GridPane grid) {
+        updateSimFlag = false;
+        System.out.println("Updating simulation grid");
+        // myColorGrid = mySim.getColorGrid();
+        Color[][] colorGrid = createColors(); // TODO: myColorGrid
+        int totalRows = colorGrid.length;
+        int totalCols = colorGrid[0].length;
+        double rectangleHeight = SIM_HEIGHT / totalRows;
+        double rectangleWidth = SIM_WIDTH / totalCols;
+        for (int row = 0; row < totalRows; row ++) {
+            for (int col = 0; col < totalCols; col ++) {
+                Rectangle myRectangle = new Rectangle(rectangleWidth, rectangleHeight);
+                myRectangle.setStroke(STROKE_FILL);
+                myRectangle.setStrokeWidth(STROKE_WIDTH);
+                myRectangle.setFill(colorGrid[row][col]);
+                grid.add(myRectangle, col, row ); // Default to col:row span = 1
+            }
+        }
+        return grid;
     }
 
     private void stepSelected() {
-        // myColorGrid = mySim.getColorGrid();
+        updateSimFlag = true;
         myStepButton.setSelected(false);
         System.out.println("myStepButton deselected");
     }
 
     private void pauseSelected() {
-        ANIMATION_RATE = Integer.MAX_VALUE;
+        myTimer.schedule(new UpdateSimulationReminder(), Integer.MAX_VALUE);
     }
 
     private void playSelected() {
-        ANIMATION_RATE = (int) mySlider.getValue();
+        if (!timerOn) {
+            System.out.println("Scheduling timer action");
+            myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate());
+            timerOn = true;         // May be unnecessary
+        }
+    }
+
+    private double getAnimationRate() {
+        double val = mySlider.getValue();
+        double guy;
+        if (val == 0) {
+            guy = Integer.MAX_VALUE;
+        } else {
+            guy = Math.pow(val, -1);
+        }
+        System.out.println("slider value: " + val);
+        System.out.println("Animation Rate set to: " + guy);
+        return guy;
+    }
+
+    private void clearTimer() {
+        System.out.println("Purging timer");
+        myTimer.purge();
+        timerOn = false;
     }
 
     private void loadSelected() {
@@ -246,7 +279,20 @@ public class Visualization extends Application {
         Stage fileStage = new Stage();
         fileStage.setTitle("Open Simulation XML File");
         FileChooser fileChooser = new FileChooser();
-        mySim = new Simulation(fileChooser.showOpenDialog(fileStage));
+        mySimulation = new Simulation(fileChooser.showOpenDialog(fileStage));
         System.out.println("Created simulation from fileChooser");
+    }
+
+    class UpdateSimulationReminder extends TimerTask {
+
+        /**
+         * The action to be performed by this timer task.
+         */
+        @Override
+        public void run() {
+            System.out.println("Timer action run");
+            updateSimFlag = true;
+            timerOn = false;
+        }
     }
 }
