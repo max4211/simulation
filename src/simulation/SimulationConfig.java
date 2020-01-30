@@ -6,7 +6,24 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Class meant to encapsulate raw data on initial simulation configuration pulled from .xml file.
+ * This class is meant to keep the extraction of data from the .xml file separate from the Simulation class.
+ * Files in constructor are meant to follow the following format:
+ *
+ * <SimulationConfig>
+ *         <height>1</height> // integer
+ *         <width>1</width> // integer
+ *         <type>DummyCell</type> // String
+ *         <neighborType>Moore</neighborType> // String
+ *         <cell>0 0 0</cell> // String in the format "x-coord y-coord state" where state is an integer
+ *         <cell>0 1 0</cell>
+ * </SimulationConfig>
+ *
+ */
 
 public class SimulationConfig {
 
@@ -15,13 +32,19 @@ public class SimulationConfig {
     private int width;
     private String simType;
     private String neighborType;
-    private List<String> initialCells;
+    private List<String> initialCells = new ArrayList<>();
 
     public SimulationConfig(File path){
-        //myFile = path;
-        myFile = new File("data/simulation_sample.xml");
+        myFile = path;
+        //myFile = new File("data/simulation_sample.xml");
         buildDocument();
     }
+
+    public int getHeight(){ return this.height; }
+    public int getWidth(){ return this.width; }
+    public String getSimType(){ return this.simType; }
+    public String getNeighborType(){ return this.neighborType; }
+    public List<String> getCellStates(){ return this.initialCells; }
 
     private void buildDocument(){
         try {
@@ -32,7 +55,7 @@ public class SimulationConfig {
             Document doc = db.parse(this.myFile);
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getElementsByTagName("SimulationConfig");
-            // nodeList is not iterable, so we are using for loop
+            readTags(nodeList);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +84,7 @@ public class SimulationConfig {
 
 
     public static void main(String[] args){
-
+        SimulationConfig s = new SimulationConfig(new File("data/simulation_sample.xml"));
 
     }
 }
