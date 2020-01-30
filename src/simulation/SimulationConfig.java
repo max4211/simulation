@@ -63,21 +63,19 @@ public class SimulationConfig {
     }
 
     private void readTags(NodeList nodeList){
-        for (int itr = 0; itr < nodeList.getLength(); itr++) {
-            Node node = nodeList.item(itr);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) node;
-                this.height = Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent());
-                this.width = Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent());
-                this.simType = eElement.getElementsByTagName("type").item(0).getTextContent();
-                this.neighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
+        Node node = nodeList.item(0);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element eElement = (Element) node;
+            this.height = Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent());
+            this.width = Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent());
+            this.simType = eElement.getElementsByTagName("type").item(0).getTextContent();
+            this.neighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
 
-                // Initial cell states
-                NodeList cellList = eElement.getElementsByTagName("cell");
-                for(int cellItr = 0; cellItr < cellList.getLength(); cellItr++){
-                    Element initialCell = (Element) cellList.item(cellItr);
-                    initialCells.add(initialCell.getTextContent());
-                }
+            // Initial cell states
+            NodeList cellList = eElement.getElementsByTagName("cell");
+            for(int cellItr = 0; cellItr < cellList.getLength(); cellItr++){
+                Element initialCell = (Element) cellList.item(cellItr);
+                initialCells.add(initialCell.getTextContent());
             }
         }
     }
@@ -85,6 +83,6 @@ public class SimulationConfig {
 
     public static void main(String[] args){
         SimulationConfig s = new SimulationConfig(new File("data/simulation_sample.xml"));
-
+        
     }
 }
