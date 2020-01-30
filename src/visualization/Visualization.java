@@ -186,14 +186,23 @@ public class Visualization extends Application {
     }
 
     private void pauseSelected() {
-        myTimer.schedule(new UpdateSimulationReminder(), Integer.MAX_VALUE);
+        myTimer.purge();
+        // myTimer.schedule(new UpdateSimulationReminder(), Integer.MAX_VALUE);
     }
 
-    // TODO: Fix myTimer timing, currently too frequent
+    // TODO: Fix myTimer timing, stutter step on pulse (timerOn trigger?)
     private void playSelected() {
         if (!timerOn) {
             System.out.println("Scheduling timer action");
-            myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate() * 1000);
+            // myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate() * 1000);
+            myTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Timer action run");
+                    updateSimFlag = true;
+                    timerOn = false;
+                }
+            }, (long) getAnimationRate() * 1000);
             timerOn = true;         // May be unnecessary
         }
     }
@@ -206,8 +215,7 @@ public class Visualization extends Application {
         } else {
             guy = Math.pow(val, -1);
         }
-        System.out.println("Slider Value: " + val);
-        System.out.println("Animation Rate set to: " + guy);
+        System.out.println("Animation Rate: " + guy + " seconds");
         return guy;
     }
 
@@ -228,10 +236,6 @@ public class Visualization extends Application {
     }
 
     private class UpdateSimulationReminder extends TimerTask {
-
-        /**
-         * The action to be performed by this timer task.
-         */
         @Override
         public void run() {
             System.out.println("Timer action run");
@@ -239,4 +243,5 @@ public class Visualization extends Application {
             timerOn = false;
         }
     }
+
 }
