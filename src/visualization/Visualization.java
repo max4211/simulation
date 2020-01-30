@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -133,52 +132,16 @@ public class Visualization extends Application {
     private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
-        myPauseButton = createButton("Pause");
-        myPlayButton = createButton("Play");
-        myStepButton = createButton("Step");
-        myLoadButton = createButton("Load");
+        ToggleGroup group = new ToggleGroup();
+        myPauseButton = new PauseButton("Pause", group);
+        myPlayButton = new PlayButton("Play", group);
+        myStepButton = new StepButton("Step", group);
+        myLoadButton = new LoadButton("Load", group);
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
         box.getChildren().add(myStepButton);
         box.getChildren().add(myLoadButton);
-        createToggleGroup();
         return box;
-    }
-
-    private void createToggleGroup() {
-        ToggleGroup myToggleGroup = new ToggleGroup();
-        myPauseButton.setToggleGroup(myToggleGroup);
-        myPlayButton.setToggleGroup(myToggleGroup);
-        myStepButton.setToggleGroup(myToggleGroup);
-        myLoadButton.setToggleGroup(myToggleGroup);
-    }
-
-    private ToggleButton createButton(String text) {
-        ToggleButton btn = new ToggleButton(text);
-        switch (text) {
-            case("Pause"):
-                btn.setOnAction((ActionEvent e) -> {
-                    System.out.println("Pausing Simulation");
-                });
-                btn.setSelected(true);
-                break;
-            case("Play"):
-                btn.setOnAction((ActionEvent e) -> {
-                    System.out.println("Playing Simulation");
-                });
-                break;
-            case("Step"):
-                btn.setOnAction((ActionEvent e) -> {
-                    System.out.println("Stepping Simulation");
-                });
-                break;
-            case("Load"):
-                btn.setOnAction((ActionEvent e) -> {
-                    System.out.println("Trying to open FileChooser");
-                });
-                break;
-        }
-        return btn;
     }
 
     private void step() {
@@ -257,8 +220,8 @@ public class Visualization extends Application {
     private void loadSelected() {
         myLoadButton.setSelected(false);
         Stage fileStage = new Stage();
-        fileStage.setTitle("Open Simulation XML File");
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Simulation XML File");
         mySimulation = new Simulation(fileChooser.showOpenDialog(fileStage));
         myPauseButton.setSelected(true);
         System.out.println("Created simulation from fileChooser");
