@@ -25,6 +25,8 @@ import java.util.List;
  *
  * Based on code from https://www.javatpoint.com/how-to-read-xml-file-in-java
  *
+ * @param path: an .xml file in format above
+ *
  *
  */
 
