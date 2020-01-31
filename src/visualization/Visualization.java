@@ -137,6 +137,7 @@ public class Visualization extends Application {
         myPlayButton = new PlayButton("Play", group);
         myStepButton = new StepButton("Step", group);
         myLoadButton = new LoadButton("Load", group);
+        pauseSelected();
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
         box.getChildren().add(myStepButton);
@@ -147,8 +148,8 @@ public class Visualization extends Application {
     private GridPane updateSimGrid(GridPane grid) {
         updateSimFlag = false;
         System.out.println("Updating simulation grid");
-        myColorGrid = mySimulation.getColorGrid();
-        // Color[][] myColorGrid = createColors(); // TODO: myColorGrid
+        // myColorGrid = mySimulation.getColorGrid();
+        Color[][] myColorGrid = createColors(); // TODO: myColorGrid
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
         double rectangleHeight = SIM_HEIGHT / totalRows;
