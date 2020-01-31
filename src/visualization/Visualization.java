@@ -72,6 +72,7 @@ public class Visualization extends Application {
     }
 
     // TODO: Update two HBox to single VBox to stack, overall pane to border
+    // TODO: Testing git merge
     private Scene createScene() {
         GridPane root = createGrid();
         HBox topHBox = createTopHBox();
