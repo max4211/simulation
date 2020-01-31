@@ -25,9 +25,6 @@ import java.util.List;
  *
  * Based on code from https://www.javatpoint.com/how-to-read-xml-file-in-java
  *
- * @param path: an .xml file in format above
- *
- *
  */
 
 public class SimulationConfig {
@@ -39,6 +36,10 @@ public class SimulationConfig {
     private String neighborType;
     private List<String> initialCells = new ArrayList<>();
 
+    /**
+     * Constructs a SimulationConfig class using a File input
+     * @param path: an .xml file in format above
+     */
     public SimulationConfig(File path){
         myFile = path;
         buildDocument();

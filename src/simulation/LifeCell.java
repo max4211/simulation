@@ -17,7 +17,7 @@ import java.util.Collection;
 public class LifeCell extends Cell {
 
     /**
-     * Constructs a LifeCell using samegi parameters as Cell
+     * Constructs a LifeCell using same parameters as Cell
      * @param initialState: initial state (0 or 1)
      * @param row: y-coordinate of cell
      * @param col: x-coordinate of cell
@@ -28,8 +28,8 @@ public class LifeCell extends Cell {
 
     @Override
     public void createColorMap(){
-        this.myColorMap.put(0.0, Color.WHITE);
-        this.myColorMap.put(1.0, Color.BLACK);
+        myColorMap.put(0.0, Color.WHITE);
+        myColorMap.put(1.0, Color.BLACK);
     }
 
     @Override
