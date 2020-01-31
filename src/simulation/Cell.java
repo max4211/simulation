@@ -1,15 +1,16 @@
 package simulation;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Cell {
-    private double myState;
-    private double nextState;
-    private Map<Double, Color> myColorMap;
+    protected double myState;
+    protected double nextState;
+    protected Map<Double, Color> myColorMap = new HashMap<>();
 
-    public Cell(double initialState) {
+    public Cell(double initialState, int row, int col) {
         this.myState = initialState;
         createColorMap();
     }
