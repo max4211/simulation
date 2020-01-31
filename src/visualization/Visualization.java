@@ -71,6 +71,7 @@ public class Visualization extends Application {
         animation.play();
     }
 
+    // TODO: Update two HBox to single VBox to stack, overall pane to border
     private Scene createScene() {
         GridPane root = createGrid();
         HBox topHBox = createTopHBox();
@@ -146,10 +147,10 @@ public class Visualization extends Application {
     private GridPane updateSimGrid(GridPane grid) {
         updateSimFlag = false;
         System.out.println("Updating simulation grid");
-        // myColorGrid = mySim.getColorGrid();
-        Color[][] colorGrid = createColors(); // TODO: myColorGrid
-        int totalRows = colorGrid.length;
-        int totalCols = colorGrid[0].length;
+        myColorGrid = mySimulation.getColorGrid();
+        // Color[][] myColorGrid = createColors(); // TODO: myColorGrid
+        int totalRows = myColorGrid.length;
+        int totalCols = myColorGrid[0].length;
         double rectangleHeight = SIM_HEIGHT / totalRows;
         double rectangleWidth = SIM_WIDTH / totalCols;
         for (int row = 0; row < totalRows; row ++) {
@@ -157,7 +158,7 @@ public class Visualization extends Application {
                 Rectangle myRectangle = new Rectangle(rectangleWidth, rectangleHeight);
                 myRectangle.setStroke(STROKE_FILL);
                 myRectangle.setStrokeWidth(STROKE_WIDTH);
-                myRectangle.setFill(colorGrid[row][col]);
+                myRectangle.setFill(myColorGrid[row][col]);
                 grid.add(myRectangle, col, row ); // Default to col:row span = 1
             }
         }
