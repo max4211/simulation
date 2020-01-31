@@ -6,9 +6,10 @@ public class FireCell extends Cell {
 
     private double PROB_CATCH;
 
-    public FireCell(double initialState, int x, int y, double probCatch) {
-        super(initialState, x, y);
-        this.PROB_CATCH = probCatch;
+    public FireCell(double initialState, int x, int y) {
+        super(Math.floor(initialState), x, y);
+        this.PROB_CATCH = (initialState - Math.floor(initialState))*100;
+        createColorMap();
     }
 
     @Override

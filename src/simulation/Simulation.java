@@ -30,6 +30,7 @@ public class Simulation {
         String simType = simCon.simType;
         String neighborType = simCon.neighborType;
         List<String> initialCells = simCon.initialCells;
+        // for SimulationConfig() use getter methods
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // loop through initialCells and fill myGrid
@@ -48,7 +49,7 @@ public class Simulation {
 
             Cell newCell;
             if(simType.equals("Spreading of Fire")) {
-                newCell = new FireCell(state, x, y, 10);    // <- we need to discuss how probCatch will get here
+                newCell = new FireCell(state, x, y);
             }else throw new Exception("Simulation Type Not Accepted");
             myGrid[x][y] = newCell;
         }
