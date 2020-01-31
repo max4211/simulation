@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class Cell {
-    private double myState;
-    private double nextState;
-    private Map<Double, Color> myColorMap;
+    protected double myState;
+    protected double nextState;
+    protected Map<Double, Color> myColorMap;
 
     public Cell(double initialState, int x, int y) {
         this.myState = initialState;
