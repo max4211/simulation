@@ -17,8 +17,8 @@ import java.util.List;
  * <SimulationConfig>
  *         <height>1</height> // integer
  *         <width>1</width> // integer
- *         <type>DummyCell</type> // String
- *         <neighborType>Moore</neighborType> // String
+ *         <type>Spreading of Fire</type> // String
+ *         <neighborType>MOORE</neighborType> // String
  *         <cell>0 0 0</cell> // String in the format "x-coord y-coord state" where state is an integer
  *         <cell>0 1 0</cell>
  * </SimulationConfig>
@@ -97,5 +97,6 @@ public class SimulationConfig {
         for(String state: s.getCellStates()){
             System.out.print(state);
         }
+
     }
 }
