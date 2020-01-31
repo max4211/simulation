@@ -23,23 +23,30 @@ public class Simulation {
      * @param configFile the .XML file to build the simulation from
      * @throws Exception if simType or neighborType are unexpected values
      */
-    public Simulation(File configFile) throws Exception {
-        // get data from the SimulationConfig class
-        // ~~~~~ this chunk should be changed when I get a working SimulationConfig ~~~~~
-        SimulationConfig simCon  = new SimulationConfig(configFile);
+    public Simulation(File configFile){
+        try{
+            // get data from the SimulationConfig class
+            // ~~~~~ this chunk should be changed when I get a working SimulationConfig ~~~~~
+            SimulationConfig simCon  = new SimulationConfig(configFile);
 
-        int height = simCon.getHeight();
-        int width = simCon.getWidth();
-        String simType = simCon.getSimType();
-        String neighborType = simCon.getNeighborType();
-        List<String> initialCells = simCon.getCellStates();
-        // for SimulationConfig() use getter methods
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            int height = simCon.getHeight();
+            int width = simCon.getWidth();
+            String simType = simCon.getSimType();
+            String neighborType = simCon.getNeighborType();
+            List<String> initialCells = simCon.getCellStates();
+            // for SimulationConfig() use getter methods
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // loop through initialCells and fill myGrid
-        myGrid = new Cell[height][width];
-        fillGrid(simType, initialCells);
-        createDeltaArrays(neighborType);
+            // loop through initialCells and fill myGrid
+            myGrid = new Cell[height][width];
+            fillGrid(simType, initialCells);
+            createDeltaArrays(neighborType);
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+        }
+
+
     }
 
     private void fillGrid(String simType, List<String> initialCells) throws Exception {
