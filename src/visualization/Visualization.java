@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,6 +58,9 @@ public class Visualization extends Application {
     private GridPane mySimGrid;
     private Color[][] myColorGrid;
 
+    // First simulation to run
+    private File firstSim = new File("data/simulation_sample.xml");
+
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
@@ -72,12 +76,12 @@ public class Visualization extends Application {
     }
 
     // TODO: Update two HBox to single VBox to stack, overall pane to border
-    // TODO: Testing git merge
     private Scene createScene() {
         GridPane root = createGrid();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
-        mySimGrid = createSim();
+        mySimGrid = createSimGrid();
+        mySimulation = new Simulation(firstSim);
         root.add(mySimGrid, 0, 0, 2, 4);
         root.add(topHBox, 0, 5, 2, 1);
         root.add(botHBox, 0, 6, 2, 1);
@@ -85,7 +89,7 @@ public class Visualization extends Application {
         return scene;
     }
 
-    private GridPane createSim() {
+    private GridPane createSimGrid() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setMinWidth(200);
@@ -149,8 +153,8 @@ public class Visualization extends Application {
     private GridPane updateSimGrid(GridPane grid) {
         updateSimFlag = false;
         System.out.println("Updating simulation grid");
-        // myColorGrid = mySimulation.getColorGrid();
-        Color[][] myColorGrid = createColors(); // TODO: myColorGrid
+        myColorGrid = mySimulation.getColorGrid();
+        // Color[][] myColorGrid = createColors(); // TODO: myColorGrid
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
         double rectangleHeight = SIM_HEIGHT / totalRows;
@@ -233,9 +237,10 @@ public class Visualization extends Application {
         Stage fileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Simulation XML File");
-        mySimulation = new Simulation(fileChooser.showOpenDialog(fileStage));
+        File simFile = fileChooser.showOpenDialog(fileStage);
+        mySimulation = new Simulation(simFile);
         myPauseButton.setSelected(true);
-        System.out.println("Created simulation from fileChooser");
+        System.out.println("Created simulation from fileChooser \n" + simFile);
     }
 
     private class UpdateSimulationReminder extends TimerTask {
