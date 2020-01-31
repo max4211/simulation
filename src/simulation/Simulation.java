@@ -23,13 +23,13 @@ public class Simulation {
     public Simulation(File configFile) throws Exception {
         // get data from the SimulationConfig class
         // ~~~~~ this chunk should be changed when I get a working SimulationConfig ~~~~~
-        DummySimulationConfig simCon  = new DummySimulationConfig(configFile);
+        SimulationConfig simCon  = new SimulationConfig(configFile);
 
-        int height = simCon.height;
-        int width = simCon.width;
-        String simType = simCon.simType;
-        String neighborType = simCon.neighborType;
-        List<String> initialCells = simCon.initialCells;
+        int height = simCon.getHeight();
+        int width = simCon.getWidth();
+        String simType = simCon.getSimType();
+        String neighborType = simCon.getNeighborType();
+        List<String> initialCells = simCon.getCellStates();
         // for SimulationConfig() use getter methods
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -43,15 +43,15 @@ public class Simulation {
         for (String cellString : initialCells){
             String[] cellData = cellString.split(" ");
 
-            int x = Integer.parseInt(cellData[0]);
-            int y = Integer.parseInt(cellData[1]);
+            int row = Integer.parseInt(cellData[0]);
+            int col = Integer.parseInt(cellData[1]);
             float state = Float.parseFloat(cellData[2]);
 
             Cell newCell;
             if(simType.equals("Spreading of Fire")) {
-                newCell = new FireCell(state, x, y);
+                newCell = new FireCell(state, row, col);
             }else throw new Exception("Simulation Type Not Accepted");
-            myGrid[x][y] = newCell;
+            myGrid[row][col] = newCell;
         }
     }
 
@@ -120,7 +120,7 @@ public class Simulation {
     // this main method is here for testing - not supposed to be part of the final build
     public static void main(String[] args) throws Exception {
         // filename doesn't matter for now because the program never actually uses it
-        Simulation sim = new Simulation(new File("blah blah blah"));
+        Simulation sim = new Simulation(new File("data/simulation_sample.xml"));
 
         // check all the values
         System.out.println("Grid:");
