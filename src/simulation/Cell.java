@@ -9,7 +9,7 @@ public abstract class Cell {
     protected double nextState;
     protected Map<Double, Color> myColorMap;
 
-    public Cell(double initialState, int x, int y) {
+    public Cell(double initialState, int row, int col) {
         this.myState = initialState;
         createColorMap();
     }
