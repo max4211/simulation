@@ -7,11 +7,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+
+
 public class Simulation {
 
     private Cell[][] myGrid;
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
+
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
