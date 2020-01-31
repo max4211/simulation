@@ -1,6 +1,6 @@
 package simulation;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 import java.util.Collection;
 import java.util.Map;
 

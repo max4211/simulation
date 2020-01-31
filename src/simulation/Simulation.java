@@ -1,6 +1,6 @@
 package simulation;
 
-import java.awt.*;
+import javafx.scene.paint.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +50,9 @@ public class Simulation {
             Cell newCell;
             if(simType.equals("Spreading of Fire")) {
                 newCell = new FireCell(state, row, col);
-            }else throw new Exception("Simulation Type Not Accepted");
+            } else if(simType.equals("Game of Life")){
+                newCell = new LifeCell(state, row, col);
+            } else throw new Exception("Simulation Type Not Accepted");
             myGrid[row][col] = newCell;
         }
     }

@@ -2,7 +2,7 @@
 <SimulationConfig>
         <height>2</height>
         <width>1</width>
-        <type>Spreading of Fire</type>
+        <type>Game of Life</type>
         <neighborType>MOORE</neighborType>
         <cell>0 0 0</cell>
         <cell>1 0 0</cell>
