@@ -26,6 +26,12 @@ import java.util.TimerTask;
 
 public class Visualization extends Application {
 
+    // Resources for styling
+    private static final String RESOURCES = "resources";
+    public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    public static final String STYLESHEET = "default.css";
+
     // Sim and scene metadata
     private final int SCENE_HEIGHT = 520;
     private final int SCENE_WIDTH = 420;
@@ -92,6 +98,7 @@ public class Visualization extends Application {
         root.setCenter(mySimGrid);
         root.setBottom(myVBox);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
     }
 
