@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -79,7 +80,7 @@ public class Visualization extends Application {
 
     // TODO: Update scene to BorderPane (then add escape button on top)
     private Scene createScene() {
-        GridPane root = createGrid();
+        BorderPane root = createRootPane();
         VBox myVBox = new VBox();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
@@ -88,10 +89,8 @@ public class Visualization extends Application {
         myVBox.setSpacing(VBOX_SPACING);
         mySimGrid = createSimGrid();
         mySimulation = new Simulation(firstSim);
-        root.add(mySimGrid, 0, 0, 2, 4);
-        root.add(myVBox, 0, 5, 2, 1);
-        // root.add(topHBox, 0, 5, 2, 1);
-        // root.add(botHBox, 0, 6, 2, 1);
+        root.setCenter(mySimGrid);
+        root.setBottom(myVBox);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
         return scene;
     }
@@ -112,13 +111,10 @@ public class Visualization extends Application {
         return myColors;
     }
 
-    private GridPane createGrid() {
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(H_GAP);
-        grid.setVgap(V_GAP);
-        grid.setPadding(new Insets(TOP_PAD, RIGHT_PAD, BOTTOM_PAD, LEFT_PAD));
-        return grid;
+    private BorderPane createRootPane() {
+        BorderPane borderPane = new BorderPane();
+        borderPane.setPadding(new Insets(TOP_PAD, RIGHT_PAD, BOTTOM_PAD, LEFT_PAD));
+        return borderPane;
     }
 
     private HBox createBottomHBox() {
