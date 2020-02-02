@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import simulation.Simulation;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -248,15 +249,36 @@ public class Visualization extends Application {
         timerOn = false;
     }
 
+    // TODO: Verify NullPointer exception
     private void loadSelected() {
+        myPauseButton.setSelected(true);
         myLoadButton.setSelected(false);
         Stage fileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Simulation XML File");
+        File dir = new File (System.getProperty("user.dir"));
+        fileChooser.setInitialDirectory(dir);
         File simFile = fileChooser.showOpenDialog(fileStage);
-        mySimulation = new Simulation(simFile);
-        myPauseButton.setSelected(true);
-        System.out.println("Created simulation from fileChooser \n" + simFile);
+        String extension = getFileExtension(simFile);
+        if (simFile == null) {
+            System.out.println("No file selected, please try again");
+        } else if (extension.equals("xml") || extension.equals("XML")){
+            mySimulation = new Simulation(simFile);
+            myPauseButton.setSelected(true);
+            System.out.println("Created simulation from fileChooser \n" + simFile);
+        } else {
+            System.out.println("Incorrect file type selected, please try again");
+        }
+    }
+
+    private String getFileExtension(File file) {
+        String fileName = file.getName();
+        int index = fileName.lastIndexOf(".");
+        if (index > 0) {
+            return fileName.substring(index+1);
+        } else {
+            return "";
+        }
     }
 
     private class UpdateSimulationReminder extends TimerTask {
