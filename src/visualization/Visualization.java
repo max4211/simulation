@@ -20,18 +20,22 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
 
+import javax.imageio.ImageIO;
 import java.io.File;
-import java.nio.file.Files;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Visualization extends Application {
 
-    // Resources for styling
-    private static final String RESOURCES = "resources";
-    public static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
-    public static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    public static final String STYLESHEET = "default.css";
+    // Resources for styling and properties
+    protected static final String RESOURCES = "resources";
+    protected static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    protected static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    protected static final String LANGUAGE = "Image";
+    protected static final String STYLESHEET = "default.css";
+    protected static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    protected ResourceBundle myResources;
 
     // Sim and scene metadata
     private final double SCENE_HEIGHT = 520;
@@ -73,6 +77,7 @@ public class Visualization extends Application {
 
     @Override
     public void start(Stage stage) {
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
         Scene myScene = createScene();
         stage.setTitle("CA Simulation Project");
         stage.setScene(myScene);
@@ -130,7 +135,7 @@ public class Visualization extends Application {
         mySlider = new AnimationSlider();
         Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
         sliderLabel.setFont(Font.font(24));
-        Label sliderUnits = new Label ("animations/second");
+        Label sliderUnits = new Label (myResources.getString("AnimationLabel"));
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
@@ -145,15 +150,17 @@ public class Visualization extends Application {
         return box;
     }
 
+    // TODO: Determine how to refactor button classes
+    //  May want to extend objects and make global variables protected
     private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
         ToggleGroup group = new ToggleGroup();
-        myPauseButton = new PauseButton("Pause", group);
-        myPlayButton = new PlayButton("Play", group);
-        myStepButton = new StepButton("Step", group);
-        myLoadButton = new LoadButton("Load", group);
-        myExitButton = new ExitButton("Exit", group);
+        myPauseButton = new PauseButton(myResources.getString("PauseButton"), group);
+        myPlayButton = new PlayButton(myResources.getString("PlayButton"), group);
+        myStepButton = new StepButton(myResources.getString("StepButton"), group);
+        myLoadButton = new LoadButton(myResources.getString("LoadButton"), group);
+        myExitButton = new ExitButton(myResources.getString("ExitButton"), group);
         pauseSelected();
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
