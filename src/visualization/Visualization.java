@@ -32,7 +32,7 @@ public class Visualization extends Application {
     protected static final String RESOURCES = "resources";
     protected static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     protected static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    protected static final String LANGUAGE = "English";
+    protected static final String LANGUAGE = "CAPS";
     protected static final String STYLESHEET = "default.css";
     protected static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     protected ResourceBundle myResources;
