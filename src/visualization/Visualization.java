@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -41,6 +42,7 @@ public class Visualization extends Application {
     private final int V_GAP = 10;
     private final int BUTTON_SPACING = 20;
     private final int SLIDER_SPACING = 20;
+    private final int VBOX_SPACING = 15;
 
     // Viewer objects
     private Slider mySlider;
@@ -54,8 +56,8 @@ public class Visualization extends Application {
     private Timer myTimer = new Timer();
     private boolean timerOn = false;
     private boolean updateSimFlag = true;
-    private Simulation mySimulation;
     private GridPane mySimGrid;
+    private Simulation mySimulation;
     private Color[][] myColorGrid;
 
     // First simulation to run
@@ -75,16 +77,21 @@ public class Visualization extends Application {
         animation.play();
     }
 
-    // TODO: Update two HBox to single VBox to stack, overall pane to border
+    // TODO: Update scene to BorderPane (then add escape button on top)
     private Scene createScene() {
         GridPane root = createGrid();
+        VBox myVBox = new VBox();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
+        myVBox.getChildren().add(topHBox);
+        myVBox.getChildren().add(botHBox);
+        myVBox.setSpacing(VBOX_SPACING);
         mySimGrid = createSimGrid();
         mySimulation = new Simulation(firstSim);
         root.add(mySimGrid, 0, 0, 2, 4);
-        root.add(topHBox, 0, 5, 2, 1);
-        root.add(botHBox, 0, 6, 2, 1);
+        root.add(myVBox, 0, 5, 2, 1);
+        // root.add(topHBox, 0, 5, 2, 1);
+        // root.add(botHBox, 0, 6, 2, 1);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
         return scene;
     }
@@ -126,6 +133,7 @@ public class Visualization extends Application {
                 Number old_val, Number new_val) -> {
             sliderLabel.setText(String.format("%.2f", new_val));
             myPlayButton.setSelected(true);
+            myTimer.purge();
             clearTimer();
         });
         box.getChildren().add(mySlider);
@@ -153,8 +161,8 @@ public class Visualization extends Application {
     private GridPane updateSimGrid(GridPane grid) {
         updateSimFlag = false;
         System.out.println("Updating simulation grid");
-        myColorGrid = mySimulation.getColorGrid();
-        // Color[][] myColorGrid = createColors(); // TODO: myColorGrid
+        // myColorGrid = mySimulation.getColorGrid();
+        Color[][] myColorGrid = createColors(); // TODO: myColorGrid
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
         double rectangleHeight = SIM_HEIGHT / totalRows;
@@ -201,6 +209,7 @@ public class Visualization extends Application {
     private void playSelected() {
         if (!timerOn) {
             System.out.println("Scheduling timer action");
+            myTimer.purge();
             // myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate() * 1000);
             myTimer.schedule(new TimerTask() {
                 @Override
@@ -210,7 +219,7 @@ public class Visualization extends Application {
                     timerOn = false;
                 }
             }, (long) getAnimationRate() * 1000);
-            timerOn = true;         // May be unnecessary
+            timerOn = true;
         }
     }
 
