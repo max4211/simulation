@@ -266,6 +266,7 @@ public class Visualization extends Application {
     }
 
     private String getFileExtension(File file) {
+        if (file == null) {return "";}
         String fileName = file.getName();
         int index = fileName.lastIndexOf(".");
         if (index > 0) {
