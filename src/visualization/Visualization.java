@@ -85,7 +85,6 @@ public class Visualization extends Application {
         animation.play();
     }
 
-    // TODO: Update scene to BorderPane (then add escape button on top)
     private Scene createScene() {
         BorderPane root = createRootPane();
         VBox myVBox = new VBox();
@@ -108,8 +107,6 @@ public class Visualization extends Application {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setGridLinesVisible(true);
-        // grid.setMinWidth(200);
-        // grid.setMinHeight(200);
         return grid;
     }
 
@@ -170,7 +167,7 @@ public class Visualization extends Application {
         updateSimFlag = false;
         System.out.println("Updating simulation grid");
         // myColorGrid = mySimulation.getColorGrid();
-        Color[][] myColorGrid = createColors(); // TODO: myColorGrid
+        Color[][] myColorGrid = createColors(); // TODO: myColorGrid from Simulation
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
         double rectangleHeight = SIM_HEIGHT / totalRows;
@@ -210,7 +207,6 @@ public class Visualization extends Application {
 
     private void pauseSelected() {
         myTimer.purge();
-        // myTimer.schedule(new UpdateSimulationReminder(), Integer.MAX_VALUE);
     }
 
     // TODO: Fix myTimer timing, stutter step on pulse (timerOn trigger?)
@@ -218,7 +214,6 @@ public class Visualization extends Application {
         if (!timerOn) {
             System.out.println("Scheduling timer action");
             myTimer.purge();
-            // myTimer.schedule(new UpdateSimulationReminder(), (long) getAnimationRate() * 1000);
             myTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -249,7 +244,6 @@ public class Visualization extends Application {
         timerOn = false;
     }
 
-    // TODO: Verify NullPointer exception
     private void loadSelected() {
         myPauseButton.setSelected(true);
         myLoadButton.setSelected(false);
@@ -278,15 +272,6 @@ public class Visualization extends Application {
             return fileName.substring(index+1);
         } else {
             return "";
-        }
-    }
-
-    private class UpdateSimulationReminder extends TimerTask {
-        @Override
-        public void run() {
-            System.out.println("Timer action run");
-            updateSimFlag = true;
-            timerOn = false;
         }
     }
 
