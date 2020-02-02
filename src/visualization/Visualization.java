@@ -37,6 +37,7 @@ public class Visualization extends Application {
     private final double SCENE_WIDTH = 420;
     private final double SIM_HEIGHT = SCENE_HEIGHT * 0.75;
     private final double SIM_WIDTH = SCENE_WIDTH * 0.95;
+    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.15;
     private final Color STROKE_FILL = Color.BLACK;
     private final double STROKE_WIDTH = 3;
 
@@ -55,6 +56,7 @@ public class Visualization extends Application {
     private ToggleButton myPlayButton;
     private ToggleButton myStepButton;
     private ToggleButton myLoadButton;
+    private ToggleButton myExitButton;
 
     // Simulation metadata
     private final int FRAME_RATE = 10;
@@ -91,6 +93,7 @@ public class Visualization extends Application {
         myVBox.getChildren().add(topHBox);
         myVBox.getChildren().add(botHBox);
         myVBox.setSpacing(VBOX_SPACING);
+        myVBox.setMaxHeight(VBOX_HEIGHT);
         mySimGrid = createSimGrid();
         mySimulation = new Simulation(firstSim);
         root.setCenter(mySimGrid);
@@ -103,8 +106,9 @@ public class Visualization extends Application {
     private GridPane createSimGrid() {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setMinWidth(200);
-        grid.setMinHeight(200);
+        grid.setGridLinesVisible(true);
+        // grid.setMinWidth(200);
+        // grid.setMinHeight(200);
         return grid;
     }
 
@@ -151,11 +155,13 @@ public class Visualization extends Application {
         myPlayButton = new PlayButton("Play", group);
         myStepButton = new StepButton("Step", group);
         myLoadButton = new LoadButton("Load", group);
+        myExitButton = new ExitButton("Exit", group);
         pauseSelected();
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
         box.getChildren().add(myStepButton);
         box.getChildren().add(myLoadButton);
+        box.getChildren().add(myExitButton);
         return box;
     }
 
