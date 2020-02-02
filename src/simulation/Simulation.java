@@ -83,7 +83,7 @@ public class Simulation {
         updateGrid();
         Color[][] colorGrid = new Color[myGrid.length][myGrid[0].length];
         for(int row=0; row<colorGrid.length; row++){
-            for(int col=0; col<colorGrid.length; col++){
+            for(int col=0; col<colorGrid[0].length; col++){
                 colorGrid[row][col] = myGrid[row][col].getColor();
             }
         }
@@ -108,7 +108,7 @@ public class Simulation {
     }
 
     private boolean inBounds(int row, int col) {
-        return (row <= myGrid.length) && (col <= myGrid[0].length)
+        return (row < myGrid.length) && (col < myGrid[0].length)
                 && (row >= 0) && (col >= 0);
     }
 
