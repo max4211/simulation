@@ -32,7 +32,7 @@ public class Visualization extends Application {
     protected static final String RESOURCES = "resources";
     protected static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     protected static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    protected static final String LANGUAGE = "Image";
+    protected static final String LANGUAGE = "English";
     protected static final String STYLESHEET = "default.css";
     protected static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     protected ResourceBundle myResources;
@@ -156,11 +156,11 @@ public class Visualization extends Application {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
         ToggleGroup group = new ToggleGroup();
-        myPauseButton = new PauseButton(myResources.getString("PauseButton"), group);
-        myPlayButton = new PlayButton(myResources.getString("PlayButton"), group);
-        myStepButton = new StepButton(myResources.getString("StepButton"), group);
-        myLoadButton = new LoadButton(myResources.getString("LoadButton"), group);
-        myExitButton = new ExitButton(myResources.getString("ExitButton"), group);
+        myPauseButton = new CustomToggle(myResources.getString("PauseButton"), group, event -> pauseSelected());
+        myPlayButton = new CustomToggle(myResources.getString("PlayButton"), group, event -> playSelected());
+        myStepButton = new CustomToggle(myResources.getString("StepButton"), group, event -> stepSelected());
+        myLoadButton = new CustomToggle(myResources.getString("LoadButton"), group, event -> loadSelected());
+        myExitButton = new CustomToggle(myResources.getString("ExitButton"), group, event -> exitSelected());
         pauseSelected();
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
@@ -194,8 +194,6 @@ public class Visualization extends Application {
     private void step() {
         if (myStepButton.isSelected()) {
             stepSelected();
-        } else if (myPauseButton.isSelected()) {
-            pauseSelected();
         } else if (myPlayButton.isSelected()) {
             playSelected();
         } else if (myLoadButton.isSelected()) {
@@ -207,12 +205,13 @@ public class Visualization extends Application {
     }
 
     private void stepSelected() {
+        System.out.println("Step Selected");
         updateSimFlag = true;
         myStepButton.setSelected(false);
-        System.out.println("myStepButton deselected");
     }
 
     private void pauseSelected() {
+        System.out.println("Pause Selected");
         myTimer.purge();
     }
 
@@ -231,6 +230,11 @@ public class Visualization extends Application {
             }, (long) getAnimationRate() * 1000);
             timerOn = true;
         }
+    }
+
+    private void exitSelected() {
+        System.out.println("Exit selected");
+        System.exit(0);
     }
 
     private double getAnimationRate() {
@@ -252,6 +256,7 @@ public class Visualization extends Application {
     }
 
     private void loadSelected() {
+        System.out.println("Load Selected");
         myPauseButton.setSelected(true);
         myLoadButton.setSelected(false);
         Stage fileStage = new Stage();
