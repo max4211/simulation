@@ -33,10 +33,10 @@ public class Visualization extends Application {
     public static final String STYLESHEET = "default.css";
 
     // Sim and scene metadata
-    private final int SCENE_HEIGHT = 520;
-    private final int SCENE_WIDTH = 420;
-    private final int SIM_HEIGHT = 400;
-    private final int SIM_WIDTH = 400;
+    private final double SCENE_HEIGHT = 520;
+    private final double SCENE_WIDTH = 420;
+    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.75;
+    private final double SIM_WIDTH = SCENE_WIDTH * 0.95;
     private final Color STROKE_FILL = Color.BLACK;
     private final double STROKE_WIDTH = 3;
 
@@ -45,8 +45,6 @@ public class Visualization extends Application {
     private final int BOTTOM_PAD = 5;
     private final int LEFT_PAD = 5;
     private final int RIGHT_PAD = 5;
-    private final int H_GAP = 10;
-    private final int V_GAP = 10;
     private final int BUTTON_SPACING = 20;
     private final int SLIDER_SPACING = 20;
     private final int VBOX_SPACING = 15;
