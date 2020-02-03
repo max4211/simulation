@@ -24,6 +24,6 @@ public class LifeGenerator extends GridGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        GridGenerator g = new LifeGenerator(100, 100);
+        GridGenerator g = new LifeGenerator(10, 10);
     }
 }
