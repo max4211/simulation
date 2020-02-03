@@ -97,7 +97,7 @@ public class Simulation {
         // Determine Cell updates
         for(int row=0; row<myGrid.length; row++){
             for(int col=0; col<myGrid[0].length; col++){
-                myGrid[row][col].determineState(getNeighborStates(row, col));
+                myGrid[row][col].determineNextState(getNeighborStates(row, col));
             }
         }
 

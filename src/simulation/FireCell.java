@@ -31,7 +31,7 @@ public class FireCell extends Cell {
     public double getProbCatch() { return this.probCatch; }
 
     @Override
-    public void determineState(Collection<Double> neighborStates) {
+    public void determineNextState(Collection<Double> neighborStates) {
         if(myState==0)
             nextState = myState;
 
