@@ -8,10 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -66,6 +63,7 @@ public class Visualization extends Application {
     private final int FRAME_RATE = 20;
     private long updateTime;
     private GridPane mySimGrid;
+    private BorderPane myRoot;
     private Simulation mySimulation;
     private Color[][] myColorGrid;
 
@@ -88,7 +86,7 @@ public class Visualization extends Application {
     }
 
     private Scene createScene() {
-        BorderPane root = createRootPane();
+        myRoot = createRootPane();
         VBox myVBox = new VBox();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
@@ -99,9 +97,9 @@ public class Visualization extends Application {
         mySimGrid = createSimGrid();
         mySimulation = new Simulation(firstSim);
         showSimGrid();
-        root.setCenter(mySimGrid);
-        root.setBottom(myVBox);
-        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
+        myRoot.setCenter(mySimGrid);
+        myRoot.setBottom(myVBox);
+        Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
     }
@@ -110,7 +108,8 @@ public class Visualization extends Application {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setGridLinesVisible(true);
-        grid.setMaxSize(SIM_WIDTH, SIM_HEIGHT);
+        grid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
+        grid.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         return grid;
     }
 
@@ -161,6 +160,7 @@ public class Visualization extends Application {
 
     // TODO: Fix new game upload cell overflow
     private void showSimGrid() {
+        mySimGrid = new GridPane();
         myColorGrid = mySimulation.getColorGrid();
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
@@ -175,6 +175,15 @@ public class Visualization extends Application {
                 mySimGrid.add(myRectangle, col, row ); // Default to col:row span = 1
             }
         }
+        myRoot.setCenter(mySimGrid);
+        printGridState();
+    }
+
+    private void printGridState() {
+        System.out.println("sim height: " + mySimGrid.getHeight());
+        System.out.println("sim width: " + mySimGrid.getWidth());
+        System.out.println("max height: " + mySimGrid.getMaxHeight());
+        System.out.println("max width: " + mySimGrid.getMaxWidth());
     }
 
     private void updateSimGrid() {
@@ -200,7 +209,6 @@ public class Visualization extends Application {
         System.out.println("Pause Selected");
     }
 
-    // TODO: Fix update trigger (timer not working, change to System.currentTimeMillis()
     private void playSelected() {
         if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
         if (System.currentTimeMillis() >= updateTime) {
