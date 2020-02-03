@@ -90,7 +90,7 @@ public class Simulation {
         return colorGrid;
     }
 
-    private void updateGrid() {
+    public void updateGrid() {
         // Determine Cell updates
         for(int row=0; row<myGrid.length; row++){
             for(int col=0; col<myGrid[0].length; col++){
