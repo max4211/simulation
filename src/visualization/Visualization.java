@@ -141,7 +141,6 @@ public class Visualization extends Application {
                 Number old_val, Number new_val) -> {
             sliderLabel.setText(String.format("%.2f", new_val));
             myPlayButton.setSelected(true);
-            myTimer.purge();
             clearTimer();
         });
         box.getChildren().add(mySlider);
@@ -192,12 +191,8 @@ public class Visualization extends Application {
     }
 
     private void step() {
-        if (myStepButton.isSelected()) {
-            stepSelected();
-        } else if (myPlayButton.isSelected()) {
+        if (myPlayButton.isSelected()) {
             playSelected();
-        } else if (myLoadButton.isSelected()) {
-            loadSelected();
         }
         if (updateSimFlag) {
             updateSimGrid(mySimGrid);
