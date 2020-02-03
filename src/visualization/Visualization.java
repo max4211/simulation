@@ -27,13 +27,14 @@ import java.util.ResourceBundle;
 public class Visualization extends Application {
 
     // Resources for styling and properties
-    protected static final String RESOURCES = "resources";
-    protected static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
-    protected static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    protected static final String LANGUAGE = "CAPS";
-    protected static final String STYLESHEET = "default.css";
-    protected static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    protected ResourceBundle myResources;
+    private static final String RESOURCES = "resources";
+    private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    private static final String LANGUAGE = "CAPS";
+    private static final String STYLESHEET = "default.css";
+    private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
+    private ResourceBundle myResources;
 
     // Sim and scene metadata
     private final double SCENE_HEIGHT = 520;
@@ -230,7 +231,7 @@ public class Visualization extends Application {
         Stage fileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Simulation XML File");
-        File dir = new File (System.getProperty("user.dir"));
+        File dir = new File (PERCOLATION_FILES);
         fileChooser.setInitialDirectory(dir);
         File simFile = fileChooser.showOpenDialog(fileStage);
         String extension = getFileExtension(simFile);
