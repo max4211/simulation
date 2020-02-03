@@ -6,8 +6,8 @@ public class AnimationSlider extends Slider {
 
     // Slider metadata
     private final double SLIDER_MIN = 0;
-    private final double SLIDER_MAX = 5;
-    private final double SLIDER_MAJOR_TICK = 1;
+    private final double SLIDER_MAX = 10;
+    private final double SLIDER_MAJOR_TICK = 2;
     private final double SLIDER_MINOR_TICK = 0.2;
 
     public AnimationSlider() {
