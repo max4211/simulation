@@ -40,19 +40,24 @@ public class LifeCell extends Cell {
         }
 
         // Currently alive (1)
-        if(myState==1){
+        if(myState==1.0){
             if(numAlive == 2 || numAlive == 3)
-                nextState = 1;
+                nextState = 1.0;
             else
-                nextState = 0;
+                nextState = 0.0;
         }
         // Currently dead (0)
         else{
             if(numAlive == 3)
-                nextState = 1;
+                nextState = 1.0;
             else
-                nextState = 0;
+                nextState = 0.0;
         }
+        if(myState!=nextState){
+            System.out.println("Something changed");
+        }
+        else
+            System.out.println("no change");
     }
 
     // unsure what type of state to double mapping we should do here?
