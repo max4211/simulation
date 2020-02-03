@@ -23,8 +23,6 @@ import simulation.Simulation;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Visualization extends Application {
 
@@ -64,10 +62,8 @@ public class Visualization extends Application {
     private ToggleButton myExitButton;
 
     // Simulation metadata
-    private final int FRAME_RATE = 10;
-    private Timer myTimer = new Timer();
-    private boolean timerOn = false;
-    private boolean updateSimFlag = false;
+    private final int FRAME_RATE = 20;
+    private long updateTime;
     private GridPane mySimGrid;
     private Simulation mySimulation;
     private Color[][] myColorGrid;
@@ -101,7 +97,7 @@ public class Visualization extends Application {
         myVBox.setMaxHeight(VBOX_HEIGHT);
         mySimGrid = createSimGrid();
         mySimulation = new Simulation(firstSim);
-        showSimGrid(mySimGrid);
+        showSimGrid();
         root.setCenter(mySimGrid);
         root.setBottom(myVBox);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
@@ -115,14 +111,6 @@ public class Visualization extends Application {
         grid.setGridLinesVisible(true);
         grid.setMaxSize(SIM_WIDTH, SIM_HEIGHT);
         return grid;
-    }
-
-    private Color[][] createColors() {
-        Color[][] myColors = new Color[3][3];
-        myColors[0] = new Color[]{Color.RED, Color.BLUE, Color.RED};
-        myColors[1] = new Color[]{Color.BLACK, Color.BLUE, Color.PURPLE};
-        myColors[2] = new Color[]{Color.BLUE, Color.BLUE, Color.PINK};
-        return myColors;
     }
 
     private BorderPane createRootPane() {
@@ -143,7 +131,7 @@ public class Visualization extends Application {
                 Number old_val, Number new_val) -> {
             sliderLabel.setText(String.format("%.2f", new_val));
             myPlayButton.setSelected(true);
-            clearTimer();
+            setUpdateTime();
         });
         box.getChildren().add(mySlider);
         box.getChildren().add(sliderLabel);
@@ -170,8 +158,7 @@ public class Visualization extends Application {
         return box;
     }
 
-    private void showSimGrid(GridPane grid) {
-        // Color[][] myColorGrid = createColors(); // TODO: myColorGrid from Simulation
+    private void showSimGrid() {
         myColorGrid = mySimulation.getColorGrid();
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
@@ -183,53 +170,41 @@ public class Visualization extends Application {
                 myRectangle.setStroke(STROKE_FILL);
                 myRectangle.setStrokeWidth(STROKE_WIDTH);
                 myRectangle.setFill(myColorGrid[row][col]);
-                grid.add(myRectangle, col, row ); // Default to col:row span = 1
+                mySimGrid.add(myRectangle, col, row ); // Default to col:row span = 1
             }
         }
     }
 
-    // TODO: Call update on simulation
     private void updateSimGrid() {
-        System.out.println("Updating simulation grid");
-        updateSimFlag = false;
         mySimulation.updateGrid();
     }
 
+    private void setUpdateTime() {
+        updateTime = System.currentTimeMillis() + (long) getAnimationRate();
+    }
+
     private void step() {
-        if (myPlayButton.isSelected()) {
-            playSelected();
-        }
-        if (updateSimFlag) {
-            updateSimGrid();
-            showSimGrid(mySimGrid);
-        }
+        if (myPlayButton.isSelected()) { playSelected();}
     }
 
     private void stepSelected() {
         System.out.println("Step Selected");
-        updateSimFlag = true;
         myStepButton.setSelected(false);
+        updateSimGrid();
+        showSimGrid();
     }
 
     private void pauseSelected() {
         System.out.println("Pause Selected");
-        myTimer.purge();
     }
 
-    // TODO: Fix myTimer timing, stutter step on pulse (timerOn trigger?)
+    // TODO: Fix update trigger (timer not working, change to System.currentTimeMillis()
     private void playSelected() {
-        if (!timerOn) {
-            System.out.println("Scheduling timer action");
-            myTimer.purge();
-            myTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("Timer action run");
-                    updateSimFlag = true;
-                    timerOn = false;
-                }
-            }, (long) getAnimationRate() * 1000);
-            timerOn = true;
+        if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
+        if (System.currentTimeMillis() >= updateTime) {
+            updateSimGrid();
+            showSimGrid();
+            setUpdateTime();
         }
     }
 
@@ -240,20 +215,11 @@ public class Visualization extends Application {
 
     private double getAnimationRate() {
         double val = mySlider.getValue();
-        double guy;
         if (val == 0) {
-            guy = Integer.MAX_VALUE;
+            return Integer.MAX_VALUE / 10;
         } else {
-            guy = Math.pow(val, -1);
+            return Math.pow(val, -1) * 1000;
         }
-        System.out.println("Animation Rate: " + guy + " seconds");
-        return guy;
-    }
-
-    private void clearTimer() {
-        System.out.println("Purging timer");
-        myTimer.purge();
-        timerOn = false;
     }
 
     private void loadSelected() {

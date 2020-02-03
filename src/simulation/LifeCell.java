@@ -53,11 +53,6 @@ public class LifeCell extends Cell {
             else
                 nextState = 0.0;
         }
-        if(myState!=nextState){
-            System.out.println("Something changed");
-        }
-        else
-            System.out.println("no change");
     }
 
     // unsure what type of state to double mapping we should do here?
