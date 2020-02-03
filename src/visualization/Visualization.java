@@ -67,7 +67,7 @@ public class Visualization extends Application {
     private final int FRAME_RATE = 10;
     private Timer myTimer = new Timer();
     private boolean timerOn = false;
-    private boolean updateSimFlag = true;
+    private boolean updateSimFlag = false;
     private GridPane mySimGrid;
     private Simulation mySimulation;
     private Color[][] myColorGrid;
@@ -101,6 +101,7 @@ public class Visualization extends Application {
         myVBox.setMaxHeight(VBOX_HEIGHT);
         mySimGrid = createSimGrid();
         mySimulation = new Simulation(firstSim);
+        showSimGrid(mySimGrid);
         root.setCenter(mySimGrid);
         root.setBottom(myVBox);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
@@ -112,6 +113,7 @@ public class Visualization extends Application {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setGridLinesVisible(true);
+        grid.setMaxSize(SIM_WIDTH, SIM_HEIGHT);
         return grid;
     }
 
@@ -149,8 +151,7 @@ public class Visualization extends Application {
         return box;
     }
 
-    // TODO: Determine how to refactor button classes
-    //  May want to extend objects and make global variables protected
+    // TODO: Refactoring of toggle class, so they have protected access (move all events out of here)
     private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
@@ -169,9 +170,7 @@ public class Visualization extends Application {
         return box;
     }
 
-    private GridPane updateSimGrid(GridPane grid) {
-        updateSimFlag = false;
-        System.out.println("Updating simulation grid");
+    private void showSimGrid(GridPane grid) {
         // myColorGrid = mySimulation.getColorGrid();
         Color[][] myColorGrid = createColors(); // TODO: myColorGrid from Simulation
         int totalRows = myColorGrid.length;
@@ -187,7 +186,13 @@ public class Visualization extends Application {
                 grid.add(myRectangle, col, row ); // Default to col:row span = 1
             }
         }
-        return grid;
+    }
+
+    // TODO: Call update on simulation
+    private void updateSimGrid() {
+        System.out.println("Updating simulation grid");
+        updateSimFlag = false;
+        // mySimulation.updateGrid();
     }
 
     private void step() {
@@ -195,7 +200,8 @@ public class Visualization extends Application {
             playSelected();
         }
         if (updateSimFlag) {
-            updateSimGrid(mySimGrid);
+            updateSimGrid();
+            showSimGrid(mySimGrid);
         }
     }
 
