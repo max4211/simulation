@@ -107,7 +107,6 @@ public class Simulation {
                 myGrid[row][col].updateState();
             }
         }
-
     }
 
     private boolean inBounds(int row, int col) {
