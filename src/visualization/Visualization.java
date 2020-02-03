@@ -73,7 +73,7 @@ public class Visualization extends Application {
     private Color[][] myColorGrid;
 
     // First simulation to run
-    private File firstSim = new File("data/simulation_sample.xml");
+    private File firstSim = new File("data/life1.xml");
 
     @Override
     public void start(Stage stage) {
@@ -171,8 +171,8 @@ public class Visualization extends Application {
     }
 
     private void showSimGrid(GridPane grid) {
-        // myColorGrid = mySimulation.getColorGrid();
-        Color[][] myColorGrid = createColors(); // TODO: myColorGrid from Simulation
+        // Color[][] myColorGrid = createColors(); // TODO: myColorGrid from Simulation
+        myColorGrid = mySimulation.getColorGrid();
         int totalRows = myColorGrid.length;
         int totalCols = myColorGrid[0].length;
         double rectangleHeight = SIM_HEIGHT / totalRows;
@@ -192,7 +192,7 @@ public class Visualization extends Application {
     private void updateSimGrid() {
         System.out.println("Updating simulation grid");
         updateSimFlag = false;
-        // mySimulation.updateGrid();
+        mySimulation.updateGrid();
     }
 
     private void step() {
