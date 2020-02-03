@@ -8,10 +8,14 @@ import java.util.Map;
 public abstract class Cell {
     protected double myState;
     protected double nextState;
+    protected int myRow;
+    protected int myCol;
     protected Map<Double, Color> myColorMap = new HashMap<>();
 
     public Cell(double initialState, int row, int col) {
         this.myState = initialState;
+        this.myRow = row;
+        this.myCol = col;
         createColorMap();
     }
 
