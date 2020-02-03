@@ -129,7 +129,7 @@ public class Visualization extends Application {
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
-            sliderLabel.setText(String.format("%.2f", new_val));
+            sliderLabel.setText(String.format("%.1f", new_val));
             myPlayButton.setSelected(true);
             setUpdateTime();
         });
@@ -158,6 +158,7 @@ public class Visualization extends Application {
         return box;
     }
 
+    // TODO: Fix new game upload cell overflow
     private void showSimGrid() {
         myColorGrid = mySimulation.getColorGrid();
         int totalRows = myColorGrid.length;
@@ -216,7 +217,7 @@ public class Visualization extends Application {
     private double getAnimationRate() {
         double val = mySlider.getValue();
         if (val == 0) {
-            return Integer.MAX_VALUE / 10;
+            return Math.sqrt(Integer.MAX_VALUE);
         } else {
             return Math.pow(val, -1) * 1000;
         }
@@ -237,6 +238,7 @@ public class Visualization extends Application {
             System.out.println("No file selected, please try again");
         } else if (extension.equals("xml") || extension.equals("XML")){
             mySimulation = new Simulation(simFile);
+            showSimGrid();
             myPauseButton.setSelected(true);
             System.out.println("Created simulation from fileChooser \n" + simFile);
         } else {
