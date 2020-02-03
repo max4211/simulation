@@ -6,17 +6,23 @@ import java.util.Collection;
 /**
  *  This class represents a cell in a Percolation simulation.
  *
- *
  * States:
  * 0 = blocked
  * 1 = open
  * 2 = percolated
+ *
+ *  Neighborhood Type: Moore
+ *  Rules:
+ *  If a cell is blocked, its state does not change.
+ *  If a cell is open and has at least one percolated neighbor, it is percolated.
+ *  If a cell is percolated, its state does not change.
+ *
  */
 public class PercolationCell extends Cell {
 
     /**
-     * Constructs a LifeCell using same parameters as Cell
-     * @param initialState: initial state (0 or 1)
+     * Constructs a PercolationCell using same parameters as Cell
+     * @param initialState: initial state (0, 1, or 2)
      * @param row: y-coordinate of cell
      * @param col: x-coordinate of cell
      */
