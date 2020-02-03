@@ -49,7 +49,7 @@ public class SegregationCell extends Cell{
         boolean satisfied;
         for (Double d : neighborStates ){
             totalNeighbors++;
-            if (Math.floor(d) != Math.floor(myState) || Math.floor(d) != 0) otherNeighbors++;
+            if (Math.floor(d) != Math.floor(myState) && Math.floor(d) != 0) otherNeighbors++;
         }
         satisfied = otherNeighbors*0.1/totalNeighbors >= myPercentTolerance;
 
