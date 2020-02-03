@@ -49,13 +49,14 @@ public class Simulation {
 
     }
 
+    public Cell[][] getGrid(){ return myGrid; }
+
     private void fillGrid(String simType, List<String> initialCells) throws Exception {
         for (String cellString : initialCells){
             String[] cellData = cellString.split(" ");
-
             int row = Integer.parseInt(cellData[0]);
             int col = Integer.parseInt(cellData[1]);
-            float state = Float.parseFloat(cellData[2]);
+            double state = Double.parseDouble(cellData[2]);
 
             Cell newCell;
             if(simType.equals("Spreading of Fire")) {
@@ -80,7 +81,6 @@ public class Simulation {
     }
 
     public Color[][] getColorGrid() {
-        updateGrid();
         Color[][] colorGrid = new Color[myGrid.length][myGrid[0].length];
         for(int row=0; row<colorGrid.length; row++){
             for(int col=0; col<colorGrid[0].length; col++){
