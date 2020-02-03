@@ -1,0 +1,29 @@
+.root {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Calibri Light";
+    -fx-base: rgb(50, 50, 250);
+    -fx-background: rgb(225, 228, 203);
+}
+
+.toggle-button {
+    -fx-text-fill: #006464;
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+}
+
+.toggle-button:selected {
+    -fx-background-color: rgb(100, 100, 100);
+    -fx-text-fill: rgb(250, 100, 40);
+}
+
+.toggle-button:hover {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: rgb(255, 15, 20);
+}
+
+.label {
+    -fx-text-fill: rgb(255, 100, 100);
+    //-fx-font-weight: 900;
+}
