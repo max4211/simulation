@@ -7,9 +7,9 @@ import java.util.Collection;
  *  This class represents a cell in a Percolation simulation.
  *
  * States:
- * 0 = blocked
- * 1 = open
- * 2 = percolated
+ * 0 = blocked (black)
+ * 1 = open (white)
+ * 2 = percolated (sky blue)
  *
  *  Neighborhood Type: Moore
  *  Rules:
@@ -17,6 +17,8 @@ import java.util.Collection;
  *  If a cell is open and has at least one percolated neighbor, it is percolated.
  *  If a cell is percolated, its state does not change.
  *
+ * Full rules explained on pg. 3 of:
+ * https://www2.cs.duke.edu/courses/spring20/compsci308/assign/02_simulation/PercolationCA.pdf
  */
 public class PercolationCell extends Cell {
 
