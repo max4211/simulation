@@ -40,7 +40,7 @@ public class PercolationCell extends Cell {
     }
 
     @Override
-    public void determineState(Collection<Double> neighborStates){
+    public void determineNextState(Collection<Double> neighborStates){
 
         // Open and has a percolated neighbor -> percolates
         if(myState==1 && neighborStates.contains(2.0))

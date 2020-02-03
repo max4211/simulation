@@ -33,7 +33,7 @@ public class LifeCell extends Cell {
     }
 
     @Override
-    public void determineState(Collection<Double> neighborStates){
+    public void determineNextState(Collection<Double> neighborStates){
         int numAlive = 0;
         for(double state: neighborStates){
             numAlive += (int) state;

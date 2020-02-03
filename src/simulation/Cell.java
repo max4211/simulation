@@ -21,7 +21,7 @@ public abstract class Cell {
 
     public abstract void createColorMap();
 
-    public abstract void determineState(Collection<Double> neighborStates);
+    public abstract void determineNextState(Collection<Double> neighborStates);
 
     public abstract double mapKey(double myState);
 
