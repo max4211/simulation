@@ -63,7 +63,10 @@ public class Simulation {
                 newCell = new FireCell(state, row, col);
             } else if(simType.equals("Game of Life")){
                 newCell = new LifeCell(state, row, col);
-            } else throw new Exception("Simulation Type Not Accepted");
+            } else if(simType.equals("Percolation")){
+                newCell = new PercolationCell(state, row, col);
+            }
+            else throw new Exception("Simulation Type Not Accepted");
             myGrid[row][col] = newCell;
         }
     }
