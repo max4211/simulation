@@ -67,6 +67,8 @@ public class Simulation {
                 newCell = new PercolationCell(state, row, col);
             } else if(simType.equals("Segregation")){
                 newCell = new SegregationCell(state, row, col, myGrid);
+            } else if(simType.equals("Predator Prey")){
+                newCell = new PredatorPreyCell(state, row, col);
             }
             else throw new Exception("Simulation Type Not Accepted");
             myGrid[row][col] = newCell;
