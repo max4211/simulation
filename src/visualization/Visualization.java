@@ -265,8 +265,6 @@ public class Visualization extends Application {
             button.setText("");
             button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
         }
-        else { button.setText(label); }
-
     }
 
 }
