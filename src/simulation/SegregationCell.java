@@ -35,6 +35,12 @@ public class SegregationCell extends Cell{
         myPercentTolerance = initialState - Math.floor(initialState);
     }
 
+    public void setMyPercentTolerance(double tolerance){
+        myPercentTolerance = tolerance;
+    }
+
+    public double getPercentTolerance(){ return myPercentTolerance; }
+
     @Override
     public void createColorMap() {
         myColorMap.put(0.0, Color.WHITE);
@@ -43,17 +49,17 @@ public class SegregationCell extends Cell{
     }
 
     @Override
-    public void determineNextState(Collection<Double> neighborStates) {
-        int otherNeighbors = 0;
-        int totalNeighbors = 0;
-        boolean satisfied;
-        for (Double d : neighborStates ){
+    public void determineNextState(Collection<Cell> neighbors) {
+        double otherNeighbors = 0;
+        double totalNeighbors = 0;
+        for (Cell n : neighbors){
             totalNeighbors++;
-            if (Math.floor(d) != Math.floor(myState) || Math.floor(d) != 0) otherNeighbors++;
+            double neighborState = Math.floor(n.getState());
+            if (neighborState != Math.floor(myState) && neighborState != 0) otherNeighbors++;
         }
-        satisfied = otherNeighbors*0.1/totalNeighbors >= myPercentTolerance;
+        boolean satisfied = otherNeighbors/totalNeighbors >= myPercentTolerance;
 
-        if(!satisfied){
+        if(!satisfied) {
             // find another cell and switch information with them
         }
     }
