@@ -8,8 +8,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -30,6 +33,7 @@ public class Visualization extends Application {
     private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
     private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
+    private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
@@ -38,6 +42,7 @@ public class Visualization extends Application {
     private final double SIM_HEIGHT = SCENE_HEIGHT * 0.7;
     private final double SIM_WIDTH = SCENE_WIDTH * 0.9;
     private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.25;
+    private final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
     private final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
 
     // Padding values
@@ -138,6 +143,7 @@ public class Visualization extends Application {
         myStepButton = new CustomToggle(myResources.getString("StepButton"), group, event -> stepSelected());
         myLoadButton = new CustomToggle(myResources.getString("LoadButton"), group, event -> loadSelected());
         myExitButton = new CustomToggle(myResources.getString("ExitButton"), group, event -> exitSelected());
+        styleButtons();
         pauseSelected();
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
@@ -241,6 +247,26 @@ public class Visualization extends Application {
         int index = fileName.lastIndexOf(".");
         if (index > 0) { return fileName.substring(index+1); }
         else { return ""; }
+    }
+
+    private void styleButtons() {
+        styleButton(myPauseButton);
+        styleButton(myPlayButton);
+        styleButton(myLoadButton);
+        styleButton(myExitButton);
+        styleButton(myStepButton);
+    }
+
+    private void styleButton(ToggleButton button) {
+        String label = button.getText();
+        if (label.matches(IMAGEFILE_SUFFIXES)) {
+            button.setPrefSize(50, 50);
+            button.setShape(new Circle(BUTTON_RADIUS));
+            button.setText("");
+            button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
+        }
+        else { button.setText(label); }
+
     }
 
 }
