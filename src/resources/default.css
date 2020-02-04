@@ -1,5 +1,5 @@
 .root {
-    -fx-font-size: 10pt;
+    -fx-font-size: 14pt;
     -fx-font-family: "Calibri Light";
     -fx-base: rgb(50, 50, 250);
     -fx-background: rgb(225, 228, 203);
@@ -14,13 +14,13 @@
 }
 
 .toggle-button:selected {
-    -fx-background-color: rgb(100, 100, 100);
-    -fx-text-fill: rgb(250, 100, 40);
+    -fx-background-color: rgb(255, 255, 153);
+    -fx-text-fill: rgb(255, 153, 255);
 }
 
 .toggle-button:hover {
     -fx-background-color: #3a3a3a;
-    -fx-text-fill: rgb(255, 15, 20);
+    -fx-text-fill: rgb(250, 100, 40);
 }
 
 .label {

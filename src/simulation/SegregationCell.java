@@ -15,7 +15,7 @@ import java.util.Random;
  *  Rules:
  *  If the percentage of cells around this cell that are a different race is greater than the cell's
  *  myPercentTolerance, it is unsatisfied.
- *  If a cell is unsatisfied it can switch places with another unsatisfied cell or an empty cell
+ *  If a cell is unsatisfied it can move to an empty cell
  *  Else, a cell is satisfied and it stays still
  *
  * Full rules explained at:
@@ -30,11 +30,11 @@ public class SegregationCell extends Cell{
      * Creates a new SegregationCell
      * @param initialState: the state; the integer part is the RACE and everything to the right of the decimal
      *                    is the PERCENT TOLERANCE
-     * @param x: x position
-     * @param y: y position
+     * @param row: x position
+     * @param col: y position
      */
-    public SegregationCell(double initialState, int x, int y, SegregationCell[][] grid){
-        super(Math.floor(initialState), x, y);
+    public SegregationCell(double initialState, int row, int col, SegregationCell[][] grid){
+        super(initialState, row, col);
         myPercentTolerance = initialState - Math.floor(initialState);
         myGrid = grid;
     }
