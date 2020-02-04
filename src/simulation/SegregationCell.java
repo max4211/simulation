@@ -53,30 +53,28 @@ public class SegregationCell extends Cell{
 
     @Override
     public void determineNextState(Collection<Cell> neighbors) {
-        double otherNeighbors = 0;
-        double totalNeighbors = 0;
-        for (Cell n : neighbors){
-            totalNeighbors++;
-            double neighborState = Math.floor(n.getState());
-            if (neighborState != myState && neighborState != 0) otherNeighbors++;
+        if(Math.floor(myState)!=0){
+            double otherNeighbors = 0;
+            double totalNeighbors = 0;
+            for (Cell n : neighbors){
+                totalNeighbors++;
+                double neighborState = Math.floor(n.getState());
+                if (neighborState != Math.floor(myState) && neighborState != 0) otherNeighbors++;
+            }
+            boolean satisfied = otherNeighbors/totalNeighbors >= myPercentTolerance;
+            if(!satisfied)
+                findVacantCell();
+            else
+                nextState = myState;
         }
-        boolean satisfied = otherNeighbors/totalNeighbors >= myPercentTolerance;
-        if(!satisfied) { findVacantCell(); }
         else{
             nextState = myState;
-            nextTolerance = myPercentTolerance; // TODO: override updateState method so tolerance updates too
         }
     }
 
     @Override
     public double mapKey(double myState) {
-        return myState;
-    }
-
-    @Override
-    public void updateState() {
-        this.myState = this.nextState;
-       // this.myPercentTolerance = this.nextTolerance;
+        return Math.floor(myState);
     }
 
     private void findVacantCell(){
@@ -86,7 +84,7 @@ public class SegregationCell extends Cell{
         while(!foundEmpty){
             int randRow = new Random().nextInt(height);
             int randCol = new Random().nextInt(width);
-            if(myGrid[randRow][randCol].getNextState()==0){ //TODO fix case where next state isn't yet defined?
+            if(Math.floor(myGrid[randRow][randCol].getNextState())==0){ //TODO fix case where next state isn't yet defined?
                 foundEmpty = true;
                 moveTo(randRow, randCol);
             }
@@ -95,6 +93,8 @@ public class SegregationCell extends Cell{
 
     private void moveTo(int r, int c){
         // Switch states by setting cell being moved to's next state
+        System.out.printf("move from %d %d to %d %d\n", myRow, myCol, r, c);
+        System.out.printf("changing this cell from %f to %f\n", myState, myGrid[r][c].getState());
         myGrid[r][c].setNextState(myState);
         this.nextState = 0;
     }
