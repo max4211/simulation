@@ -43,13 +43,13 @@ public class SegregationCell extends Cell{
     }
 
     @Override
-    public void determineNextState(Collection<Double> neighborStates) {
+    public void determineNextState(Collection<Cell> neighbors) {
         int otherNeighbors = 0;
         int totalNeighbors = 0;
         boolean satisfied;
-        for (Double d : neighborStates ){
+        for (Cell c : neighbors ){
             totalNeighbors++;
-            if (Math.floor(d) != Math.floor(myState) && Math.floor(d) != 0) otherNeighbors++;
+            if (Math.floor(c.getState()) != Math.floor(myState) && Math.floor(c.myState) != 0) otherNeighbors++;
         }
         satisfied = otherNeighbors*0.1/totalNeighbors >= myPercentTolerance;
 
