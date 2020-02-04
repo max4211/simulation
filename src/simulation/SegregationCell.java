@@ -30,7 +30,7 @@ public class SegregationCell extends Cell{
      * @param row: x position
      * @param col: y position
      */
-    public SegregationCell(double initialState, int row, int col){
+    public SegregationCell(double initialState, int row, int col, Cell[][] grid){
         super(initialState, row, col);
         myPercentTolerance = initialState - Math.floor(initialState);
     }
