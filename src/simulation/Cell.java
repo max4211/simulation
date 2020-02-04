@@ -25,15 +25,15 @@ public abstract class Cell {
 
     public abstract double mapKey(double myState);
 
-    public void updateState() {
-        this.myState = this.nextState;
-    }
+    public void updateState() { this.myState = this.nextState; }
 
     public double getState() { return this.myState; }
 
     public double getNextState(){ return this.nextState; }
 
     public void setNextState(double state){ this.nextState = state; }
+
+    public void setState(double state){ this.myState = state; }
 
     public Color getColor() {
         double key = mapKey(this.myState);

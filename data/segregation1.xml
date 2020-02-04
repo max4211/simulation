@@ -4,8 +4,8 @@
     <width>3</width>
     <type>Segregation</type>
     <neighborType>MOORE</neighborType>
-    <cell>0 0 1.0</cell>
-    <cell>0 1 0.0</cell>
+    <cell>0 0 1.9999</cell>
+    <cell>0 1 2.0</cell>
     <cell>0 2 0.0</cell>
     <cell>1 0 0.0</cell>
     <cell>1 1 0.0</cell>
