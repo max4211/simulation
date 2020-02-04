@@ -27,7 +27,7 @@ public class Visualization extends Application {
     private static final String RESOURCES = "resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    private static final String LANGUAGE = "CAPS";
+    private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
@@ -65,12 +65,13 @@ public class Visualization extends Application {
     private Simulation mySimulation;
 
     // First simulation to run
-    private File firstSim = new File("data/percolation74.xml");
+    private final String SIM_TITLE = myResources.getString("SimTitle");
+    private final File firstSim = new File("data/percolation74.xml");
 
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
-        stage.setTitle("CA Simulation Project");
+        stage.setTitle(SIM_TITLE);
         stage.setScene(myScene);
         stage.sizeToScene();
         stage.show();

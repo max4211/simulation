@@ -19,7 +19,6 @@ public class AnimationSlider extends Slider {
         this.setShowTickLabels(true);
         this.setShowTickMarks(true);
         this.setMajorTickUnit(SLIDER_MAJOR_TICK);
-        // slider.setMinorTickCount(SLIDER_MINOR_TICK);
         this.setBlockIncrement(SLIDER_MINOR_TICK);
     }
 }
