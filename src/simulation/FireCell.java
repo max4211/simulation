@@ -3,6 +3,7 @@ package simulation;
 import javafx.scene.paint.Color;
 
 import java.util.Collection;
+import java.util.Random;
 
 /**
  * States:
@@ -22,20 +23,33 @@ public class FireCell extends Cell {
 
     private double probCatch;
 
-    public FireCell(double initialState, int x, int y) {
-        super(Math.floor(initialState), x, y);
-        this.probCatch = (initialState - Math.floor(initialState))*100;
+    public FireCell(double initialState, int row, int col) {
+        super(Math.floor(initialState), row, col);
+        this.probCatch = (initialState - Math.floor(initialState));
         createColorMap();
     }
 
     public double getProbCatch() { return this.probCatch; }
 
     @Override
-    public void determineNextState(Collection<Double> neighborStates) {
-        if(myState==0)
-            nextState = myState;
-
-
+    public void determineNextState(Collection<Cell> neighbors) {
+        boolean hasBurningNeighbor = false;
+        for(Cell n: neighbors){
+            if(n.getState()==2){
+                hasBurningNeighbor = true;
+                break;
+            }
+        }
+        if(myState==0){
+            nextState = 0.0;
+        } else if(myState==1){
+            if(hasBurningNeighbor && new Random().nextDouble() < this.probCatch)
+                nextState = 2.0;
+            else
+                nextState = 1.0;
+        } else if(myState==2){
+            nextState = 0.0;
+        }
     }
 
     @Override
@@ -47,7 +61,7 @@ public class FireCell extends Cell {
 
     @Override
     public double mapKey(double myState) {
-        return Math.floor(myState);
+        return myState;
     }
 }
 

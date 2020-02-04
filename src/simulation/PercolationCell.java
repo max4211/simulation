@@ -40,10 +40,16 @@ public class PercolationCell extends Cell {
     }
 
     @Override
-    public void determineNextState(Collection<Double> neighborStates){
-
+    public void determineNextState(Collection<Cell> neighbors){
+        boolean neighborPercolates = false;
+        for(Cell n: neighbors){
+            if(n.getState()==2){
+                neighborPercolates = true;
+                break;
+            }
+        }
         // Open and has a percolated neighbor -> percolates
-        if(myState==1 && neighborStates.contains(2.0))
+        if(myState==1 && neighborPercolates)
             nextState = 2.0;
         // Blocked, percolated, or open without a percolated neighbor -> constant
         else

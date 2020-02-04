@@ -97,7 +97,7 @@ public class Simulation {
         // Determine Cell updates
         for(int row=0; row<myGrid.length; row++){
             for(int col=0; col<myGrid[0].length; col++){
-                myGrid[row][col].determineNextState(getNeighborStates(row, col));
+                myGrid[row][col].determineNextState(getNeighbors(row, col));
             }
         }
 
@@ -107,7 +107,6 @@ public class Simulation {
                 myGrid[row][col].updateState();
             }
         }
-
     }
 
     private boolean inBounds(int row, int col) {
@@ -120,17 +119,18 @@ public class Simulation {
      * @param col column cell whose neighbors are being requested
      * @return list of neighbors states in order of ROW_DELTA and COL_DELTA
      */
-    private Collection<Double> getNeighborStates(int row, int col) {
-        Collection<Double> neighborStates = new ArrayList<Double>();
+    private Collection<Cell> getNeighbors(int row, int col) {
+        Collection<Cell> neighbors = new ArrayList<Cell>();
         int r2; int c2;
         for (int i = 0; i < ROW_DELTA.length; i ++) {
             r2 = row + ROW_DELTA[i]; c2 = col + COL_DELTA[i];
             if (inBounds(r2, c2)) {
-                neighborStates.add(myGrid[r2][c2].getState());
+                neighbors.add(myGrid[r2][c2]);
             }
         }
-        return neighborStates;
+        return neighbors;
     }
+
 
     // this main method is here for testing - not supposed to be part of the final build
     public static void main(String[] args) throws Exception {
