@@ -55,9 +55,7 @@ public class PredatorPreyCell extends Cell{
 
     @Override
     public void determineNextState(Collection<Double> neighborStates) {
-        for(Double d : neighborStates){
 
-        }
     }
 
     @Override
