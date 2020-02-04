@@ -23,8 +23,7 @@ import java.util.Random;
  */
 public class SegregationCell extends Cell{
     private double myPercentTolerance;      //double between 0 and 1
-    private double nextTolerance;
-    private SegregationCell[][] myGrid;
+    private Cell[][] myGrid;
 
     /**
      * Creates a new SegregationCell
@@ -33,7 +32,7 @@ public class SegregationCell extends Cell{
      * @param row: x position
      * @param col: y position
      */
-    public SegregationCell(double initialState, int row, int col, SegregationCell[][] grid){
+    public SegregationCell(double initialState, int row, int col, Cell[][] grid){
         super(initialState, row, col);
         myPercentTolerance = initialState - Math.floor(initialState);
         myGrid = grid;
@@ -44,8 +43,6 @@ public class SegregationCell extends Cell{
     }
 
     public double getPercentTolerance(){ return myPercentTolerance; }
-
-    public void setNextTolerance(double tol){ nextTolerance = tol; }
 
     @Override
     public void createColorMap() {
@@ -76,6 +73,12 @@ public class SegregationCell extends Cell{
         return myState;
     }
 
+    @Override
+    public void updateState() {
+        this.myState = this.nextState;
+       // this.myPercentTolerance = this.nextTolerance;
+    }
+
     private void findVacantCell(){
         int height = myGrid.length;
         int width = myGrid[0].length;
@@ -83,7 +86,7 @@ public class SegregationCell extends Cell{
         while(!foundEmpty){
             int randRow = new Random().nextInt(height);
             int randCol = new Random().nextInt(width);
-            if(myGrid[randRow][randCol].getNextState()==0){
+            if(myGrid[randRow][randCol].getNextState()==0){ //TODO fix case where next state isn't yet defined?
                 foundEmpty = true;
                 moveTo(randRow, randCol);
             }
@@ -94,9 +97,5 @@ public class SegregationCell extends Cell{
         // Switch states by setting cell being moved to's next state
         myGrid[r][c].setNextState(myState);
         this.nextState = 0;
-
-        // Switch tolerances
-        myGrid[r][c].setNextTolerance(myPercentTolerance);
-        this.nextTolerance = 0;
     }
 }
