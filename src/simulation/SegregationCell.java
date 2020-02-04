@@ -39,6 +39,10 @@ public class SegregationCell extends Cell{
 
     public double getPercentTolerance(){ return myState - Math.floor(myState); }
 
+    public boolean isOccupied(){
+        return Math.floor(myState) != 0;
+    }
+
     @Override
     public void createColorMap() {
         myColorMap.put(0.0, Color.WHITE);
@@ -50,14 +54,20 @@ public class SegregationCell extends Cell{
     public void determineNextState(Collection<Cell> neighbors) {
         if(! changedAlready){
             if(Math.floor(myState)!=0){
-                double otherNeighbors = 0;
+                double likeNeighbors = 0;
                 double totalNeighbors = 0;
                 for (Cell n : neighbors){
-                    totalNeighbors++;
                     double neighborState = Math.floor(n.getState());
-                    if (neighborState != Math.floor(myState) && neighborState != 0) otherNeighbors++;
+                    if(neighborState != 0){
+                        totalNeighbors++;
+                        if (neighborState == Math.floor(myState)) likeNeighbors++;
+                    }
                 }
-                boolean satisfied = otherNeighbors/totalNeighbors >= getPercentTolerance();
+                boolean satisfied = true;
+                if(totalNeighbors > 0){
+                    satisfied = likeNeighbors/totalNeighbors >= getPercentTolerance();
+                    System.out.println(likeNeighbors/totalNeighbors);
+                }
                 if(!satisfied)
                     findVacantCell();
                 else
@@ -94,7 +104,8 @@ public class SegregationCell extends Cell{
         while(!foundEmpty){
             int randRow = new Random().nextInt(height);
             int randCol = new Random().nextInt(width);
-            if(Math.floor(myGrid[randRow][randCol].getNextState())==0 && !(randRow == myRow && randCol == myCol)){
+            if(Math.floor(myGrid[randRow][randCol].getNextState())==0 && Math.floor(myGrid[randRow][randCol].getState())==0 &&
+                    !(randRow == myRow && randCol == myCol)){
                 foundEmpty = true;
                 moveTo(randRow, randCol);
             }
@@ -103,12 +114,10 @@ public class SegregationCell extends Cell{
 
     private void moveTo(int r, int c){
         // Switch states by setting cell being moved to's next state
-        System.out.printf("move from %d %d to %d %d\n", myRow, myCol, r, c);
-        System.out.printf("changing this cell from %f to %f\n", myState, myGrid[r][c].getState());
         myGrid[r][c].setNextState(myState);
 
         // Now empty
         this.nextState = 0;
-        System.out.println("cell this agent just moved will next have state: " + myGrid[r][c].getNextState());
+
     }
 }
