@@ -31,6 +31,10 @@ public abstract class Cell {
 
     public double getState() { return this.myState; }
 
+    public double getNextState(){ return this.nextState; }
+
+    public void setNextState(double state){ this.nextState = state; }
+
     public Color getColor() {
         double key = mapKey(this.myState);
         return this.myColorMap.get(key);

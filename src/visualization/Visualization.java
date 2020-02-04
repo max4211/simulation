@@ -68,7 +68,7 @@ public class Visualization extends Application {
     private Color[][] myColorGrid;
 
     // First simulation to run
-    private File firstSim = new File("data/fire83.xml");
+    private File firstSim = new File("data/gameoflife29.xml");
 
     @Override
     public void start(Stage stage) {

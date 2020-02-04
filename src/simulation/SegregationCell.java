@@ -2,6 +2,7 @@ package simulation;
 
 import javafx.scene.paint.Color;
 import java.util.Collection;
+import java.util.Random;
 
 /**
  *  This class represents a cell in a Schelling's Model of Segregation simulation.
@@ -21,7 +22,9 @@ import java.util.Collection;
  * https://www2.cs.duke.edu/courses/spring20/compsci308/assign/02_simulation/nifty/mccown-schelling-model-segregation/
  */
 public class SegregationCell extends Cell{
-    private Double myPercentTolerance;      //double between 0 and 1
+    private double myPercentTolerance;      //double between 0 and 1
+    private double nextTolerance;
+    private SegregationCell[][] myGrid;
 
     /**
      * Creates a new SegregationCell
@@ -30,9 +33,10 @@ public class SegregationCell extends Cell{
      * @param x: x position
      * @param y: y position
      */
-    public SegregationCell(double initialState, int x, int y){
-        super(initialState, x, y);
+    public SegregationCell(double initialState, int x, int y, SegregationCell[][] grid){
+        super(Math.floor(initialState), x, y);
         myPercentTolerance = initialState - Math.floor(initialState);
+        myGrid = grid;
     }
 
     public void setMyPercentTolerance(double tolerance){
@@ -40,6 +44,8 @@ public class SegregationCell extends Cell{
     }
 
     public double getPercentTolerance(){ return myPercentTolerance; }
+
+    public void setNextTolerance(double tol){ nextTolerance = tol; }
 
     @Override
     public void createColorMap() {
@@ -55,17 +61,42 @@ public class SegregationCell extends Cell{
         for (Cell n : neighbors){
             totalNeighbors++;
             double neighborState = Math.floor(n.getState());
-            if (neighborState != Math.floor(myState) && neighborState != 0) otherNeighbors++;
+            if (neighborState != myState && neighborState != 0) otherNeighbors++;
         }
         boolean satisfied = otherNeighbors/totalNeighbors >= myPercentTolerance;
-
-        if(!satisfied) {
-            // find another cell and switch information with them
+        if(!satisfied) { findVacantCell(); }
+        else{
+            nextState = myState;
+            nextTolerance = myPercentTolerance; // TODO: override updateState method so tolerance updates too
         }
     }
 
     @Override
     public double mapKey(double myState) {
-        return Math.floor(myState);
+        return myState;
+    }
+
+    private void findVacantCell(){
+        int height = myGrid.length;
+        int width = myGrid[0].length;
+        boolean foundEmpty = false;
+        while(!foundEmpty){
+            int randRow = new Random().nextInt(height);
+            int randCol = new Random().nextInt(width);
+            if(myGrid[randRow][randCol].getNextState()==0){
+                foundEmpty = true;
+                moveTo(randRow, randCol);
+            }
+        }
+    }
+
+    private void moveTo(int r, int c){
+        // Switch states by setting cell being moved to's next state
+        myGrid[r][c].setNextState(myState);
+        this.nextState = 0;
+
+        // Switch tolerances
+        myGrid[r][c].setNextTolerance(myPercentTolerance);
+        this.nextTolerance = 0;
     }
 }
