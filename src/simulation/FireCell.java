@@ -32,11 +32,18 @@ public class FireCell extends Cell {
     public double getProbCatch() { return this.probCatch; }
 
     @Override
-    public void determineNextState(Collection<Double> neighborStates) {
+    public void determineNextState(Collection<Cell> neighbors) {
+        boolean hasBurningNeighbor = false;
+        for(Cell n: neighbors){
+            if(n.getState()==2){
+                hasBurningNeighbor = true;
+                break;
+            }
+        }
         if(myState==0){
             nextState = 0.0;
         } else if(myState==1){
-            if(neighborStates.contains(2.0) && new Random().nextDouble() < this.probCatch)
+            if(hasBurningNeighbor && new Random().nextDouble() < this.probCatch)
                 nextState = 2.0;
             else
                 nextState = 1.0;
