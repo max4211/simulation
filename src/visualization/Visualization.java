@@ -208,11 +208,8 @@ public class Visualization extends Application {
 
     private double getAnimationRate() {
         double val = mySlider.getValue();
-        if (val == 0) {
-            return Math.sqrt(Integer.MAX_VALUE);
-        } else {
-            return Math.pow(val, -1) * 1000;
-        }
+        if (val == 0) { return Math.sqrt(Integer.MAX_VALUE); }
+        else { return Math.pow(val, -1) * 1000; }
     }
 
     private void loadSelected() {
@@ -242,11 +239,8 @@ public class Visualization extends Application {
         if (file == null) {return "";}
         String fileName = file.getName();
         int index = fileName.lastIndexOf(".");
-        if (index > 0) {
-            return fileName.substring(index+1);
-        } else {
-            return "";
-        }
+        if (index > 0) { return fileName.substring(index+1); }
+        else { return ""; }
     }
 
 }
