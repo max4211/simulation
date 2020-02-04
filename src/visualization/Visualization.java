@@ -29,7 +29,6 @@ public class Visualization extends Application {
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
     private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
-    private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
