@@ -22,8 +22,8 @@ import java.util.Random;
  * https://www2.cs.duke.edu/courses/spring20/compsci308/assign/02_simulation/nifty/mccown-schelling-model-segregation/
  */
 public class SegregationCell extends Cell{
-    private double myPercentTolerance;      //double between 0 and 1
     private Cell[][] myGrid;
+    private boolean changedAlready = false;
 
     /**
      * Creates a new SegregationCell
@@ -34,15 +34,10 @@ public class SegregationCell extends Cell{
      */
     public SegregationCell(double initialState, int row, int col, Cell[][] grid){
         super(initialState, row, col);
-        myPercentTolerance = initialState - Math.floor(initialState);
         myGrid = grid;
     }
 
-    public void setMyPercentTolerance(double tolerance){
-        myPercentTolerance = tolerance;
-    }
-
-    public double getPercentTolerance(){ return myPercentTolerance; }
+    public double getPercentTolerance(){ return myState - Math.floor(myState); }
 
     @Override
     public void createColorMap() {
@@ -53,22 +48,24 @@ public class SegregationCell extends Cell{
 
     @Override
     public void determineNextState(Collection<Cell> neighbors) {
-        if(Math.floor(myState)!=0){
-            double otherNeighbors = 0;
-            double totalNeighbors = 0;
-            for (Cell n : neighbors){
-                totalNeighbors++;
-                double neighborState = Math.floor(n.getState());
-                if (neighborState != Math.floor(myState) && neighborState != 0) otherNeighbors++;
+        if(! changedAlready){
+            if(Math.floor(myState)!=0){
+                double otherNeighbors = 0;
+                double totalNeighbors = 0;
+                for (Cell n : neighbors){
+                    totalNeighbors++;
+                    double neighborState = Math.floor(n.getState());
+                    if (neighborState != Math.floor(myState) && neighborState != 0) otherNeighbors++;
+                }
+                boolean satisfied = otherNeighbors/totalNeighbors >= getPercentTolerance();
+                if(!satisfied)
+                    findVacantCell();
+                else
+                    nextState = myState;
             }
-            boolean satisfied = otherNeighbors/totalNeighbors >= myPercentTolerance;
-            if(!satisfied)
-                findVacantCell();
-            else
+            else{
                 nextState = myState;
-        }
-        else{
-            nextState = myState;
+            }
         }
     }
 
@@ -77,6 +74,19 @@ public class SegregationCell extends Cell{
         return Math.floor(myState);
     }
 
+    @Override
+    public void setNextState(double state){
+        this.nextState = state;
+        changedAlready = true;
+    }
+
+    @Override
+    public void updateState() {
+        this.myState = this.nextState;
+        changedAlready = false;
+    }
+
+
     private void findVacantCell(){
         int height = myGrid.length;
         int width = myGrid[0].length;
@@ -84,7 +94,7 @@ public class SegregationCell extends Cell{
         while(!foundEmpty){
             int randRow = new Random().nextInt(height);
             int randCol = new Random().nextInt(width);
-            if(Math.floor(myGrid[randRow][randCol].getNextState())==0){ //TODO fix case where next state isn't yet defined?
+            if(Math.floor(myGrid[randRow][randCol].getNextState())==0 && !(randRow == myRow && randCol == myCol)){
                 foundEmpty = true;
                 moveTo(randRow, randCol);
             }
@@ -96,6 +106,9 @@ public class SegregationCell extends Cell{
         System.out.printf("move from %d %d to %d %d\n", myRow, myCol, r, c);
         System.out.printf("changing this cell from %f to %f\n", myState, myGrid[r][c].getState());
         myGrid[r][c].setNextState(myState);
+
+        // Now empty
         this.nextState = 0;
+        System.out.println("cell this agent just moved will next have state: " + myGrid[r][c].getNextState());
     }
 }
