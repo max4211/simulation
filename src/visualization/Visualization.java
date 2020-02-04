@@ -31,16 +31,15 @@ public class Visualization extends Application {
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
-    private ResourceBundle myResources;
+    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
-    private final double SCENE_HEIGHT = 520;
-    private final double SCENE_WIDTH = 420;
-    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.75;
-    private final double SIM_WIDTH = SCENE_WIDTH * 0.95;
-    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.15;
-    private final Color STROKE_FILL = Color.BLACK;
-    private final double STROKE_WIDTH = 3;
+    private final double SCENE_HEIGHT = 700;
+    private final double SCENE_WIDTH = 550;
+    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.7;
+    private final double SIM_WIDTH = SCENE_WIDTH * 0.9;
+    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.25;
+    private final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
 
     // Padding values
     private final int TOP_PAD = 5;
@@ -62,17 +61,14 @@ public class Visualization extends Application {
     // Simulation metadata
     private final int FRAME_RATE = 20;
     private long updateTime;
-    private GridPane mySimGrid;
     private BorderPane myRoot;
     private Simulation mySimulation;
-    private Color[][] myColorGrid;
 
     // First simulation to run
-    private File firstSim = new File("data/fire83.xml");
+    private File firstSim = new File("data/percolation74.xml");
 
     @Override
     public void start(Stage stage) {
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
         Scene myScene = createScene();
         stage.setTitle("CA Simulation Project");
         stage.setScene(myScene);
@@ -87,6 +83,15 @@ public class Visualization extends Application {
 
     private Scene createScene() {
         myRoot = createRootPane();
+        mySimulation = new Simulation(firstSim);
+        myRoot.setBottom(createVBox());
+        showSimGrid();
+        Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
+        return scene;
+    }
+
+    private VBox createVBox() {
         VBox myVBox = new VBox();
         HBox topHBox = createTopHBox();
         HBox botHBox = createBottomHBox();
@@ -94,28 +99,13 @@ public class Visualization extends Application {
         myVBox.getChildren().add(botHBox);
         myVBox.setSpacing(VBOX_SPACING);
         myVBox.setMaxHeight(VBOX_HEIGHT);
-        mySimGrid = createSimGrid();
-        mySimulation = new Simulation(firstSim);
-        showSimGrid();
-        myRoot.setCenter(mySimGrid);
-        myRoot.setBottom(myVBox);
-        Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
-        scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
-        return scene;
-    }
-
-    private GridPane createSimGrid() {
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setGridLinesVisible(true);
-        grid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
-        grid.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-        return grid;
+        return myVBox;
     }
 
     private BorderPane createRootPane() {
         BorderPane borderPane = new BorderPane();
         borderPane.setPadding(new Insets(TOP_PAD, RIGHT_PAD, BOTTOM_PAD, LEFT_PAD));
+        borderPane.setStyle(BACKGROUND_COLOR);
         return borderPane;
     }
 
@@ -139,7 +129,6 @@ public class Visualization extends Application {
         return box;
     }
 
-    // TODO: Refactoring of toggle class, so they have protected access (move all events out of here)
     private HBox createTopHBox() {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
@@ -158,35 +147,35 @@ public class Visualization extends Application {
         return box;
     }
 
-    // TODO: Fix new game upload cell overflow
     private void showSimGrid() {
-        mySimGrid = new GridPane();
-        myColorGrid = mySimulation.getColorGrid();
-        int totalRows = myColorGrid.length;
-        int totalCols = myColorGrid[0].length;
-        double rectangleHeight = SIM_HEIGHT / totalRows;
-        double rectangleWidth = SIM_WIDTH / totalCols;
+        GridPane simGrid = new GridPane();
+        simGrid.setAlignment(Pos.CENTER);
+        simGrid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
+        myRoot.setCenter(simGrid);
+        Color[][] colorGrid = mySimulation.getColorGrid();
+        int totalRows = colorGrid.length;
+        int totalCols = colorGrid[0].length;
+        double regionHeight = SIM_HEIGHT / totalRows;
+        double regionWidth = SIM_WIDTH / totalCols;
         for (int row = 0; row < totalRows; row ++) {
             for (int col = 0; col < totalCols; col ++) {
-                Rectangle myRectangle = new Rectangle(rectangleWidth, rectangleHeight);
-                myRectangle.setStroke(STROKE_FILL);
-                myRectangle.setStrokeWidth(STROKE_WIDTH);
-                myRectangle.setFill(myColorGrid[row][col]);
-                mySimGrid.add(myRectangle, col, row ); // Default to col:row span = 1
+                simGrid.add(createRegion(regionWidth, regionHeight, colorGrid[row][col]), col, row );
             }
         }
-        myRoot.setCenter(mySimGrid);
-        printGridState();
     }
 
-    private void printGridState() {
-        System.out.println("sim height: " + mySimGrid.getHeight());
-        System.out.println("sim width: " + mySimGrid.getWidth());
-        System.out.println("max height: " + mySimGrid.getMaxHeight());
-        System.out.println("max width: " + mySimGrid.getMaxWidth());
+    private Region createRegion(double regionWidth, double regionHeight, Color color) {
+        Region myRegion = new Region();
+        Insets myInsets = new Insets(regionHeight/50);
+        myRegion.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, myInsets)));
+        myRegion.setShape(new Rectangle(regionWidth, regionHeight));
+        myRegion.setPrefSize(regionWidth, regionHeight);
+        Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+        myRegion.setBorder(myBorder);
+        return myRegion;
     }
 
-    private void updateSimGrid() {
+    private void updateSimulation() {
         mySimulation.updateGrid();
     }
 
@@ -199,29 +188,23 @@ public class Visualization extends Application {
     }
 
     private void stepSelected() {
-        System.out.println("Step Selected");
         myStepButton.setSelected(false);
-        updateSimGrid();
+        updateSimulation();
         showSimGrid();
     }
 
-    private void pauseSelected() {
-        System.out.println("Pause Selected");
-    }
+    private void pauseSelected(){;}
 
     private void playSelected() {
         if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
         if (System.currentTimeMillis() >= updateTime) {
-            updateSimGrid();
+            updateSimulation();
             showSimGrid();
             setUpdateTime();
         }
     }
 
-    private void exitSelected() {
-        System.out.println("Exit selected");
-        System.exit(0);
-    }
+    private void exitSelected() { System.exit(0); }
 
     private double getAnimationRate() {
         double val = mySlider.getValue();
@@ -233,9 +216,12 @@ public class Visualization extends Application {
     }
 
     private void loadSelected() {
-        System.out.println("Load Selected");
         myPauseButton.setSelected(true);
         myLoadButton.setSelected(false);
+        loadFile();
+    }
+
+    private void loadFile() {
         Stage fileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Simulation XML File");
@@ -243,15 +229,12 @@ public class Visualization extends Application {
         fileChooser.setInitialDirectory(dir);
         File simFile = fileChooser.showOpenDialog(fileStage);
         String extension = getFileExtension(simFile);
-        if (simFile == null) {
-            System.out.println("No file selected, please try again");
-        } else if (extension.equals("xml") || extension.equals("XML")){
+        if (extension.equals("xml") || extension.equals("XML")) {
             mySimulation = new Simulation(simFile);
             showSimGrid();
             myPauseButton.setSelected(true);
-            System.out.println("Created simulation from fileChooser \n" + simFile);
         } else {
-            System.out.println("Incorrect file type selected, please try again");
+            System.out.println("Please select valid XML file and try again");
         }
     }
 
