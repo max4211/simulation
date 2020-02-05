@@ -1,6 +1,8 @@
 package simulation;
 
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
@@ -22,7 +24,7 @@ import java.util.Random;
  * https://www2.cs.duke.edu/courses/spring20/compsci308/assign/02_simulation/nifty/mccown-schelling-model-segregation/
  */
 public class SegregationCell extends Cell{
-    private Cell[][] myGrid;
+    private Simulation myCurrentSim;
     private boolean changedAlready = false;
 
     /**
@@ -32,9 +34,9 @@ public class SegregationCell extends Cell{
      * @param row: x position
      * @param col: y position
      */
-    public SegregationCell(double initialState, int row, int col, Cell[][] grid){
+    public SegregationCell(double initialState, int row, int col, Simulation sim){
         super(initialState, row, col);
-        myGrid = grid;
+        myCurrentSim = sim;
     }
 
     public double getPercentTolerance(){ return myState - Math.floor(myState); }
@@ -98,13 +100,14 @@ public class SegregationCell extends Cell{
 
 
     private void findVacantCell(){
-        int height = myGrid.length;
-        int width = myGrid[0].length;
+        int height = myCurrentSim.getHeight();
+        int width = myCurrentSim.getWidth();
         boolean foundEmpty = false;
         while(!foundEmpty){
             int randRow = new Random().nextInt(height);
             int randCol = new Random().nextInt(width);
-            if(Math.floor(myGrid[randRow][randCol].getNextState())==0 && Math.floor(myGrid[randRow][randCol].getState())==0 &&
+            if(Math.floor(myCurrentSim.getCell(randRow, randCol).getNextState())==0 &&
+                    Math.floor(myCurrentSim.getCell(randRow, randCol).getState())==0 &&
                     !(randRow == myRow && randCol == myCol)){
                 foundEmpty = true;
                 moveTo(randRow, randCol);
@@ -114,10 +117,9 @@ public class SegregationCell extends Cell{
 
     private void moveTo(int r, int c){
         // Switch states by setting cell being moved to's next state
-        myGrid[r][c].setNextState(myState);
+        myCurrentSim.getCell(r, c).setNextState(myState);
 
         // Now empty
         this.nextState = 0;
-
     }
 }
