@@ -2,6 +2,7 @@ package simulation;
 
 import javafx.scene.paint.Color;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,6 +48,11 @@ public class Simulation {
         }
 
 
+    }
+
+    public Collection<ArrayList<Color>> getCollection() {
+        Collection<ArrayList<Color>> myList = new ArrayList<ArrayList<Color>>();
+        return myList;
     }
 
     public Cell[][] getGrid(){ return myGrid; }

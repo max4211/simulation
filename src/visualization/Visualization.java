@@ -22,6 +22,8 @@ import simulation.Simulation;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -168,6 +170,17 @@ public class Visualization extends Application {
                 simGrid.add(createRegion(regionWidth, regionHeight, colorGrid[row][col]), col, row );
             }
         }
+        /* TODO: Update region height/width assignments, explore dynamic region assigments
+        Collection<ArrayList<Color>> myList = mySimulation.getCollection();
+        int row = -1; int col;
+        for (ArrayList<Color> list: myList) {
+            row += 1; col = -1;
+            for(Color c: list) {
+                col += 1;
+                simGrid.add(createRegion(regionWidth, regionHeight, c), col, row);
+            }
+        }
+         */
     }
 
     private Region createRegion(double regionWidth, double regionHeight, Color color) {
