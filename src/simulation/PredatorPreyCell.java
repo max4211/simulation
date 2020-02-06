@@ -2,7 +2,7 @@ package simulation;
 
 import javafx.scene.paint.Color;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  *  This class represents a cell in a Preditor-Prey simulation.
@@ -33,16 +33,39 @@ import java.util.Collection;
  * */
 public class PredatorPreyCell extends Cell{
     public int reproductiveAge;
+    public int energyGainFromFish;
+    public int energy;
+    public int age;
+
+    public int nextReproductiveAge;
+    public int nextEnergyGainFromFish;
+    public int nextEnergy;
+    public int nextAge;
 
     /**
      * Creates new PredatorPreyCell
-     * @param initialState: the integer side is the cell's initial state, the decimal side is the cell's
-     * @param row:
-     * @param col
+     * @param initialState: the integer side is the cell's initial state (fish, shark, or water), the first three
+     *                    numbers to the right of the decimal is the energy gained per fish eaten, the second three
+     *                    are the age needed to reproduce.
+     *                          __ /.__ __ __ /__ __ __
+     *                          ^       ^          ^
+     *                      state   energy gain   reproductive age
+     *
+     * @param row: cell's row
+     * @param col: cell's column
      */
     public PredatorPreyCell(double initialState, int row, int col) {
 
         super(initialState, row, col);
+        energyGainFromFish = (int) Math.floor((initialState - Math.floor(initialState)) * 1000);
+        reproductiveAge = (int) (myState *1000000)%1000;
+        energy = energyGainFromFish;
+        age = 0;
+
+        nextReproductiveAge = reproductiveAge;
+        nextEnergyGainFromFish = energyGainFromFish;
+        nextEnergy = energyGainFromFish;
+        nextAge = age;
 
     }
 
@@ -54,8 +77,120 @@ public class PredatorPreyCell extends Cell{
     }
 
     @Override
-    public void determineNextState(Collection<Cell> neighborStates) {
+    public void determineNextState(Collection<Cell> neighbors) {
+        // for sharks
+        if(Math.floor(myState) == 1) {
+            // make subsets of cells that are fish and empty
+            ArrayList<Cell> fishCellSublist = new ArrayList<>();
+            for (Cell cell : neighbors) {
+                if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
+            }
+            ArrayList<Cell> emptyCellSublist = new ArrayList<>();
+            for (Cell cell : neighbors) {
+                if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
+            }
+            // if you're out of energy, die :(
+            if(energy <= 0){
+                nextState = 0;
+            }
+            // otherwise try to move
+            // if there are fish, move into a random fish's cell and eat it
+            else if(fishCellSublist.size()>0){
+                PredatorPreyCell cellPicked = pickRandomEntry(fishCellSublist);
+                if(Math.floor(cellPicked.nextState) == 2) energy += energyGainFromFish;
+                if(age >= reproductiveAge) {
+                    age = 0;
+                    nextState = myState;
+                    nextAge = 0;
+                    nextEnergy = energyGainFromFish;
+                }
+                else{
+                    nextState = 0;
+                    nextAge = 0;
+                    nextEnergy = 0;
+                }
+                moveInfoInto(cellPicked);
+            }
 
+            // if there are no fish, move into a random empty cell and lower energy
+            else if(emptyCellSublist.size()>0){
+                if(age >= reproductiveAge) {
+                    age = 0;
+                    nextState = myState;
+                    nextAge = 0;
+                    nextEnergy = energyGainFromFish;
+                }
+                else{
+                    nextState = 0;
+                    nextAge = 0;
+                    nextEnergy = 0;
+                }
+                PredatorPreyCell cellPicked = pickRandomEntry(emptyCellSublist);
+                moveInfoInto(cellPicked);
+            }
+
+            // if there is no where to move just update energy and age
+            else{
+                nextEnergy = energy -1;
+                nextAge = age + 1;
+            }
+        }
+
+        // for fish
+        if (Math.floor(myState) == 2){
+            // make sublist of empty cells
+            ArrayList<Cell> emptyCellSublist = new ArrayList<>();
+            for (Cell cell : neighbors) {
+                if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
+            }
+
+            // if there is space move into a random empty cell
+            if(emptyCellSublist.size()>0){
+                if(age >= reproductiveAge) {
+                    age = 0;
+                    nextState = myState;
+                    nextAge = 0;
+                    nextEnergy = energyGainFromFish;
+                }
+                else{
+                    nextState = 0;
+                    nextAge = 0;
+                    nextEnergy = 0;
+                }
+                PredatorPreyCell cellPicked = pickRandomEntry(emptyCellSublist);
+                moveInfoInto(cellPicked);
+            }
+
+            // if there is no where to move just update energy and age
+            else{
+                nextAge = age + 1;
+            }
+        }
+    }
+    @Override
+    public void updateState() {
+        this.myState = this.nextState;
+        this.age = this.nextAge;
+        this.energy = this.nextEnergy;
+        this.reproductiveAge = this.nextReproductiveAge;
+        this.energyGainFromFish = this.nextEnergyGainFromFish;
+    }
+
+    private PredatorPreyCell pickRandomEntry(ArrayList<Cell> sublist) {
+        Random r = new Random();
+        return (PredatorPreyCell) sublist.get(r.nextInt(sublist.size()));
+    }
+
+    /**
+     * copies the information from this instance into the next values for the given cell
+     * @param dest: cell to be overridden
+     */
+    private void moveInfoInto(PredatorPreyCell dest) {
+        dest.nextState = myState;
+        dest.nextReproductiveAge = reproductiveAge;
+        dest.nextEnergy = energy - 1;
+        dest.nextEnergyGainFromFish = energyGainFromFish;
+        dest.nextAge = age + 1;
     }
 
     @Override
