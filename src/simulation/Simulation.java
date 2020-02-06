@@ -110,17 +110,6 @@ public class Simulation {
         else throw new Exception("Neighborhood Type Not Accepted");
     }
 
-    // TODO: Refactor based on new grid
-    public String[][] getColorGrid() {
-        String[][] colorGrid = new String[getHeight()][getWidth()];
-        for(int row=0; row<colorGrid.length; row++){
-            for(int col=0; col<colorGrid[0].length; col++){
-                colorGrid[row][col] = getCell(row, col).getColor();
-            }
-        }
-        return colorGrid;
-    }
-
     public void updateGrid() {
         // Determine Cell updates
         for(int row=0; row<getHeight(); row++){
