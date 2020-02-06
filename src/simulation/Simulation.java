@@ -44,13 +44,12 @@ public class Simulation {
                 myGrid.add(new ArrayList<Cell>(width));
             }
 
-
             fillGrid(simType, initialCells);
             createDeltaArrays(neighborType);
         }
         catch(Exception e){
             //System.out.println(e.toString());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
     }
