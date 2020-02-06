@@ -1,8 +1,6 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
@@ -47,9 +45,9 @@ public class SegregationCell extends Cell{
 
     @Override
     public void createColorMap() {
-        myColorMap.put(0.0, Color.WHITE);
-        myColorMap.put(1.0, Color.RED);
-        myColorMap.put(2.0, Color.BLUE);
+        myColorMap.put(0.0, WHITE);
+        myColorMap.put(1.0, RED);
+        myColorMap.put(2.0, BLUE);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -71,9 +70,9 @@ public class PredatorPreyCell extends Cell{
 
     @Override
     public void createColorMap() {
-        myColorMap.put(0.0, Color.BLUE);
-        myColorMap.put(1.0, Color.YELLOW);
-        myColorMap.put(2.0, Color.GREEN);
+        myColorMap.put(0.0, BLUE);
+        myColorMap.put(1.0, YELLOW);
+        myColorMap.put(2.0, GREEN);
     }
 
     @Override

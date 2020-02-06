@@ -1,6 +1,5 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 import java.util.Collection;
 
 /**
@@ -34,9 +33,9 @@ public class PercolationCell extends Cell {
 
     @Override
     public void createColorMap(){
-        myColorMap.put(0.0, Color.BLACK);
-        myColorMap.put(1.0, Color.WHITE);
-        myColorMap.put(2.0, Color.SKYBLUE);
+        myColorMap.put(0.0, BLACK);
+        myColorMap.put(1.0, WHITE);
+        myColorMap.put(2.0, SKYBLUE);
     }
 
     @Override

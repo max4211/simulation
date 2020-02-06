@@ -1,6 +1,5 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 
 import java.util.Collection;
 import java.util.Random;
@@ -54,9 +53,9 @@ public class FireCell extends Cell {
 
     @Override
     public void createColorMap() {
-        myColorMap.put(0.0, Color.YELLOW);
-        myColorMap.put(1.0, Color.GREEN);
-        myColorMap.put(2.0, Color.RED);
+        myColorMap.put(0.0, YELLOW);
+        myColorMap.put(1.0, GREEN);
+        myColorMap.put(2.0, RED);
     }
 
     @Override

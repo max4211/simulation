@@ -1,16 +1,23 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Cell {
+    protected static final String WHITE = "#FFFFFF";
+    protected static final String BLACK = "#000000";
+    protected static final String SKYBLUE = "#87CEEB";
+    protected static final String YELLOW = "#FFFF00";
+    protected static final String GREEN = "#008000";
+    protected static final String RED = "#FF0000";
+    protected static final String BLUE = "#0000FF";
+
     protected double myState;
     protected double nextState;
     protected int myRow;
     protected int myCol;
-    protected Map<Double, Color> myColorMap = new HashMap<>();
+    protected Map<Double, String> myColorMap = new HashMap<>();
 
     public Cell(double initialState, int row, int col) {
         this.myState = initialState;
@@ -35,7 +42,8 @@ public abstract class Cell {
 
     public void setState(double state){ this.myState = state; }
 
-    public Color getColor() {
+    //TODO: colors to hex values
+    public String getColor() {
         double key = mapKey(this.myState);
         return this.myColorMap.get(key);
     }

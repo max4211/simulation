@@ -1,8 +1,6 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -112,9 +110,9 @@ public class Simulation {
         else throw new Exception("Neighborhood Type Not Accepted");
     }
 
-    // TODO: refactor based on new grid, visualization?
-    public Color[][] getColorGrid() {
-        Color[][] colorGrid = new Color[getHeight()][getWidth()];
+    // TODO: Refactor based on new grid
+    public String[][] getColorGrid() {
+        String[][] colorGrid = new String[getHeight()][getWidth()];
         for(int row=0; row<colorGrid.length; row++){
             for(int col=0; col<colorGrid[0].length; col++){
                 colorGrid[row][col] = getCell(row, col).getColor();
