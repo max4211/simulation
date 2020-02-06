@@ -1,4 +1,5 @@
 package configuration;
 
-public class ConfigException {
+public class ConfigException extends RuntimeException {
+
 }

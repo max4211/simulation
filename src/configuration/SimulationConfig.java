@@ -9,6 +9,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//TODO: Incorrect file type, incomplete/incorrect formatting, incorrect states
+
 /**
  * Class meant to encapsulate raw data on initial simulation configuration pulled from .xml file.
  * This class is meant to keep the extraction of data from the .xml file separate from the Simulation class.
@@ -65,7 +68,7 @@ public class SimulationConfig {
             readTags(nodeList);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
