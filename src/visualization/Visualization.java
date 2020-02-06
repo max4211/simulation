@@ -22,17 +22,15 @@ import simulation.Simulation;
 
 import javax.imageio.ImageIO;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
 
     // Resources for styling and properties
-    private static final String RESOURCES = "resources";
+    private static final String RESOURCES = "visualization/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    private static final String LANGUAGE = "English";
+    private static final String LANGUAGE = "Image";
     private static final String STYLESHEET = "default.css";
     private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
