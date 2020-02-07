@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class StateChart extends LineChart {
 
-    private Map<State, XYChart.Series> mySeries = new HashMap<State, XYChart.Series>();
-    private boolean seriesFlag = false;
+    private Map<String, XYChart.Series> mySeries = new HashMap<String, XYChart.Series>();
+    private boolean seriesFlag;
     private int STEP = 0;
 
     /**
@@ -26,33 +26,37 @@ public class StateChart extends LineChart {
         super(xAxis, yAxis);
         xAxis.setLabel("Step");
         yAxis.setLabel("Percent (%)");
+        seriesFlag = false;
     }
 
     // TODO: Style Series (with CSS styling)
-    public void createSeries(Map<State, Integer> allStates) {
-        for (State state: allStates.keySet()) {
-            XYChart.Series series = new XYChart.Series();
-            System.out.println("state.getString()" + state.getString());
-            series.setName(state.getString());
-            this.getData().add(series);
-            mySeries.put(state, new XYChart.Series());
+    public void createSeries(Map<String, Integer> allStates) {
+        System.out.println("creating series...");
+        for (String name: allStates.keySet()) {
+            if (!(mySeries.containsKey(name))) {
+                XYChart.Series series = new XYChart.Series();
+                series.setName(name);
+                this.getData().add(series);
+                mySeries.put(name, new XYChart.Series());
+            }
         }
     }
 
-    private void appendSeries(State state, int count) {
-        Series series = mySeries.get(state);
+    private void appendSeries(String name, int count) {
+        Series series = mySeries.get(name);
+        System.out.println("Series: " + series.getName());
         series.getData().add(new XYChart.Data(STEP, count));
     }
 
-    public void populateChart(Map<State, Integer> allStates) {
+    public void populateChart(Map<String, Integer> allStates) {
         if (!(seriesFlag)) {
             createSeries(allStates);
             seriesFlag = true;
         }
         STEP ++;
-        for (State state: allStates.keySet()) {
-            int count = allStates.get(state);
-            appendSeries(state, count);
+        for (String name: allStates.keySet()) {
+            int count = allStates.get(name);
+            appendSeries(name, count);
         }
     }
 }

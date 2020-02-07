@@ -47,16 +47,17 @@ public class Simulation {
         implementUpdates();
     }
 
-    public Map<State, Integer> countStates() {
-        Map<State, Integer> myMap = new HashMap<State, Integer>();
+    public Map<String, Integer> countStates() {
+        Map<String, Integer> myMap = new HashMap<String, Integer>();
         for (int row = 0; row < getHeight(); row++) {
             for (int col = 0; col < getWidth(); col++) {
                 Cell myCell = getCell(row, col);
-                double myDouble = myCell.getState();
+                double myDouble = Math.floor(myCell.getState());
                 State myState = myCell.getStateMap().get(myDouble);
-                if (!(myMap.containsKey(myState))) {
-                    myMap.put(myState, 0);
-                    myMap.put(myState, myMap.get(myState) + 1);
+                String myName = myState.getString();
+                if (!(myMap.containsKey(myName))) {
+                    myMap.put(myName, 0);
+                    myMap.put(myName, myMap.get(myName) + 1);
                 }
             }
         }

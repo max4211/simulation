@@ -94,16 +94,16 @@ public class Visualization extends Application {
         myRoot = createRootPane();
         myRoot.setBottom(createVBox());
         createSimulation();
-        myRoot.setTop(createChart());
+        createChart();
         Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
     }
 
-    private Chart createChart() {
+    private void createChart() {
         myChart = new StateChart(new NumberAxis(), new NumberAxis());
         myChart.setPrefSize(SIM_WIDTH, CHART_HEIGHT);
-        return myChart;
+        myRoot.setTop(myChart);
     }
 
     private VBox createVBox() {
@@ -191,7 +191,7 @@ public class Visualization extends Application {
 
     private void updateSimulation() {
         mySimulation.updateGrid();
-        // myChart.populateChart(mySimulation.countStates());
+        myChart.populateChart(mySimulation.countStates());
     }
 
     private void setUpdateTime() {
@@ -237,6 +237,7 @@ public class Visualization extends Application {
         try {
             mySimulation = new Configuration().getSimulation();
             myPauseButton.setSelected(true);
+            createChart();
             showSimGrid();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
