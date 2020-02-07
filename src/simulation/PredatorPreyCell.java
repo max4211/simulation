@@ -81,13 +81,12 @@ public class PredatorPreyCell extends Cell{
         if(Math.floor(myState) == 1) {
             // make subsets of cells that are fish and empty
             ArrayList<Cell> fishCellSublist = new ArrayList<>();
-            for (Cell cell : neighbors) {
-                if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
-            }
             ArrayList<Cell> emptyCellSublist = new ArrayList<>();
             for (Cell cell : neighbors) {
+                if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
                 if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
             }
+
             // if you're out of energy, die :(
             if(energy <= 0){
                 nextState = 0;

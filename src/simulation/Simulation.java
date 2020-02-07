@@ -51,10 +51,8 @@ public class Simulation {
             //System.out.println(e.toString());
             //e.printStackTrace();
         }
-
     }
 
-    public ArrayList<ArrayList<Cell>> getGrid(){ return myGrid; }
 
     public void setCell(int r, int c, Cell cell){
         myGrid.get(r).set(c, cell);
