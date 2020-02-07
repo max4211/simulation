@@ -21,18 +21,21 @@ public abstract class Cell {
     protected Map<Double, State> myStateMap = new HashMap<>();
 
     public Cell(double initialState, int row, int col) {
+        createColorMap();
+        createStateMap();
+        //if (!checkValidState(initialState))
+          //  throw new IllegalArgumentException("Invalid Cell type");
         this.myState = initialState;
         this.myRow = row;
         this.myCol = col;
-        createColorMap();
-        createStateMap();
+
     }
+
+    //protected abstract boolean checkValidState(double initialState);
 
     public abstract void createColorMap();
     public abstract void createStateMap();
-
     public abstract void determineNextState(Collection<Cell> neighbors);
-
     public abstract double mapKey(double myState);
 
     public void updateState() { this.myState = this.nextState; }

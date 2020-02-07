@@ -56,6 +56,9 @@ public class Configuration {
     private ArrayList<ArrayList<Cell>> myGrid = new ArrayList<ArrayList<Cell>>();
     private Simulation mySimulation = new Simulation();
 
+    // Setting defaults
+    private final String DEFAULT_NEIGHBOR = "MOORE";
+
     /**
      * Constructs a Configuration file to prepare for simluation
      * Uses FileChooser to select a file each time
@@ -148,20 +151,26 @@ public class Configuration {
     }
 
     private Cell createCell(int row, int col, double state) {
-        switch (mySimType) {
-            case ("Spreading of Fire"):
-                return new FireCell(state, row, col);
-            case ("Game of Life"):
-                return new LifeCell(state, row, col);
-            case ("Percolation"):
-                return new PercolationCell(state, row, col);
-            case ("Segregation"):
-                return new SegregationCell(state, row, col, mySimulation);
-            case ("Predator Prey"):
-                return new PredatorPreyCell(state, row, col);
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + mySimType);
+        try {
+            switch (mySimType) {
+                case ("Spreading of Fire"):
+                    return new FireCell(state, row, col);
+                case ("Game of Life"):
+                    return new LifeCell(state, row, col);
+                case ("Percolation"):
+                    return new PercolationCell(state, row, col);
+                case ("Segregation"):
+                    return new SegregationCell(state, row, col, mySimulation);
+                case ("Predator Prey"):
+                    return new PredatorPreyCell(state, row, col);
+                default:
+                    throw new IllegalArgumentException("Unexpected value: " + mySimType);
+            }
+        } catch (IllegalStateException e) {
+            // TODO: Prompt for valid state
+            throw new IllegalArgumentException("Illegal state: " + state);
         }
+
     }
 
     private void createDeltaArrays (String neighborType) {
@@ -175,7 +184,8 @@ public class Configuration {
                 mySimulation.setRowDelta(new int[]{0, -1, 0, 1});
                 break;
             default:
-                throw new IllegalArgumentException("Unexpected value: " + neighborType);
+                System.out.println("Default neighborhood invalid/not given, defaulting to: " + DEFAULT_NEIGHBOR);
+                createDeltaArrays(DEFAULT_NEIGHBOR);
         }
     }
 
