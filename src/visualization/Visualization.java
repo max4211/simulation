@@ -191,7 +191,7 @@ public class Visualization extends Application {
 
     private void updateSimulation() {
         mySimulation.updateGrid();
-        myChart.populateChart(mySimulation.countStates());
+        // myChart.populateChart(mySimulation.countStates());
     }
 
     private void setUpdateTime() {
