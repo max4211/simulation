@@ -57,8 +57,8 @@ public class Simulation {
                 String myName = myState.getString();
                 if (!(myMap.containsKey(myName))) {
                     myMap.put(myName, 0);
-                    myMap.put(myName, myMap.get(myName) + 1);
                 }
+                myMap.put(myName, myMap.get(myName) + 1);
             }
         }
         return myMap;

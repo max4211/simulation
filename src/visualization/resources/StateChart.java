@@ -54,6 +54,7 @@ public class StateChart extends LineChart {
             seriesFlag = true;
         }
         STEP ++;
+        System.out.println(STEP);
         for (String name: allStates.keySet()) {
             int count = allStates.get(name);
             appendSeries(name, count);
