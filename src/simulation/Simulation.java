@@ -64,6 +64,14 @@ public class Simulation {
         return myMap;
     }
 
+    /**
+     * TODO: implement so that an xml file is output reflecting the current state of the grid
+     * Will likely need to implement a new class for this
+     */
+    public void captureGridState(){
+
+    }
+
     private void determineUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
