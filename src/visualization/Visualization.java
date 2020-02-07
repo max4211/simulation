@@ -24,6 +24,7 @@ import javafx.util.Duration;
 import simulation.Cell;
 import simulation.Simulation;
 import simulation.State;
+import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class Visualization extends Application {
     private ToggleButton myStepButton;
     private ToggleButton myLoadButton;
     private ToggleButton myExitButton;
-    private Chart myChart;
+    private StateChart myChart;
 
     // Simulation metadata
     private final int FRAME_RATE = 20;
@@ -100,11 +101,7 @@ public class Visualization extends Application {
     }
 
     private Chart createChart() {
-        NumberAxis xAxis = new NumberAxis();
-        NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Step");
-        yAxis.setLabel("Percent (%)");
-        myChart = new LineChart<Number, Number>(xAxis, yAxis);
+        myChart = new StateChart(new NumberAxis(), new NumberAxis());
         myChart.setPrefSize(SIM_WIDTH, CHART_HEIGHT);
         return myChart;
     }
@@ -192,18 +189,9 @@ public class Visualization extends Application {
         return myRegion;
     }
 
-    // TODO: Populate chart with all states from cells
-    private void populateChart(Map<Integer, State> allStates) {
-        for (int key: allStates.keySet()) {
-            State value = allStates.get(key);
-            String stateName = value.getString();
-            String stateColor = value.getColor();
-            
-        }
-    }
-
     private void updateSimulation() {
-        populateChart(mySimulation.updateGrid());
+        mySimulation.updateGrid();
+        // myChart.populateChart(mySimulation.countStates());
     }
 
     private void setUpdateTime() {

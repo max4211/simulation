@@ -13,6 +13,7 @@ public class State {
         myString = string; myColor = color;
     }
 
+    public String toString() {return this.myString;}
     public double getState() {return this.myDouble;}
     public String getString() {return this.myString;}
     public String getColor() {return this.myColor;}

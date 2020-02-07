@@ -35,7 +35,6 @@ public class LifeCell extends Cell {
     public void createStateMap() {
         myStateMap.put(0.0, new State("Dead", WHITE));
         myStateMap.put(0.0, new State("Alive", BLACK));
-
     }
 
     @Override

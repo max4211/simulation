@@ -42,31 +42,41 @@ public class Simulation {
     public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
 
-    public Map<Integer, State> updateGrid() {
-        // Determine Cell updates
+    public void updateGrid() {
+        determineUpdates();
+        implementUpdates();
+    }
+
+    public Map<State, Integer> countStates() {
+        Map<State, Integer> myMap = new HashMap<State, Integer>();
+        for (int row = 0; row < getHeight(); row++) {
+            for (int col = 0; col < getWidth(); col++) {
+                Cell myCell = getCell(row, col);
+                double myDouble = myCell.getState();
+                State myState = myCell.getStateMap().get(myDouble);
+                if (!(myMap.containsKey(myState))) {
+                    myMap.put(myState, 0);
+                    myMap.put(myState, myMap.get(myState) + 1);
+                }
+            }
+        }
+        return myMap;
+    }
+
+    private void determineUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
                 getCell(row, col).determineNextState(getNeighbors(row, col));
             }
         }
-
-        // Implement cell updates
-        for(int row=0; row<getHeight(); row++){
-            for(int col=0; col<getWidth(); col++){
-                getCell(row, col).updateState();
-            }
-        }
-        return countStates();
     }
 
-    private Map<Integer, State> countStates() {
-        Map<Integer, State> allStates = new HashMap<Integer, State>();
+    private void implementUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
                 getCell(row, col).updateState();
             }
         }
-        return allStates;
     }
 
     private boolean inBounds(int row, int col) {
