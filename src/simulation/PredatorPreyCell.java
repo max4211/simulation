@@ -76,6 +76,13 @@ public class PredatorPreyCell extends Cell{
     }
 
     @Override
+    public void createStateMap() {
+        myStateMap.put(0.0, new State("Water", BLUE));
+        myStateMap.put(1.0, new State("Shark", YELLOW));
+        myStateMap.put(2.0, new State("Fish", GREEN));
+    }
+
+    @Override
     public void determineNextState(Collection<Cell> neighbors) {
         // for sharks
         if(Math.floor(myState) == 1) {

@@ -32,6 +32,13 @@ public class LifeCell extends Cell {
     }
 
     @Override
+    public void createStateMap() {
+        myStateMap.put(0.0, new State("Dead", WHITE));
+        myStateMap.put(0.0, new State("Alive", BLACK));
+
+    }
+
+    @Override
     public void determineNextState(Collection<Cell> neighbors){
         int numAlive = 0;
         for(Cell cell: neighbors){

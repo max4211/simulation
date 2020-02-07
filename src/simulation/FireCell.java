@@ -59,6 +59,13 @@ public class FireCell extends Cell {
     }
 
     @Override
+    public void createStateMap() {
+        myStateMap.put(0.0, new State("Susceptible", YELLOW));
+        myStateMap.put(1.0, new State("Tree", GREEN));
+        myStateMap.put(2.0, new State("Burned", RED));
+    }
+
+    @Override
     public double mapKey(double myState) {
         return myState;
     }

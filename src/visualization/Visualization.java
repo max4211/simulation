@@ -23,8 +23,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Cell;
 import simulation.Simulation;
+import simulation.State;
 
 import javax.imageio.ImageIO;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -101,7 +103,7 @@ public class Visualization extends Application {
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Step");
-        yAxis.setLabel("Concentration (%)");
+        yAxis.setLabel("Percent (%)");
         myChart = new LineChart<Number, Number>(xAxis, yAxis);
         myChart.setPrefSize(SIM_WIDTH, CHART_HEIGHT);
         return myChart;
@@ -190,8 +192,18 @@ public class Visualization extends Application {
         return myRegion;
     }
 
+    // TODO: Populate chart with all states from cells
+    private void populateChart(Map<Integer, State> allStates) {
+        for (int key: allStates.keySet()) {
+            State value = allStates.get(key);
+            String stateName = value.getString();
+            String stateColor = value.getColor();
+            
+        }
+    }
+
     private void updateSimulation() {
-        mySimulation.updateGrid();
+        populateChart(mySimulation.updateGrid());
     }
 
     private void setUpdateTime() {

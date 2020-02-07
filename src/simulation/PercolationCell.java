@@ -39,6 +39,13 @@ public class PercolationCell extends Cell {
     }
 
     @Override
+    public void createStateMap() {
+        myStateMap.put(0.0, new State("Blocked", BLACK));
+        myStateMap.put(1.0, new State("Open", WHITE));
+        myStateMap.put(2.0, new State("Water", SKYBLUE));
+    }
+
+    @Override
     public void determineNextState(Collection<Cell> neighbors){
         boolean neighborPercolates = false;
         for(Cell n: neighbors){

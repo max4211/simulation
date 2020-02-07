@@ -51,6 +51,13 @@ public class SegregationCell extends Cell{
     }
 
     @Override
+    public void createStateMap() {
+        myStateMap.put(0.0, new State("Open", WHITE));
+        myStateMap.put(1.0, new State("Red", RED));
+        myStateMap.put(2.0, new State("Blue", BLUE));
+    }
+
+    @Override
     public void determineNextState(Collection<Cell> neighbors) {
         if(! changedAlready){
             if(Math.floor(myState)!=0){

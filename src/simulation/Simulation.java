@@ -2,6 +2,8 @@ package simulation;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Simulation {
 
@@ -40,7 +42,7 @@ public class Simulation {
     public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
 
-    public void updateGrid() {
+    public Map<Integer, State> updateGrid() {
         // Determine Cell updates
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
@@ -54,6 +56,17 @@ public class Simulation {
                 getCell(row, col).updateState();
             }
         }
+        return countStates();
+    }
+
+    private Map<Integer, State> countStates() {
+        Map<Integer, State> allStates = new HashMap<Integer, State>();
+        for(int row=0; row<getHeight(); row++){
+            for(int col=0; col<getWidth(); col++){
+                getCell(row, col).updateState();
+            }
+        }
+        return allStates;
     }
 
     private boolean inBounds(int row, int col) {
