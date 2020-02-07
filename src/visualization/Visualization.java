@@ -8,6 +8,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,9 +19,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import simulation.Cell;
 import simulation.Simulation;
 
 import javax.imageio.ImageIO;
@@ -30,7 +33,7 @@ public class Visualization extends Application {
     private static final String RESOURCES = "visualization/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    private static final String LANGUAGE = "Image";
+    private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
@@ -38,10 +41,12 @@ public class Visualization extends Application {
     // Sim and scene metadata
     private final double SCENE_HEIGHT = 700;
     private final double SCENE_WIDTH = 550;
-    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.7;
+    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
     private final double SIM_WIDTH = SCENE_WIDTH * 0.9;
-    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.25;
+    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
+    private final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
     private final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
+    private final double IMAGE_DIMENSIONS = VBOX_HEIGHT * 0.4;
     private final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
 
     // Padding values
@@ -60,6 +65,7 @@ public class Visualization extends Application {
     private ToggleButton myStepButton;
     private ToggleButton myLoadButton;
     private ToggleButton myExitButton;
+    private Chart myChart;
 
     // Simulation metadata
     private final int FRAME_RATE = 20;
@@ -67,13 +73,10 @@ public class Visualization extends Application {
     private BorderPane myRoot;
     private Simulation mySimulation;
 
-    // First simulation to run
-    private final String SIM_TITLE = myResources.getString("SimTitle");
-
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
-        stage.setTitle(SIM_TITLE);
+        stage.setTitle(myResources.getString("SimTitle"));
         stage.setScene(myScene);
         stage.sizeToScene();
         stage.show();
@@ -88,9 +91,20 @@ public class Visualization extends Application {
         myRoot = createRootPane();
         myRoot.setBottom(createVBox());
         createSimulation();
+        myRoot.setTop(createChart());
         Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
+    }
+
+    private Chart createChart() {
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Step");
+        yAxis.setLabel("Concentration (%)");
+        myChart = new LineChart<Number, Number>(xAxis, yAxis);
+        myChart.setPrefSize(SIM_WIDTH, CHART_HEIGHT);
+        return myChart;
     }
 
     private VBox createVBox() {
@@ -158,7 +172,8 @@ public class Visualization extends Application {
         double regionWidth = SIM_WIDTH / mySimulation.getWidth();
         for (int row = 0; row < mySimulation.getHeight(); row ++) {
             for (int col = 0; col < mySimulation.getWidth(); col ++) {
-                simGrid.add(createRegion(regionWidth, regionHeight, mySimulation.getCell(row, col).getColor()), col, row );
+                Cell myCell = mySimulation.getCell(row, col);
+                simGrid.add(createRegion(regionWidth, regionHeight, myCell.getColor()), col, row );
             }
         }
         myRoot.setCenter(simGrid);
@@ -240,7 +255,7 @@ public class Visualization extends Application {
     private void styleButton(ToggleButton button) {
         String label = button.getText();
         if (label.matches(IMAGEFILE_SUFFIXES)) {
-            button.setPrefSize(50, 50);
+            button.setPrefSize(IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
             button.setShape(new Circle(BUTTON_RADIUS));
             button.setText("");
             button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));

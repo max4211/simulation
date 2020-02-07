@@ -47,4 +47,12 @@ public abstract class Cell {
         double key = mapKey(this.myState);
         return this.myColorMap.get(key);
     }
+
+    /**
+     *
+     * @return map of colors and states to simulation for chart processing
+     */
+    public Map<Double, String> getColorMap() {
+        return this.myColorMap;
+    }
 }

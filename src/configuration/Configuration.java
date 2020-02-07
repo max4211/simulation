@@ -13,6 +13,7 @@ import simulation.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 //TODO: Incorrect file type, incomplete/incorrect formatting, incorrect states
@@ -37,7 +38,14 @@ import java.util.List;
 
 public class Configuration {
 
+    // Location of simulation files
     private static final String SIMULATION_FILES = System.getProperty("user.dir") + "/data/";
+
+    // Constants to declare resources location for error codes
+    private static final String RESOURCES = "configuration/resources";
+    private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    private static final String LANGUAGE = "English";
+    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     private File myFile;
     private int myHeight;
@@ -69,7 +77,7 @@ public class Configuration {
         if (extension.equals("xml") || extension.equals("XML")) {
             return simFile;
         } else {
-            throw new IllegalArgumentException("Invalid File Type: " + simFile);
+            throw new IllegalArgumentException(myResources.getString("InvalidFile") + simFile);
         }
     }
 
@@ -92,7 +100,7 @@ public class Configuration {
             NodeList nodeList = doc.getElementsByTagName("SimulationConfig");
             readTags(nodeList);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid File: " + e);
+            throw new IllegalArgumentException(myResources.getString("InvalidFile"));
         }
     }
 

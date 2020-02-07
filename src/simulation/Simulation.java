@@ -1,13 +1,7 @@
 package simulation;
 
-import configuration.Configuration;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-
 
 public class Simulation {
 
