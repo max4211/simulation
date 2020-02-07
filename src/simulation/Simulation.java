@@ -1,120 +1,87 @@
 package simulation;
 
-import javafx.scene.paint.Color;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class Simulation {
 
-    private Cell[][] myGrid;
+    private ArrayList<ArrayList<Cell>> myGrid;
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
-
+    private int SIMULATION_HEIGHT;
+    private int SIMULATION_WIDTH;
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
      * information from SimulationConfig. Also builds ROW_DELTA and COL_DELTA.
      *
-     * @param configFile the .XML file to build the simulation from
-     * @throws Exception if simType or neighborType are unexpected values
      */
-    public Simulation(File configFile){
-        try{
-            // get data from the SimulationConfig class
-            // ~~~~~ this chunk should be changed when I get a working SimulationConfig ~~~~~
-            SimulationConfig simCon  = new SimulationConfig(configFile);
-
-            int height = simCon.getHeight();
-            int width = simCon.getWidth();
-            String simType = simCon.getSimType();
-            String neighborType = simCon.getNeighborType();
-            List<String> initialCells = simCon.getCellStates();
-            // for SimulationConfig() use getter methods
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-            // loop through initialCells and fill myGrid
-            myGrid = new Cell[height][width];
-            fillGrid(simType, initialCells);
-            createDeltaArrays(neighborType);
-        }
-        catch(Exception e){
-            System.out.println(e.toString());
-        }
-
-
+    public Simulation() {
+        ;
     }
 
-    public Cell[][] getGrid(){ return myGrid; }
-
-    private void fillGrid(String simType, List<String> initialCells) throws Exception {
-        for (String cellString : initialCells){
-            String[] cellData = cellString.split(" ");
-            int row = Integer.parseInt(cellData[0]);
-            int col = Integer.parseInt(cellData[1]);
-            double state = Double.parseDouble(cellData[2]);
-
-            Cell newCell;
-            if(simType.equals("Spreading of Fire")) {
-                newCell = new FireCell(state, row, col);
-            } else if(simType.equals("Game of Life")){
-                newCell = new LifeCell(state, row, col);
-            } else if(simType.equals("Percolation")){
-                newCell = new PercolationCell(state, row, col);
-            } else if(simType.equals("Segregation")){
-                newCell = new SegregationCell(state, row, col, myGrid);
-            } else if(simType.equals("Predator Prey")){
-                newCell = new PredatorPreyCell(state, row, col);
-            }
-            else throw new Exception("Simulation Type Not Accepted");
-            myGrid[row][col] = newCell;
-        }
+    public Simulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
+        myGrid = grid;
+        ROW_DELTA = rdelta;
+        COL_DELTA = cdelta;
     }
 
-    private void createDeltaArrays(String neighborType) throws Exception {
-        if(neighborType.equals("MOORE")){
-            COL_DELTA = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
-            ROW_DELTA = new int[]{0, -1, -1, -1, 0, 1, 1, 1};
-        }
-        else if(neighborType.equals("VON NEUMANN")){
-            COL_DELTA = new int[]{-1, 0, 1, 0};
-            ROW_DELTA = new int[]{0, -1, 0, 1};
-        }
-        else throw new Exception("Neighborhood Type Not Accepted");
+    public void setGrid(ArrayList<ArrayList<Cell>> grid) { myGrid = grid;}
+    public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
+    public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
+    public void setHeight(int height) {SIMULATION_HEIGHT = height;}
+    public void setWidth(int width) {SIMULATION_WIDTH = width;}
+
+    public void setCell(int r, int c, Cell cell){
+        myGrid.get(r).set(c, cell);
     }
 
-    public Color[][] getColorGrid() {
-        Color[][] colorGrid = new Color[myGrid.length][myGrid[0].length];
-        for(int row=0; row<colorGrid.length; row++){
-            for(int col=0; col<colorGrid[0].length; col++){
-                colorGrid[row][col] = myGrid[row][col].getColor();
-            }
-        }
-        return colorGrid;
-    }
+    public int getHeight(){ return SIMULATION_HEIGHT; }
+    public int getWidth(){ return SIMULATION_WIDTH; }
+    public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
 
     public void updateGrid() {
-        // Determine Cell updates
-        for(int row=0; row<myGrid.length; row++){
-            for(int col=0; col<myGrid[0].length; col++){
-                myGrid[row][col].determineNextState(getNeighbors(row, col));
+        determineUpdates();
+        implementUpdates();
+    }
+
+    public Map<String, Integer> countStates() {
+        Map<String, Integer> myMap = new HashMap<String, Integer>();
+        for (int row = 0; row < getHeight(); row++) {
+            for (int col = 0; col < getWidth(); col++) {
+                Cell myCell = getCell(row, col);
+                double myDouble = Math.floor(myCell.getState());
+                State myState = myCell.getStateMap().get(myDouble);
+                String myName = myState.getString();
+                if (!(myMap.containsKey(myName))) {
+                    myMap.put(myName, 0);
+                }
+                myMap.put(myName, myMap.get(myName) + 1);
             }
         }
+        return myMap;
+    }
 
-        // Implement cell updates
-        for(int row=0; row<myGrid.length; row++){
-            for(int col=0; col<myGrid[0].length; col++){
-                myGrid[row][col].updateState();
+    private void determineUpdates() {
+        for(int row=0; row<getHeight(); row++){
+            for(int col=0; col<getWidth(); col++){
+                getCell(row, col).determineNextState(getNeighbors(row, col));
+            }
+        }
+    }
+
+    private void implementUpdates() {
+        for(int row=0; row<getHeight(); row++){
+            for(int col=0; col<getWidth(); col++){
+                getCell(row, col).updateState();
             }
         }
     }
 
     private boolean inBounds(int row, int col) {
-        return (row < myGrid.length) && (col < myGrid[0].length)
+        return (row < getHeight()) && (col < getWidth())
                 && (row >= 0) && (col >= 0);
     }
 
@@ -129,31 +96,10 @@ public class Simulation {
         for (int i = 0; i < ROW_DELTA.length; i ++) {
             r2 = row + ROW_DELTA[i]; c2 = col + COL_DELTA[i];
             if (inBounds(r2, c2)) {
-                neighbors.add(myGrid[r2][c2]);
+                neighbors.add(getCell(r2, c2));
             }
         }
         return neighbors;
-    }
-
-
-    // this main method is here for testing - not supposed to be part of the final build
-    public static void main(String[] args) throws Exception {
-        // filename doesn't matter for now because the program never actually uses it
-        Simulation sim = new Simulation(new File("data/simulation_sample.xml"));
-
-        // check all the values
-        System.out.println("Grid:");
-        for(int row=0; row<sim.myGrid.length; row++){
-            System.out.print("[");
-            for(int col=0; col<sim.myGrid[0].length; col++){
-                System.out.print(" " + sim.myGrid[row][col].getState() + ",");
-            }
-            System.out.println(" ]");
-        }
-
-        System.out.println();
-        System.out.println("Row Delta:  "+ Arrays.toString(sim.ROW_DELTA));
-        System.out.println("Col Delta:  "+ Arrays.toString(sim.COL_DELTA));
     }
 
 }

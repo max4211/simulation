@@ -1,4 +1,4 @@
-package simulation;
+package configuration;
 
 
 import java.io.File;

@@ -1,5 +1,6 @@
 package visualization;
 
+import configuration.Configuration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -7,6 +8,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,34 +19,37 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import simulation.Cell;
 import simulation.Simulation;
+import simulation.State;
+import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
-import java.io.File;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
 
     // Resources for styling and properties
-    private static final String RESOURCES = "resources";
+    private static final String RESOURCES = "visualization/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
     private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
-    private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
     private final double SCENE_HEIGHT = 700;
     private final double SCENE_WIDTH = 550;
-    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.7;
+    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
     private final double SIM_WIDTH = SCENE_WIDTH * 0.9;
-    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.25;
+    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
+    private final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
     private final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
+    private final double IMAGE_DIMENSIONS = VBOX_HEIGHT * 0.4;
     private final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
 
     // Padding values
@@ -61,6 +68,7 @@ public class Visualization extends Application {
     private ToggleButton myStepButton;
     private ToggleButton myLoadButton;
     private ToggleButton myExitButton;
+    private StateChart myChart;
 
     // Simulation metadata
     private final int FRAME_RATE = 20;
@@ -68,14 +76,10 @@ public class Visualization extends Application {
     private BorderPane myRoot;
     private Simulation mySimulation;
 
-    // First simulation to run
-    private final String SIM_TITLE = myResources.getString("SimTitle");
-    private final File firstSim = new File("data/percolation74.xml");
-
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
-        stage.setTitle(SIM_TITLE);
+        stage.setTitle(myResources.getString("SimTitle"));
         stage.setScene(myScene);
         stage.sizeToScene();
         stage.show();
@@ -88,12 +92,18 @@ public class Visualization extends Application {
 
     private Scene createScene() {
         myRoot = createRootPane();
-        mySimulation = new Simulation(firstSim);
         myRoot.setBottom(createVBox());
-        showSimGrid();
+        createSimulation();
+        createChart();
         Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
+    }
+
+    private void createChart() {
+        myChart = new StateChart(new NumberAxis(), new NumberAxis());
+        myChart.setPrefSize(SIM_WIDTH, CHART_HEIGHT);
+        myRoot.setTop(myChart);
     }
 
     private VBox createVBox() {
@@ -157,23 +167,21 @@ public class Visualization extends Application {
         GridPane simGrid = new GridPane();
         simGrid.setAlignment(Pos.CENTER);
         simGrid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
-        myRoot.setCenter(simGrid);
-        Color[][] colorGrid = mySimulation.getColorGrid();
-        int totalRows = colorGrid.length;
-        int totalCols = colorGrid[0].length;
-        double regionHeight = SIM_HEIGHT / totalRows;
-        double regionWidth = SIM_WIDTH / totalCols;
-        for (int row = 0; row < totalRows; row ++) {
-            for (int col = 0; col < totalCols; col ++) {
-                simGrid.add(createRegion(regionWidth, regionHeight, colorGrid[row][col]), col, row );
+        double regionHeight = SIM_HEIGHT / mySimulation.getHeight();
+        double regionWidth = SIM_WIDTH / mySimulation.getWidth();
+        for (int row = 0; row < mySimulation.getHeight(); row ++) {
+            for (int col = 0; col < mySimulation.getWidth(); col ++) {
+                Cell myCell = mySimulation.getCell(row, col);
+                simGrid.add(createRegion(regionWidth, regionHeight, myCell.getColor()), col, row );
             }
         }
+        myRoot.setCenter(simGrid);
     }
 
-    private Region createRegion(double regionWidth, double regionHeight, Color color) {
+    private Region createRegion(double regionWidth, double regionHeight, String color) {
         Region myRegion = new Region();
         Insets myInsets = new Insets(regionHeight/50);
-        myRegion.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, myInsets)));
+        myRegion.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, myInsets)));
         myRegion.setShape(new Rectangle(regionWidth, regionHeight));
         myRegion.setPrefSize(regionWidth, regionHeight);
         Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
@@ -183,6 +191,7 @@ public class Visualization extends Application {
 
     private void updateSimulation() {
         mySimulation.updateGrid();
+        // myChart.populateChart(mySimulation.countStates());
     }
 
     private void setUpdateTime() {
@@ -221,32 +230,19 @@ public class Visualization extends Application {
     private void loadSelected() {
         myPauseButton.setSelected(true);
         myLoadButton.setSelected(false);
-        loadFile();
+        createSimulation();
     }
 
-    private void loadFile() {
-        Stage fileStage = new Stage();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Simulation XML File");
-        File dir = new File (PERCOLATION_FILES);
-        fileChooser.setInitialDirectory(dir);
-        File simFile = fileChooser.showOpenDialog(fileStage);
-        String extension = getFileExtension(simFile);
-        if (extension.equals("xml") || extension.equals("XML")) {
-            mySimulation = new Simulation(simFile);
-            showSimGrid();
+    private void createSimulation() {
+        try {
+            mySimulation = new Configuration().getSimulation();
             myPauseButton.setSelected(true);
-        } else {
-            System.out.println("Please select valid XML file and try again");
+            createChart();
+            showSimGrid();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            createSimulation();
         }
-    }
-
-    private String getFileExtension(File file) {
-        if (file == null) {return "";}
-        String fileName = file.getName();
-        int index = fileName.lastIndexOf(".");
-        if (index > 0) { return fileName.substring(index+1); }
-        else { return ""; }
     }
 
     private void styleButtons() {
@@ -260,7 +256,7 @@ public class Visualization extends Application {
     private void styleButton(ToggleButton button) {
         String label = button.getText();
         if (label.matches(IMAGEFILE_SUFFIXES)) {
-            button.setPrefSize(50, 50);
+            button.setPrefSize(IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
             button.setShape(new Circle(BUTTON_RADIUS));
             button.setText("");
             button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
