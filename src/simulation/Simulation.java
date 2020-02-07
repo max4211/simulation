@@ -14,6 +14,8 @@ public class Simulation {
     private ArrayList<ArrayList<Cell>> myGrid;
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
+    private int SIMULATION_HEIGHT;
+    private int SIMULATION_WIDTH;
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
@@ -31,16 +33,17 @@ public class Simulation {
     }
 
     public void setGrid(ArrayList<ArrayList<Cell>> grid) { myGrid = grid;}
-
     public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
+    public void setHeight(int height) {SIMULATION_HEIGHT = height;}
+    public void setWidth(int width) {SIMULATION_WIDTH = width;}
 
     public void setCell(int r, int c, Cell cell){
         myGrid.get(r).set(c, cell);
     }
 
-    public int getHeight(){ return myGrid.size(); }
-    public int getWidth(){ return myGrid.get(0).size(); }
+    public int getHeight(){ return SIMULATION_HEIGHT; }
+    public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
 
     public void updateGrid() {

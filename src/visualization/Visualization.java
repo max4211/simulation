@@ -16,13 +16,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -70,9 +69,6 @@ public class Visualization extends Application {
 
     // First simulation to run
     private final String SIM_TITLE = myResources.getString("SimTitle");
-    private final File firstSim = new File("data/percolation74.xml");
-    private int SIMULATION_ROWS;
-    private int SIMULATION_COLS;
 
     @Override
     public void start(Stage stage) {
@@ -158,14 +154,14 @@ public class Visualization extends Application {
         GridPane simGrid = new GridPane();
         simGrid.setAlignment(Pos.CENTER);
         simGrid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
-        myRoot.setCenter(simGrid);
-        double regionHeight = SIM_HEIGHT / SIMULATION_ROWS;
-        double regionWidth = SIM_WIDTH / SIMULATION_COLS;
-        for (int row = 0; row < SIMULATION_ROWS; row ++) {
-            for (int col = 0; col < SIMULATION_COLS; col ++) {
+        double regionHeight = SIM_HEIGHT / mySimulation.getHeight();
+        double regionWidth = SIM_WIDTH / mySimulation.getWidth();
+        for (int row = 0; row < mySimulation.getHeight(); row ++) {
+            for (int col = 0; col < mySimulation.getWidth(); col ++) {
                 simGrid.add(createRegion(regionWidth, regionHeight, mySimulation.getCell(row, col).getColor()), col, row );
             }
         }
+        myRoot.setCenter(simGrid);
     }
 
     private Region createRegion(double regionWidth, double regionHeight, String color) {
@@ -225,14 +221,12 @@ public class Visualization extends Application {
     private void createSimulation() {
         try {
             mySimulation = new Configuration().getSimulation();
+            myPauseButton.setSelected(true);
+            showSimGrid();
         } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             createSimulation();
-            return;
         }
-        showSimGrid();
-        myPauseButton.setSelected(true);
-        SIMULATION_ROWS = mySimulation.getHeight();
-        SIMULATION_COLS = mySimulation.getWidth();
     }
 
     private void styleButtons() {

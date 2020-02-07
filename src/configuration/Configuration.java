@@ -120,6 +120,8 @@ public class Configuration {
         fillGrid(initialCells);
         createDeltaArrays(myNeighborType);
         mySimulation.setGrid(myGrid);
+        mySimulation.setHeight(myHeight);
+        mySimulation.setWidth(myWidth);
     }
 
     private void fillGrid(List<String> initialCells) {
@@ -134,7 +136,7 @@ public class Configuration {
 
     public void addCellToRow(int r, int c, Cell cell){
         if(myGrid.get(r).size() <= c){ myGrid.get(r).add(cell); }
-        else { throw new IndexOutOfBoundsException("Invalid ordering of cells"); }
+        else { throw new IndexOutOfBoundsException("Invalid cell order"); }
     }
 
     private Cell createCell(int row, int col, double state) {
