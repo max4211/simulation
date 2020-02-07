@@ -1,11 +1,9 @@
 package simulation;
 
-import configuration.SimulationConfig;
+import configuration.Configuration;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,18 +25,13 @@ public class Simulation {
      */
     public Simulation(File configFile){
         try{
-            // get data from the SimulationConfig class
-            // ~~~~~ this chunk should be changed when I get a working SimulationConfig ~~~~~
-            SimulationConfig simCon  = new SimulationConfig(configFile);
+            Configuration simCon  = new Configuration(configFile);
 
             int height = simCon.getHeight();
             int width = simCon.getWidth();
             String simType = simCon.getSimType();
             String neighborType = simCon.getNeighborType();
             List<String> initialCells = simCon.getCellStates();
-            // for SimulationConfig() use getter methods
-            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
             myGrid = new ArrayList<ArrayList<Cell>>();
             for(int i=0; i<height; i++){
@@ -49,8 +42,7 @@ public class Simulation {
             createDeltaArrays(neighborType);
         }
         catch(Exception e){
-            //System.out.println(e.toString());
-            //e.printStackTrace();
+
         }
     }
 
@@ -70,7 +62,7 @@ public class Simulation {
     public int getHeight(){ return myGrid.size(); }
     public int getWidth(){ return myGrid.get(0).size(); }
 
-    private Cell getCell(int r, int c){
+    public Cell getCell(int r, int c){
         return myGrid.get(r).get(c);
     }
 
@@ -147,27 +139,6 @@ public class Simulation {
             }
         }
         return neighbors;
-    }
-
-
-    // this main method is here for testing - not supposed to be part of the final build
-    public static void main(String[] args) throws Exception {
-        // filename doesn't matter for now because the program never actually uses it
-        Simulation sim = new Simulation(new File("data/simulation_sample.xml"));
-
-        // check all the values
-        System.out.println("Grid:");
-        for(int row=0; row<sim.getWidth(); row++){
-            System.out.print("[");
-            for(int col=0; col<sim.getHeight(); col++){
-                System.out.print(" " + sim.getCell(row, col).getState() + ",");
-            }
-            System.out.println(" ]");
-        }
-
-        System.out.println();
-        System.out.println("Row Delta:  "+ Arrays.toString(sim.ROW_DELTA));
-        System.out.println("Col Delta:  "+ Arrays.toString(sim.COL_DELTA));
     }
 
 }

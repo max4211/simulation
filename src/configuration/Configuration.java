@@ -30,7 +30,7 @@ import java.util.List;
  *
  */
 
-public class SimulationConfig {
+public class Configuration {
 
     private File myFile;
     private int height;
@@ -43,7 +43,7 @@ public class SimulationConfig {
      * Constructs a SimulationConfig class using a File input
      * @param path: an .xml file in format above
      */
-    public SimulationConfig(File path){
+    public Configuration(File path){
         myFile = path;
         buildDocument();
     }
@@ -91,16 +91,4 @@ public class SimulationConfig {
         }
     }
 
-
-    public static void main(String[] args){
-        SimulationConfig s = new SimulationConfig(new File("data/simulation_sample.xml"));
-        System.out.println(s.getHeight());
-        System.out.println(s.getWidth());
-        System.out.println(s.getSimType());
-        System.out.println(s.getNeighborType());
-        for(String state: s.getCellStates()){
-            System.out.print(state);
-        }
-
-    }
 }
