@@ -1,6 +1,5 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -71,9 +70,9 @@ public class PredatorPreyCell extends Cell{
 
     @Override
     public void createColorMap() {
-        myColorMap.put(0.0, Color.BLUE);
-        myColorMap.put(1.0, Color.YELLOW);
-        myColorMap.put(2.0, Color.GREEN);
+        myColorMap.put(0.0, BLUE);
+        myColorMap.put(1.0, YELLOW);
+        myColorMap.put(2.0, GREEN);
     }
 
     @Override
@@ -82,13 +81,12 @@ public class PredatorPreyCell extends Cell{
         if(Math.floor(myState) == 1) {
             // make subsets of cells that are fish and empty
             ArrayList<Cell> fishCellSublist = new ArrayList<>();
-            for (Cell cell : neighbors) {
-                if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
-            }
             ArrayList<Cell> emptyCellSublist = new ArrayList<>();
             for (Cell cell : neighbors) {
+                if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
                 if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
             }
+
             // if you're out of energy, die :(
             if(energy <= 0){
                 nextState = 0;

@@ -1,6 +1,5 @@
 package simulation;
 
-import javafx.scene.paint.Color;
 import java.util.Collection;
 
 /**
@@ -28,8 +27,8 @@ public class LifeCell extends Cell {
 
     @Override
     public void createColorMap(){
-        myColorMap.put(0.0, Color.WHITE);
-        myColorMap.put(1.0, Color.BLACK);
+        myColorMap.put(0.0, WHITE);
+        myColorMap.put(1.0, BLACK);
     }
 
     @Override

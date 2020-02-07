@@ -71,6 +71,8 @@ public class Visualization extends Application {
     // First simulation to run
     private final String SIM_TITLE = myResources.getString("SimTitle");
     private final File firstSim = new File("data/percolation74.xml");
+    private int SIMULATION_ROWS;
+    private int SIMULATION_COLS;
 
     @Override
     public void start(Stage stage) {
@@ -88,9 +90,8 @@ public class Visualization extends Application {
 
     private Scene createScene() {
         myRoot = createRootPane();
-        mySimulation = new Simulation(firstSim);
         myRoot.setBottom(createVBox());
-        showSimGrid();
+        createSimulation(firstSim);
         Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
@@ -153,19 +154,17 @@ public class Visualization extends Application {
         return box;
     }
 
+
     private void showSimGrid() {
         GridPane simGrid = new GridPane();
         simGrid.setAlignment(Pos.CENTER);
         simGrid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
         myRoot.setCenter(simGrid);
-        Color[][] colorGrid = mySimulation.getColorGrid();
-        int totalRows = colorGrid.length;
-        int totalCols = colorGrid[0].length;
-        double regionHeight = SIM_HEIGHT / totalRows;
-        double regionWidth = SIM_WIDTH / totalCols;
-        for (int row = 0; row < totalRows; row ++) {
-            for (int col = 0; col < totalCols; col ++) {
-                simGrid.add(createRegion(regionWidth, regionHeight, colorGrid[row][col]), col, row );
+        double regionHeight = SIM_HEIGHT / SIMULATION_ROWS;
+        double regionWidth = SIM_WIDTH / SIMULATION_COLS;
+        for (int row = 0; row < SIMULATION_ROWS; row ++) {
+            for (int col = 0; col < SIMULATION_COLS; col ++) {
+                simGrid.add(createRegion(regionWidth, regionHeight, mySimulation.getCell(row, col).getColor()), col, row );
             }
         }
         /* TODO: Update region height/width assignments, explore dynamic region assigments
@@ -181,10 +180,10 @@ public class Visualization extends Application {
          */
     }
 
-    private Region createRegion(double regionWidth, double regionHeight, Color color) {
+    private Region createRegion(double regionWidth, double regionHeight, String color) {
         Region myRegion = new Region();
         Insets myInsets = new Insets(regionHeight/50);
-        myRegion.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, myInsets)));
+        myRegion.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, myInsets)));
         myRegion.setShape(new Rectangle(regionWidth, regionHeight));
         myRegion.setPrefSize(regionWidth, regionHeight);
         Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
@@ -244,12 +243,18 @@ public class Visualization extends Application {
         File simFile = fileChooser.showOpenDialog(fileStage);
         String extension = getFileExtension(simFile);
         if (extension.equals("xml") || extension.equals("XML")) {
-            mySimulation = new Simulation(simFile);
-            showSimGrid();
-            myPauseButton.setSelected(true);
+            createSimulation(simFile);
         } else {
             System.out.println("Please select valid XML file and try again");
         }
+    }
+
+    private void createSimulation(File simFile) {
+        mySimulation = new Simulation(simFile);
+        showSimGrid();
+        myPauseButton.setSelected(true);
+        SIMULATION_ROWS = mySimulation.getHeight();
+        SIMULATION_COLS = mySimulation.getWidth();
     }
 
     private String getFileExtension(File file) {

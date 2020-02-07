@@ -1,9 +1,9 @@
-package simulation;
+package configuration;
 
 import java.io.IOException;
 import java.util.Random;
 
-public class PredatorPreyGenerator extends GridGenerator{
+public class PredatorPreyGenerator extends GridGenerator {
 
     public PredatorPreyGenerator(int height, int width) throws IOException {
         super(height, width, "predatorprey");

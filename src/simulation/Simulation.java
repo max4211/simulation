@@ -1,6 +1,7 @@
 package simulation;
 
-import javafx.scene.paint.Color;
+import configuration.SimulationConfig;
+
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class Simulation {
 
-    private Cell[][] myGrid;
+    private ArrayList<ArrayList<Cell>> myGrid;
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
@@ -38,24 +39,40 @@ public class Simulation {
             // for SimulationConfig() use getter methods
             // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            // loop through initialCells and fill myGrid
-            myGrid = new Cell[height][width];
+
+            myGrid = new ArrayList<ArrayList<Cell>>();
+            for(int i=0; i<height; i++){
+                myGrid.add(new ArrayList<Cell>(width));
+            }
+
             fillGrid(simType, initialCells);
             createDeltaArrays(neighborType);
         }
         catch(Exception e){
-            System.out.println(e.toString());
+            //System.out.println(e.toString());
+            //e.printStackTrace();
         }
-
-
     }
 
-    public Collection<ArrayList<Color>> getCollection() {
-        Collection<ArrayList<Color>> myList = new ArrayList<ArrayList<Color>>();
-        return myList;
+
+    public void setCell(int r, int c, Cell cell){
+        myGrid.get(r).set(c, cell);
     }
 
-    public Cell[][] getGrid(){ return myGrid; }
+    public void addCellToRow(int r, int c, Cell cell){
+        if(myGrid.get(r).size() == c){
+            myGrid.get(r).add(cell);
+        }
+        else
+            throw new IndexOutOfBoundsException("Invalid ordering of cells");
+    }
+
+    public int getHeight(){ return myGrid.size(); }
+    public int getWidth(){ return myGrid.get(0).size(); }
+
+    private Cell getCell(int r, int c){
+        return myGrid.get(r).get(c);
+    }
 
     private void fillGrid(String simType, List<String> initialCells) throws Exception {
         for (String cellString : initialCells){
@@ -72,12 +89,13 @@ public class Simulation {
             } else if(simType.equals("Percolation")){
                 newCell = new PercolationCell(state, row, col);
             } else if(simType.equals("Segregation")){
-                newCell = new SegregationCell(state, row, col, myGrid);
+                newCell = new SegregationCell(state, row, col, this);
+
             } else if(simType.equals("Predator Prey")){
                 newCell = new PredatorPreyCell(state, row, col);
             }
             else throw new Exception("Simulation Type Not Accepted");
-            myGrid[row][col] = newCell;
+            this.addCellToRow(row, col, newCell);
         }
     }
 
@@ -93,34 +111,24 @@ public class Simulation {
         else throw new Exception("Neighborhood Type Not Accepted");
     }
 
-    public Color[][] getColorGrid() {
-        Color[][] colorGrid = new Color[myGrid.length][myGrid[0].length];
-        for(int row=0; row<colorGrid.length; row++){
-            for(int col=0; col<colorGrid[0].length; col++){
-                colorGrid[row][col] = myGrid[row][col].getColor();
-            }
-        }
-        return colorGrid;
-    }
-
     public void updateGrid() {
         // Determine Cell updates
-        for(int row=0; row<myGrid.length; row++){
-            for(int col=0; col<myGrid[0].length; col++){
-                myGrid[row][col].determineNextState(getNeighbors(row, col));
+        for(int row=0; row<getHeight(); row++){
+            for(int col=0; col<getWidth(); col++){
+                getCell(row, col).determineNextState(getNeighbors(row, col));
             }
         }
 
         // Implement cell updates
-        for(int row=0; row<myGrid.length; row++){
-            for(int col=0; col<myGrid[0].length; col++){
-                myGrid[row][col].updateState();
+        for(int row=0; row<getHeight(); row++){
+            for(int col=0; col<getWidth(); col++){
+                getCell(row, col).updateState();
             }
         }
     }
 
     private boolean inBounds(int row, int col) {
-        return (row < myGrid.length) && (col < myGrid[0].length)
+        return (row < getHeight()) && (col < getWidth())
                 && (row >= 0) && (col >= 0);
     }
 
@@ -135,7 +143,7 @@ public class Simulation {
         for (int i = 0; i < ROW_DELTA.length; i ++) {
             r2 = row + ROW_DELTA[i]; c2 = col + COL_DELTA[i];
             if (inBounds(r2, c2)) {
-                neighbors.add(myGrid[r2][c2]);
+                neighbors.add(getCell(r2, c2));
             }
         }
         return neighbors;
@@ -149,10 +157,10 @@ public class Simulation {
 
         // check all the values
         System.out.println("Grid:");
-        for(int row=0; row<sim.myGrid.length; row++){
+        for(int row=0; row<sim.getWidth(); row++){
             System.out.print("[");
-            for(int col=0; col<sim.myGrid[0].length; col++){
-                System.out.print(" " + sim.myGrid[row][col].getState() + ",");
+            for(int col=0; col<sim.getHeight(); col++){
+                System.out.print(" " + sim.getCell(row, col).getState() + ",");
             }
             System.out.println(" ]");
         }

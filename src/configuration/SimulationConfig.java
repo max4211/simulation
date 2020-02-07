@@ -1,4 +1,4 @@
-package simulation;
+package configuration;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
@@ -8,6 +8,9 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+
+//TODO: Incorrect file type, incomplete/incorrect formatting, incorrect states
 
 /**
  * Class meant to encapsulate raw data on initial simulation configuration pulled from .xml file.
@@ -65,7 +68,7 @@ public class SimulationConfig {
             readTags(nodeList);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
