@@ -1,6 +1,9 @@
 package configuration;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -19,14 +22,14 @@ import java.util.List;
  * This class is meant to keep the extraction of data from the .xml file separate from the Simulation class.
  * This class assumes files passed in constructor are of type .xml and follow this format:
  *
- * <SimulationConfig>
+ * <Configuration>
  *         <height>1</height> // integer
  *         <width>1</width> // integer
  *         <type>Spreading of Fire</type> // String
  *         <neighborType>MOORE</neighborType> // String
  *         <cell>0 0 0</cell> // String in the format "x-coord y-coord state" where state is an integer
  *         <cell>0 1 0</cell>
- * </SimulationConfig>
+ * </Configuration>
  *
  * Based on code from https://www.javatpoint.com/how-to-read-xml-file-in-java
  *
@@ -34,73 +37,121 @@ import java.util.List;
 
 public class Configuration {
 
+    private static final String SIMULATION_FILES = System.getProperty("user.dir") + "/data/";
+
     private File myFile;
-    private int height;
-    private int width;
-    private String simType;
-    private String neighborType;
+    private int myHeight;
+    private int myWidth;
+    private String mySimType;
+    private String myNeighborType;
     private List<String> initialCells = new ArrayList<>();
-    private Simulation mySimulation;
+    private ArrayList<ArrayList<Cell>> myGrid = new ArrayList<ArrayList<Cell>>();
+    private Simulation mySimulation = new Simulation();
 
     /**
-     * Constructs a SimulationConfig class using a File input
-     * @param path: an .xml file in format above
+     * Constructs a Configuration file to prepare for simluation
+     * Uses FileChooser to select a file each time
      */
-    public Configuration(File path){
-        myFile = path;
+    public Configuration(){
+        myFile = loadFile();
         buildDocument();
         createSimulation();
     }
 
-    public int getHeight(){ return this.height; }
-    public int getWidth(){ return this.width; }
-    public String getSimType(){ return this.simType; }
-    public String getNeighborType(){ return this.neighborType; }
-    public List<String> getCellStates(){ return this.initialCells; }
-
-    private void createSimulation() {
-        ArrayList<ArrayList<Cell>> grid = new ArrayList<ArrayList<Cell>>();
-        for(int i=0; i < height; i++){
-            grid.add(new ArrayList<Cell>(width));
+    private File loadFile() {
+        Stage fileStage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Simulation XML File");
+        File dir = new File (SIMULATION_FILES);
+        fileChooser.setInitialDirectory(dir);
+        File simFile = fileChooser.showOpenDialog(fileStage);
+        String extension = getFileExtension(simFile);
+        if (extension.equals("xml") || extension.equals("XML")) {
+            return simFile;
+        } else {
+            throw new IllegalArgumentException("Invalid File Type: " + simFile);
         }
-
-        fillGrid(simType, initialCells);
-        createDeltaArrays(neighborType);
     }
 
-    private void fillGrid(String simType, List<String> initialCells) {
+    private String getFileExtension(File file) {
+        if (file == null) {return "";}
+        String fileName = file.getName();
+        int index = fileName.lastIndexOf(".");
+        if (index > 0) { return fileName.substring(index+1); }
+        else { return ""; }
+    }
+
+    // Helper method meant to create a Document object based on myFile and construct a NodeList of tags of name
+    // following the SimulationConfig format
+    private void buildDocument(){
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(this.myFile);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getElementsByTagName("SimulationConfig");
+            readTags(nodeList);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid File: " + e);
+        }
+    }
+
+    // Helper method meant to assign contents of tags to elements using NodeList constructed in buildDocument()
+    private void readTags(NodeList nodeList){
+        Node node = nodeList.item(0);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element eElement = (Element) node;
+            this.myHeight = Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent());
+            this.myWidth = Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent());
+            this.mySimType = eElement.getElementsByTagName("type").item(0).getTextContent();
+            this.myNeighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
+
+            // Initial cell states
+            NodeList cellList = eElement.getElementsByTagName("cell");
+            for(int cellItr = 0; cellItr < cellList.getLength(); cellItr++){
+                Element initialCell = (Element) cellList.item(cellItr);
+                initialCells.add(initialCell.getTextContent());
+            }
+        }
+    }
+
+    private void createSimulation() {
+        for(int i = 0; i < myHeight; i++){ myGrid.add(new ArrayList<Cell>(myWidth)); }
+        fillGrid(initialCells);
+        createDeltaArrays(myNeighborType);
+        mySimulation.setGrid(myGrid);
+    }
+
+    private void fillGrid(List<String> initialCells) {
         for (String cellString : initialCells) {
             String[] cellData = cellString.split(" ");
             int row = Integer.parseInt(cellData[0]);
             int col = Integer.parseInt(cellData[1]);
             double state = Double.parseDouble(cellData[2]);
-            Cell newCell = createCell(row, col, state);
-            mySimulation.addCellToRow(row, col, newCell);
+            addCellToRow(row, col, createCell(row, col, state));
         }
     }
 
+    public void addCellToRow(int r, int c, Cell cell){
+        if(myGrid.get(r).size() <= c){ myGrid.get(r).add(cell); }
+        else { throw new IndexOutOfBoundsException("Invalid ordering of cells"); }
+    }
+
     private Cell createCell(int row, int col, double state) {
-        Cell newCell;
-        switch (simType) {
+        switch (mySimType) {
             case ("Spreading of Fire"):
-                newCell = new FireCell(state, row, col);
-                break;
+                return new FireCell(state, row, col);
             case ("Game of Life"):
-                newCell = new LifeCell(state, row, col);
-                break;
+                return new LifeCell(state, row, col);
             case ("Percolation"):
-                newCell = new PercolationCell(state, row, col);
-                break;
+                return new PercolationCell(state, row, col);
             case ("Segregation"):
-                newCell = new SegregationCell(state, row, col, mySimulation);
-                break;
+                return new SegregationCell(state, row, col, mySimulation);
             case ("Predator Prey"):
-                newCell = new PredatorPreyCell(state, row, col);
-                break;
+                return new PredatorPreyCell(state, row, col);
             default:
-                throw new IllegalStateException("Unexpected value: " + simType);
+                throw new IllegalArgumentException("Unexpected value: " + mySimType);
         }
-        return newCell;
     }
 
     private void createDeltaArrays (String neighborType) {
@@ -114,49 +165,13 @@ public class Configuration {
                 mySimulation.setRowDelta(new int[]{0, -1, 0, 1});
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + neighborType);
+                throw new IllegalArgumentException("Unexpected value: " + neighborType);
         }
     }
 
-    // Helper method meant to create a Document object based on myFile and construct a NodeList of tags of name
-    // following the SimulationConfig format
-    private void buildDocument(){
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(this.myFile);
-            doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getElementsByTagName("SimulationConfig");
-            readTags(nodeList);
-        }
-        catch (Exception e) {
-            //e.printStackTrace();
-        }
-    }
-
-    // Helper method meant to assign contents of tags to elements using NodeList constructed in buildDocument()
-    private void readTags(NodeList nodeList){
-        Node node = nodeList.item(0);
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            Element eElement = (Element) node;
-            this.height = Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent());
-            this.width = Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent());
-            this.simType = eElement.getElementsByTagName("type").item(0).getTextContent();
-            this.neighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
-
-            // Initial cell states
-            NodeList cellList = eElement.getElementsByTagName("cell");
-            for(int cellItr = 0; cellItr < cellList.getLength(); cellItr++){
-                Element initialCell = (Element) cellList.item(cellItr);
-                initialCells.add(initialCell.getTextContent());
-            }
-        }
-    }
-
-    public Simulation getSimulation() {
-        return mySimulation;
-    }
-
-
+    public Simulation getSimulation() { return mySimulation; }
+    public int getHeight(){ return this.myHeight; }
+    public int getWidth(){ return this.myWidth; }
+    public String getNeighborType(){ return this.myNeighborType; }
 
 }

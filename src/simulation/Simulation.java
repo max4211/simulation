@@ -15,19 +15,22 @@ public class Simulation {
     private int[] ROW_DELTA;
     private int[] COL_DELTA;
 
-
     /**
      * Constructs myGrid depending on the simulation type and according to the
      * information from SimulationConfig. Also builds ROW_DELTA and COL_DELTA.
      *
      */
-    public Simulation(){
-
+    public Simulation() {
+        ;
     }
 
-    public void setGrid(ArrayList<ArrayList<Cell>> grid) {
+    public Simulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         myGrid = grid;
+        ROW_DELTA = rdelta;
+        COL_DELTA = cdelta;
     }
+
+    public void setGrid(ArrayList<ArrayList<Cell>> grid) { myGrid = grid;}
 
     public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
@@ -36,20 +39,9 @@ public class Simulation {
         myGrid.get(r).set(c, cell);
     }
 
-    public void addCellToRow(int r, int c, Cell cell){
-        if(myGrid.get(r).size() == c){
-            myGrid.get(r).add(cell);
-        }
-        else
-            throw new IndexOutOfBoundsException("Invalid ordering of cells");
-    }
-
     public int getHeight(){ return myGrid.size(); }
     public int getWidth(){ return myGrid.get(0).size(); }
-
-    public Cell getCell(int r, int c){
-        return myGrid.get(r).get(c);
-    }
+    public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
 
     public void updateGrid() {
         // Determine Cell updates

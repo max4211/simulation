@@ -33,7 +33,6 @@ public class Visualization extends Application {
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
     private static final String LANGUAGE = "Image";
     private static final String STYLESHEET = "default.css";
-    private static final String PERCOLATION_FILES = System.getProperty("user.dir") + "/data/";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
@@ -92,7 +91,7 @@ public class Visualization extends Application {
     private Scene createScene() {
         myRoot = createRootPane();
         myRoot.setBottom(createVBox());
-        createSimulation(firstSim);
+        createSimulation();
         Scene scene = new Scene(myRoot, SCENE_WIDTH, SCENE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_RESOURCE_FOLDER + STYLESHEET).toExternalForm());
         return scene;
@@ -154,7 +153,6 @@ public class Visualization extends Application {
         box.getChildren().add(myExitButton);
         return box;
     }
-
 
     private void showSimGrid() {
         GridPane simGrid = new GridPane();
@@ -221,38 +219,20 @@ public class Visualization extends Application {
     private void loadSelected() {
         myPauseButton.setSelected(true);
         myLoadButton.setSelected(false);
-        loadFile();
+        createSimulation();
     }
 
-    private void loadFile() {
-        Stage fileStage = new Stage();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Simulation XML File");
-        File dir = new File (PERCOLATION_FILES);
-        fileChooser.setInitialDirectory(dir);
-        File simFile = fileChooser.showOpenDialog(fileStage);
-        String extension = getFileExtension(simFile);
-        if (extension.equals("xml") || extension.equals("XML")) {
-            createSimulation(simFile);
-        } else {
-            System.out.println("Please select valid XML file and try again");
+    private void createSimulation() {
+        try {
+            mySimulation = new Configuration().getSimulation();
+        } catch (IllegalArgumentException e) {
+            createSimulation();
+            return;
         }
-    }
-
-    private void createSimulation(File simFile) {
-        mySimulation = new Configuration(simFile).getSimulation();
         showSimGrid();
         myPauseButton.setSelected(true);
         SIMULATION_ROWS = mySimulation.getHeight();
         SIMULATION_COLS = mySimulation.getWidth();
-    }
-
-    private String getFileExtension(File file) {
-        if (file == null) {return "";}
-        String fileName = file.getName();
-        int index = fileName.lastIndexOf(".");
-        if (index > 0) { return fileName.substring(index+1); }
-        else { return ""; }
     }
 
     private void styleButtons() {
