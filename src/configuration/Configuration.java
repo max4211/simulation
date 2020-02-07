@@ -5,6 +5,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import simulation.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class Configuration {
     private String simType;
     private String neighborType;
     private List<String> initialCells = new ArrayList<>();
+    private Simulation mySimulation;
 
     /**
      * Constructs a SimulationConfig class using a File input
@@ -46,6 +49,7 @@ public class Configuration {
     public Configuration(File path){
         myFile = path;
         buildDocument();
+        createSimulation();
     }
 
     public int getHeight(){ return this.height; }
@@ -54,13 +58,71 @@ public class Configuration {
     public String getNeighborType(){ return this.neighborType; }
     public List<String> getCellStates(){ return this.initialCells; }
 
+    private void createSimulation() {
+        ArrayList<ArrayList<Cell>> grid = new ArrayList<ArrayList<Cell>>();
+        for(int i=0; i < height; i++){
+            grid.add(new ArrayList<Cell>(width));
+        }
+
+        fillGrid(simType, initialCells);
+        createDeltaArrays(neighborType);
+    }
+
+    private void fillGrid(String simType, List<String> initialCells) {
+        for (String cellString : initialCells) {
+            String[] cellData = cellString.split(" ");
+            int row = Integer.parseInt(cellData[0]);
+            int col = Integer.parseInt(cellData[1]);
+            double state = Double.parseDouble(cellData[2]);
+            Cell newCell = createCell(row, col, state);
+            mySimulation.addCellToRow(row, col, newCell);
+        }
+    }
+
+    private Cell createCell(int row, int col, double state) {
+        Cell newCell;
+        switch (simType) {
+            case ("Spreading of Fire"):
+                newCell = new FireCell(state, row, col);
+                break;
+            case ("Game of Life"):
+                newCell = new LifeCell(state, row, col);
+                break;
+            case ("Percolation"):
+                newCell = new PercolationCell(state, row, col);
+                break;
+            case ("Segregation"):
+                newCell = new SegregationCell(state, row, col, mySimulation);
+                break;
+            case ("Predator Prey"):
+                newCell = new PredatorPreyCell(state, row, col);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + simType);
+        }
+        return newCell;
+    }
+
+    private void createDeltaArrays (String neighborType) {
+        switch (neighborType) {
+            case("MOORE"):
+                mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 1, 0, -1});
+                mySimulation.setRowDelta(new int[]{0, -1, -1, -1, 0, 1, 1, 1});
+                break;
+            case("VON NEUMANN"):
+                mySimulation.setColDelta(new int[]{-1, 0, 1, 0});
+                mySimulation.setRowDelta(new int[]{0, -1, 0, 1});
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + neighborType);
+        }
+    }
+
     // Helper method meant to create a Document object based on myFile and construct a NodeList of tags of name
     // following the SimulationConfig format
     private void buildDocument(){
         try {
-            //an instance of factory that gives a document builder
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            //an instance of builder to parse the specified xml file
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(this.myFile);
             doc.getDocumentElement().normalize();
@@ -90,5 +152,11 @@ public class Configuration {
             }
         }
     }
+
+    public Simulation getSimulation() {
+        return mySimulation;
+    }
+
+
 
 }

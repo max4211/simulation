@@ -20,32 +20,17 @@ public class Simulation {
      * Constructs myGrid depending on the simulation type and according to the
      * information from SimulationConfig. Also builds ROW_DELTA and COL_DELTA.
      *
-     * @param configFile the .XML file to build the simulation from
-     * @throws Exception if simType or neighborType are unexpected values
      */
-    public Simulation(File configFile){
-        try{
-            Configuration simCon  = new Configuration(configFile);
+    public Simulation(){
 
-            int height = simCon.getHeight();
-            int width = simCon.getWidth();
-            String simType = simCon.getSimType();
-            String neighborType = simCon.getNeighborType();
-            List<String> initialCells = simCon.getCellStates();
-
-            myGrid = new ArrayList<ArrayList<Cell>>();
-            for(int i=0; i<height; i++){
-                myGrid.add(new ArrayList<Cell>(width));
-            }
-
-            fillGrid(simType, initialCells);
-            createDeltaArrays(neighborType);
-        }
-        catch(Exception e){
-
-        }
     }
 
+    public void setGrid(ArrayList<ArrayList<Cell>> grid) {
+        myGrid = grid;
+    }
+
+    public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
+    public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
 
     public void setCell(int r, int c, Cell cell){
         myGrid.get(r).set(c, cell);
@@ -64,43 +49,6 @@ public class Simulation {
 
     public Cell getCell(int r, int c){
         return myGrid.get(r).get(c);
-    }
-
-    private void fillGrid(String simType, List<String> initialCells) throws Exception {
-        for (String cellString : initialCells){
-            String[] cellData = cellString.split(" ");
-            int row = Integer.parseInt(cellData[0]);
-            int col = Integer.parseInt(cellData[1]);
-            double state = Double.parseDouble(cellData[2]);
-
-            Cell newCell;
-            if(simType.equals("Spreading of Fire")) {
-                newCell = new FireCell(state, row, col);
-            } else if(simType.equals("Game of Life")){
-                newCell = new LifeCell(state, row, col);
-            } else if(simType.equals("Percolation")){
-                newCell = new PercolationCell(state, row, col);
-            } else if(simType.equals("Segregation")){
-                newCell = new SegregationCell(state, row, col, this);
-
-            } else if(simType.equals("Predator Prey")){
-                newCell = new PredatorPreyCell(state, row, col);
-            }
-            else throw new Exception("Simulation Type Not Accepted");
-            this.addCellToRow(row, col, newCell);
-        }
-    }
-
-    private void createDeltaArrays(String neighborType) throws Exception {
-        if(neighborType.equals("MOORE")){
-            COL_DELTA = new int[]{-1, -1, 0, 1, 1, 1, 0, -1};
-            ROW_DELTA = new int[]{0, -1, -1, -1, 0, 1, 1, 1};
-        }
-        else if(neighborType.equals("VON NEUMANN")){
-            COL_DELTA = new int[]{-1, 0, 1, 0};
-            ROW_DELTA = new int[]{0, -1, 0, 1};
-        }
-        else throw new Exception("Neighborhood Type Not Accepted");
     }
 
     public void updateGrid() {

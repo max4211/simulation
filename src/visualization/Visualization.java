@@ -1,5 +1,6 @@
 package visualization;
 
+import configuration.Configuration;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -239,7 +240,7 @@ public class Visualization extends Application {
     }
 
     private void createSimulation(File simFile) {
-        mySimulation = new Simulation(simFile);
+        mySimulation = new Configuration(simFile).getSimulation();
         showSimGrid();
         myPauseButton.setSelected(true);
         SIMULATION_ROWS = mySimulation.getHeight();
