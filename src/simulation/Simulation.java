@@ -1,6 +1,7 @@
 package simulation;
 
 import configuration.SimulationSaver;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -112,13 +113,13 @@ public class Simulation {
      * @param col column cell whose neighbors are being requested
      * @return list of neighbors states in order of ROW_DELTA and COL_DELTA
      */
-    private Collection<Cell> getNeighbors(int row, int col) {
-        Collection<Cell> neighbors = new ArrayList<Cell>();
+    private Map<Pair<Integer, Integer>, Cell> getNeighbors(int row, int col) {
+        Map<Pair<Integer, Integer>, Cell> neighbors = new HashMap<>();
         int r2; int c2;
         for (int i = 0; i < ROW_DELTA.length; i ++) {
             r2 = row + ROW_DELTA[i]; c2 = col + COL_DELTA[i];
             if (inBounds(r2, c2)) {
-                neighbors.add(getCell(r2, c2));
+                neighbors.put(new Pair(r2, c2), getCell(r2, c2));
             }
         }
         return neighbors;

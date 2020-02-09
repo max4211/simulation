@@ -1,6 +1,9 @@
 package simulation;
 
+import javafx.util.Pair;
+
 import java.util.Collection;
+import java.util.Map;
 
 /**
  *  This class represents a cell in a Percolation simulation.
@@ -47,9 +50,9 @@ public class PercolationCell extends Cell {
     }
 
     @Override
-    public void determineNextState(Collection<Cell> neighbors){
+    public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors){
         boolean neighborPercolates = false;
-        for(Cell n: neighbors){
+        for(Cell n: neighbors.values()){
             if(n.getState()==2){
                 neighborPercolates = true;
                 break;

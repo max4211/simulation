@@ -59,6 +59,7 @@ public class Configuration {
     private static final String DEFAULT_NEIGHBOR = "MOORE";
     private static final String MOORE = "MOORE";
     private static final String VON_NEUMANN = "VON NEUMANN";
+    private static final String HEXAGONAL = "HEXAGONAL";
 
     //Simulation Types
     private static final String GAME_OF_LIFE = "Game of Life";
@@ -193,6 +194,9 @@ public class Configuration {
                 mySimulation.setColDelta(new int[]{-1, 0, 1, 0});
                 mySimulation.setRowDelta(new int[]{0, -1, 0, 1});
                 break;
+            case(HEXAGONAL):
+                mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 0});
+                mySimulation.setRowDelta(new int[]{0, -1, -1, 0, 1, 1});
             default:
                 System.out.println("Default neighborhood invalid/not given, defaulting to: " + DEFAULT_NEIGHBOR);
                 createDeltaArrays(DEFAULT_NEIGHBOR);

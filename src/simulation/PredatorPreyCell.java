@@ -1,6 +1,8 @@
 package simulation;
 
 
+import javafx.util.Pair;
+
 import java.util.*;
 
 /**
@@ -85,13 +87,13 @@ public class PredatorPreyCell extends Cell{
     }
 
     @Override
-    public void determineNextState(Collection<Cell> neighbors) {
+    public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
         // for sharks
         if(Math.floor(myState) == 1) {
             // make subsets of cells that are fish and empty
             ArrayList<Cell> fishCellSublist = new ArrayList<>();
             ArrayList<Cell> emptyCellSublist = new ArrayList<>();
-            for (Cell cell : neighbors) {
+            for (Cell cell : neighbors.values()) {
                 if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
                 if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
             }
@@ -147,7 +149,7 @@ public class PredatorPreyCell extends Cell{
         if (Math.floor(myState) == 2){
             // make sublist of empty cells
             ArrayList<Cell> emptyCellSublist = new ArrayList<>();
-            for (Cell cell : neighbors) {
+            for (Cell cell : neighbors.values()) {
                 if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
             }
 

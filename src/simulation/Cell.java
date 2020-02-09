@@ -1,5 +1,7 @@
 package simulation;
 
+import javafx.util.Pair;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +38,7 @@ public abstract class Cell {
 
     public abstract void createColorMap();
     public abstract void createStateMap();
-    public abstract void determineNextState(Collection<Cell> neighbors);
+    public abstract void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors);
     public abstract double mapKey(double myState);
 
     public String getTypeString(){
