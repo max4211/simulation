@@ -25,9 +25,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Cell;
 import simulation.Simulation;
+import simulation.State;
 import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -182,23 +184,29 @@ public class Visualization extends Application {
     private void addGridEvent(GridPane simGrid) {
         simGrid.getChildren().forEach(item -> {
             item.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                /**
-                 * Invoked when a specific event of the type for which this handler is
-                 * registered happens.
-                 *
-                 * @param event the event which occurred
-                 */
                 @Override
                 public void handle(MouseEvent event) {
                     if (event.getClickCount() == 1) {
                         Node source = (Node) event.getSource();
                         Integer col = GridPane.getColumnIndex(source);
                         Integer row = GridPane.getRowIndex(source);
-                        System.out.printf("Mouse entered cell [%d, %d] \n", col.intValue(), row.intValue());
+                        System.out.printf("Mouse clicked cell [%d, %d] \n", col.intValue(), row.intValue());
+                        Cell myCell = mySimulation.getCell(row, col);
+                        Map<Double, State> myStates = myCell.getStateMap();
+                        printStates(myStates);
                     }
                 }
             });
         });
+    }
+
+    private void printStates(Map<Double, State> myStates) {
+        for (double d: myStates.keySet()) {
+            State state = myStates.get(d);
+            String string = state.getString();
+            String color = state.getColor();
+            System.out.printf("State double: %f, string: %s, color: %s \n", d, string, color);
+        }
     }
 
     private Region createRegion(double regionWidth, double regionHeight, String color) {
