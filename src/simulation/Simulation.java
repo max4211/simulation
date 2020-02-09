@@ -76,7 +76,7 @@ public class Simulation {
      */
     public void captureGridState() throws IOException {
         SimulationSaver s = new SimulationSaver(this);
-        s.capture();
+        s.createFile();
     }
 
     private void determineUpdates() {

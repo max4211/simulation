@@ -23,21 +23,13 @@ public abstract class GridGenerator {
         myHeight = height;
         myWidth = width;
         SIM_TYPE = simType;
-        createFile();
     }
 
     public abstract String getTypeString();
     public abstract String getNeighborString();
     public abstract double generateRandomState();
 
-    protected String nameFile() throws IOException {
-        String fileName = "data/" + SIM_TYPE + UNIQUE_ID + ".xml";
-        File file = new File(fileName);
-        file.createNewFile();
-        return fileName;
-    }
-
-    protected void createFile() throws IOException {
+    public void createFile() throws IOException {
         PrintWriter writer = new PrintWriter(nameFile());
         writer.println("<?xml version=\"1.0\"?>");
         writer.println("<SimulationConfig>");
@@ -46,6 +38,13 @@ public abstract class GridGenerator {
         generateCells(writer);
         writer.println("</SimulationConfig>");
         writer.close();
+    }
+
+    protected String nameFile() throws IOException {
+        String fileName = "data/" + SIM_TYPE + UNIQUE_ID + ".xml";
+        File file = new File(fileName);
+        file.createNewFile();
+        return fileName;
     }
 
     protected void generateCells(PrintWriter w){

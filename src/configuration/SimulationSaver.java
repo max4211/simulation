@@ -2,8 +2,11 @@ package configuration;
 
 import simulation.Simulation;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class SimulationSaver extends GridGenerator{
@@ -12,14 +15,15 @@ public class SimulationSaver extends GridGenerator{
     private String myNeighborType;
 
     //TODO: handle exception
+    //TODO: SIM_TYPE?
     public SimulationSaver(Simulation s) throws IOException {
-        super(s.getHeight(), s.getWidth(), s.getCell(0,0).getTypeString());
+        super(s.getHeight(), s.getWidth(), "running");
         mySimulation = s;
         myNeighborType = s.getNeighborhood();
     }
 
     @Override
-    public String getTypeString(){ return SIM_TYPE; }
+    public String getTypeString(){ return mySimulation.getCell(0,0).getTypeString(); }
 
     @Override
     public String getNeighborString(){ return myNeighborType; }
@@ -36,7 +40,16 @@ public class SimulationSaver extends GridGenerator{
         }
     }
 
+    @Override
+    protected String nameFile() throws IOException {
+        String fileName = "data/" + getTime() + ".xml";
+        File file = new File(fileName);
+        file.createNewFile();
+        return fileName;
+    }
 
-
+    private String getTime(){
+        return new SimpleDateFormat("MM-dd-HH-mm").format(new Date());
+    }
 
 }
