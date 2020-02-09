@@ -29,6 +29,7 @@ public class PercolationCell extends Cell {
      */
     public PercolationCell(double initialState, int row, int col) {
         super(initialState, row, col);
+        myTypeString = "Percolation";
     }
 
     @Override

@@ -19,6 +19,7 @@ public abstract class Cell {
     protected int myCol;
     protected Map<Double, String> myColorMap = new HashMap<>();
     protected Map<Double, State> myStateMap = new HashMap<>();
+    protected String myTypeString;
 
     public Cell(double initialState, int row, int col) {
         createColorMap();
@@ -37,7 +38,10 @@ public abstract class Cell {
     public abstract void createStateMap();
     public abstract void determineNextState(Collection<Cell> neighbors);
     public abstract double mapKey(double myState);
-    public abstract String getTypeString();
+
+    public String getTypeString(){
+        return myTypeString;
+    }
 
     public void updateState() { this.myState = this.nextState; }
 

@@ -26,6 +26,7 @@ public class FireCell extends Cell {
         super(Math.floor(initialState), row, col);
         this.probCatch = (initialState - Math.floor(initialState));
         createColorMap();
+        myTypeString = "Spreading of Fire";
     }
 
     public double getProbCatch() { return this.probCatch; }
@@ -70,7 +71,5 @@ public class FireCell extends Cell {
         return myState;
     }
 
-    @Override
-    public String getTypeString(){ return "Spreading of Fire"; }
 }
 

@@ -35,6 +35,7 @@ public class SegregationCell extends Cell{
     public SegregationCell(double initialState, int row, int col, Simulation sim){
         super(initialState, row, col);
         myCurrentSim = sim;
+        myTypeString = "Segregation";
     }
 
     public double getPercentTolerance(){ return myState - Math.floor(myState); }

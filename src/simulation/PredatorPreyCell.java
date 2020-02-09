@@ -31,6 +31,7 @@ import java.util.*;
  *  https://en.wikipedia.org/wiki/Wa-Tor#For_the_sharks
  * */
 public class PredatorPreyCell extends Cell{
+    // TODO: change to PRIVATE
     public int reproductiveAge;
     public int energyGainFromFish;
     public int energy;
@@ -65,6 +66,7 @@ public class PredatorPreyCell extends Cell{
         nextEnergyGainFromFish = energyGainFromFish;
         nextEnergy = energyGainFromFish;
         nextAge = age;
+        myTypeString = "Predator Prey";
 
     }
 

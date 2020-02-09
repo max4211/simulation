@@ -55,11 +55,21 @@ public class Configuration {
     private ArrayList<ArrayList<Cell>> myGrid = new ArrayList<ArrayList<Cell>>();
     private Simulation mySimulation = new Simulation();
 
-    // Setting defaults
-    private final String DEFAULT_NEIGHBOR = "MOORE";
+    // Neighborhoods
+    private static final String DEFAULT_NEIGHBOR = "MOORE";
+    private static final String MOORE = "MOORE";
+    private static final String VON_NEUMANN = "VON NEUMANN";
+
+    //Simulation Types
+    private static final String GAME_OF_LIFE = "Game of Life";
+    private static final String PERCOLATION = "Percolation";
+    private static final String FIRE = "Spreading of Fire";
+    private static final String SEGREGATION = "Segregation";
+    private static final String PREDATOR_PREY = "Predator Prey";
+
 
     /**
-     * Constructs a Configuration file to prepare for simluation
+     * Constructs a Configuration file to prepare for simulation
      * Uses FileChooser to select a file each time
      */
     public Configuration(){
@@ -153,21 +163,21 @@ public class Configuration {
     private Cell createCell(int row, int col, double state) {
         try {
             switch (mySimType) {
-                case ("Spreading of Fire"):
+                case (FIRE):
                     return new FireCell(state, row, col);
-                case ("Game of Life"):
+                case (GAME_OF_LIFE):
                     return new LifeCell(state, row, col);
-                case ("Percolation"):
+                case (PERCOLATION):
                     return new PercolationCell(state, row, col);
-                case ("Segregation"):
+                case (SEGREGATION):
                     return new SegregationCell(state, row, col, mySimulation);
-                case ("Predator Prey"):
+                case (PREDATOR_PREY):
                     return new PredatorPreyCell(state, row, col);
                 default:
                     throw new IllegalArgumentException("Unexpected value: " + mySimType);
             }
         } catch (IllegalStateException e) {
-            // TODO: Prompt for valid state
+            // TODO: Prompt for valid state in viz
             throw new IllegalArgumentException("Illegal state: " + state);
         }
 
@@ -175,11 +185,11 @@ public class Configuration {
 
     private void createDeltaArrays (String neighborType) {
         switch (neighborType) {
-            case("MOORE"):
+            case(MOORE):
                 mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 1, 0, -1});
                 mySimulation.setRowDelta(new int[]{0, -1, -1, -1, 0, 1, 1, 1});
                 break;
-            case("VON NEUMANN"):
+            case(VON_NEUMANN):
                 mySimulation.setColDelta(new int[]{-1, 0, 1, 0});
                 mySimulation.setRowDelta(new int[]{0, -1, 0, 1});
                 break;

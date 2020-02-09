@@ -14,7 +14,7 @@ import java.util.Random;
 public abstract class GridGenerator {
 
 
-    protected final int UNIQUE_ID =  new Random().nextInt(100) + 1;;
+    protected final static int UNIQUE_ID =  new Random().nextInt(100) + 1;;
     protected String SIM_TYPE;
     protected int myHeight;
     protected int myWidth;

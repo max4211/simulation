@@ -22,7 +22,8 @@ public class LifeCell extends Cell {
      * @param col: x-coordinate of cell
      */
     public LifeCell(double initialState, int row, int col) {
-       super(initialState, row, col);
+        super(initialState, row, col);
+        myTypeString = "Game of Life";
     }
 
     @Override
