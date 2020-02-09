@@ -25,10 +25,27 @@ public abstract class GridGenerator {
         SIM_TYPE = simType;
     }
 
+    /**
+     * @return Type of simulation as a one-word String
+     */
     public abstract String getTypeString();
+
+    /**
+     * @return Type of neighborhood as a one-word String
+     */
     public abstract String getNeighborString();
+
+    /**
+     * Generates a random cell state
+     * @return A random state as a double valid for simulation type
+     */
     public abstract double generateRandomState();
 
+    /**
+     * Creates an XML file in the correct format to be loaded in Visualization
+     * @throws IOException if a file is incorrectly loaded
+     */
+    //TODO: exception here?
     public void createFile() throws IOException {
         PrintWriter writer = new PrintWriter(nameFile());
         writer.println("<?xml version=\"1.0\"?>");

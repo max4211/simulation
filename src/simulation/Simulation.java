@@ -70,13 +70,15 @@ public class Simulation {
         return myMap;
     }
 
-    /**
-     * TODO: handle exception here (invalid simulation?)
-     * Will likely need to implement a new class for this
-     */
     public void captureGridState() throws IOException {
-        SimulationSaver s = new SimulationSaver(this);
-        s.createFile();
+        try{
+            SimulationSaver s = new SimulationSaver(this);
+            s.createFile();
+        }
+        catch(IOException e){
+            //TODO: Some type of popup thrown here indicating that a valid simulation is not currently running
+        }
+
     }
 
     private void determineUpdates() {

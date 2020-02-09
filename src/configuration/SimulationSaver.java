@@ -52,4 +52,12 @@ public class SimulationSaver extends GridGenerator{
         return new SimpleDateFormat("MM-dd-HH-mm").format(new Date());
     }
 
+    /*
+    public static void main(String[] args) throws IOException {
+        Simulation s = new Configuration().getSimulation();
+        SimulationSaver saver = new SimulationSaver(s);
+        saver.createFile();
+    }
+     */
+
 }
