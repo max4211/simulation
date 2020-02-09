@@ -1,8 +1,5 @@
 package visualization;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import simulation.State;
 
@@ -24,7 +21,7 @@ public class SetCell {
         State s;
         for (double d: myMap.keySet()) {
             s = myMap.get(d);
-            myList.add(new CustomToggle(s.getString(), group, s.getColor(), s));
+            myList.add(new CustomToggle(s.getString(), group, s.getColor(), d));
         }
     }
 

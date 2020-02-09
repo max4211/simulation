@@ -183,6 +183,7 @@ public class Visualization extends Application {
         simGrid.getChildren().forEach(item -> {
             item.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1) {
+                    myPauseButton.setSelected(true);
                     Node source = (Node) event.getSource();
                     Integer col = GridPane.getColumnIndex(source);
                     Integer row = GridPane.getRowIndex(source);
@@ -211,16 +212,17 @@ public class Visualization extends Application {
         Button button = new Button();
         button.setText(myResources.getString("ConfirmButton"));
         button.setOnAction(event -> {
-            State state = selectedState(toggles);
-            System.out.printf("State: %s, Double: %f, Color: %s", state.getString(), state.getState(), state.getColor());
-            mySimulation.getCell(row, col).setState(state.getState());
+            Double state = selectedState(toggles);
+            System.out.printf("Setting cell [%d, %d] to state %f", row, col, state);
+            mySimulation.getCell(row, col).setState(state);
+            showSimGrid();
             myRoot.setTop(myChart);
         });
         return button;
     }
 
     // TODO: Implement error handling for null return (current default is 0.state)
-    private State selectedState(List<CustomToggle> toggles) {
+    private Double selectedState(List<CustomToggle> toggles) {
         for (CustomToggle b: toggles) {
             if (b.isSelected()) {
                 return b.getState();

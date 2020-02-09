@@ -13,7 +13,7 @@ import simulation.State;
 
 public class CustomToggle extends ToggleButton {
 
-    private State myState;
+    private Double myState;
 
     public CustomToggle(String text, ToggleGroup group, EventHandler<ActionEvent> handler) {
         super(text);
@@ -21,7 +21,7 @@ public class CustomToggle extends ToggleButton {
         this.setToggleGroup(group);
     }
 
-    public CustomToggle(String text, ToggleGroup group, String color, State state) {
+    public CustomToggle(String text, ToggleGroup group, String color, Double state) {
         super(text);
         this.setToggleGroup(group);
         // Currently does nothing, over ridden by properties file (as expected)
@@ -29,7 +29,7 @@ public class CustomToggle extends ToggleButton {
         this.myState = state;
     }
 
-    public State getState() {return this.myState;}
+    public Double getState() {return this.myState;}
 
 
 
