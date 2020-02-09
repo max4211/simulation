@@ -5,15 +5,17 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.chart.Chart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,11 +25,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Cell;
 import simulation.Simulation;
-import simulation.State;
 import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -175,7 +175,30 @@ public class Visualization extends Application {
                 simGrid.add(createRegion(regionWidth, regionHeight, myCell.getColor()), col, row );
             }
         }
+        addGridEvent(simGrid);
         myRoot.setCenter(simGrid);
+    }
+
+    private void addGridEvent(GridPane simGrid) {
+        simGrid.getChildren().forEach(item -> {
+            item.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                /**
+                 * Invoked when a specific event of the type for which this handler is
+                 * registered happens.
+                 *
+                 * @param event the event which occurred
+                 */
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.getClickCount() == 1) {
+                        Node source = (Node) event.getSource();
+                        Integer col = GridPane.getColumnIndex(source);
+                        Integer row = GridPane.getRowIndex(source);
+                        System.out.printf("Mouse entered cell [%d, %d] \n", col.intValue(), row.intValue());
+                    }
+                }
+            });
+        });
     }
 
     private Region createRegion(double regionWidth, double regionHeight, String color) {
