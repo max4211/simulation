@@ -189,7 +189,7 @@ public class Visualization extends Application {
                     System.out.printf("Mouse clicked cell [%d, %d] \n", col.intValue(), row.intValue());
                     Cell myCell = mySimulation.getCell(row, col);
                     Map<Double, State> myStates = myCell.getStateMap();
-                    // printStates(myStates);
+                    printStates(myStates);
                     SetCell options = new SetCell(myStates);
                     List<CustomToggle> toggles = options.getList();
                     myRoot.setTop(toggleBox(toggles, row, col));
@@ -212,7 +212,8 @@ public class Visualization extends Application {
         button.setText(myResources.getString("ConfirmButton"));
         button.setOnAction(event -> {
             State state = selectedState(toggles);
-            // mySimulation.setCell();
+            System.out.printf("State: %s, Double: %f, Color: %s", state.getString(), state.getState(), state.getColor());
+            mySimulation.getCell(row, col).setState(state.getState());
             myRoot.setTop(myChart);
         });
         return button;

@@ -21,8 +21,9 @@ public class SetCell {
 
     private void createToggle(Map<Double, State> myMap) {
         myList = new ArrayList<CustomToggle>();
+        State s;
         for (double d: myMap.keySet()) {
-            State s = myMap.get(d);
+            s = myMap.get(d);
             myList.add(new CustomToggle(s.getString(), group, s.getColor(), s));
         }
     }
