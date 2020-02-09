@@ -2,7 +2,6 @@ package simulation;
 
 import configuration.SimulationSaver;
 import javafx.util.Pair;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
