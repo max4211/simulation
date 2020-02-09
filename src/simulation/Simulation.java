@@ -34,9 +34,12 @@ public class Simulation {
     public void setHeight(int height) {SIMULATION_HEIGHT = height;}
     public void setWidth(int width) {SIMULATION_WIDTH = width;}
 
+    /*
     public void setCell(int r, int c, Cell cell){
         myGrid.get(r).set(c, cell);
     }
+
+     */
 
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }

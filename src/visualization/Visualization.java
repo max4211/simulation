@@ -5,8 +5,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -15,7 +13,6 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -29,6 +26,7 @@ import simulation.State;
 import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -183,21 +181,53 @@ public class Visualization extends Application {
 
     private void addGridEvent(GridPane simGrid) {
         simGrid.getChildren().forEach(item -> {
-            item.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (event.getClickCount() == 1) {
-                        Node source = (Node) event.getSource();
-                        Integer col = GridPane.getColumnIndex(source);
-                        Integer row = GridPane.getRowIndex(source);
-                        System.out.printf("Mouse clicked cell [%d, %d] \n", col.intValue(), row.intValue());
-                        Cell myCell = mySimulation.getCell(row, col);
-                        Map<Double, State> myStates = myCell.getStateMap();
-                        printStates(myStates);
-                    }
+            item.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 1) {
+                    Node source = (Node) event.getSource();
+                    Integer col = GridPane.getColumnIndex(source);
+                    Integer row = GridPane.getRowIndex(source);
+                    System.out.printf("Mouse clicked cell [%d, %d] \n", col.intValue(), row.intValue());
+                    Cell myCell = mySimulation.getCell(row, col);
+                    Map<Double, State> myStates = myCell.getStateMap();
+                    // printStates(myStates);
+                    SetCell options = new SetCell(myStates);
+                    List<CustomToggle> toggles = options.getList();
+                    myRoot.setTop(toggleBox(toggles, row, col));
                 }
             });
         });
+    }
+
+    private HBox toggleBox(List<CustomToggle> toggles, int row, int col) {
+        HBox box = new HBox();
+        for (ToggleButton b: toggles) {
+            box.getChildren().add(b);
+        }
+        box.getChildren().add(confirmButton(toggles, row, col));
+        return box;
+    }
+
+    private Button confirmButton(List<CustomToggle> toggles, int row, int col) {
+        Button button = new Button();
+        button.setText(myResources.getString("ConfirmButton"));
+        button.setOnAction(event -> {
+            State state = selectedState(toggles);
+            // mySimulation.setCell();
+            myRoot.setTop(myChart);
+        });
+        return button;
+    }
+
+    // TODO: Implement error handling for null return (current default is 0.state)
+    private State selectedState(List<CustomToggle> toggles) {
+        for (CustomToggle b: toggles) {
+            if (b.isSelected()) {
+                return b.getState();
+            }
+        }
+        System.out.println("No toggle selected, defaulting to 0 state");
+        return toggles.get(0).getState();
+        // return null;
     }
 
     private void printStates(Map<Double, State> myStates) {
