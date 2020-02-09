@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
  * </Configuration>
  *
  * Based on code from https://www.javatpoint.com/how-to-read-xml-file-in-java
- *
  */
 
 public class Configuration {

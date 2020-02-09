@@ -1,21 +1,18 @@
 package configuration;
 
 import simulation.Simulation;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+// TODO: test this with viz
 public class SimulationSaver extends GridGenerator{
 
     private Simulation mySimulation;
     private String myNeighborType;
 
-    //TODO: handle exception
-    //TODO: SIM_TYPE?
     public SimulationSaver(Simulation s) throws IOException {
         super(s.getHeight(), s.getWidth(), "running");
         mySimulation = s;
@@ -51,13 +48,4 @@ public class SimulationSaver extends GridGenerator{
     private String getTime(){
         return new SimpleDateFormat("MM-dd-HH-mm").format(new Date());
     }
-
-    /*
-    public static void main(String[] args) throws IOException {
-        Simulation s = new Configuration().getSimulation();
-        SimulationSaver saver = new SimulationSaver(s);
-        saver.createFile();
-    }
-     */
-
 }

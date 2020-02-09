@@ -49,7 +49,6 @@ public abstract class Cell {
 
     public void setState(double state){ this.myState = state; }
 
-    //TODO: colors to hex values
     public String getColor() {
         double key = mapKey(this.myState);
         return this.myColorMap.get(key);

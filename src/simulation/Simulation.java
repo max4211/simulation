@@ -70,6 +70,11 @@ public class Simulation {
         return myMap;
     }
 
+    /**
+     * Creates an instance of the SimulationSaver class, which outputs the current state of
+     * the grid to an XML file that can be read to the simulation.
+     * @throws IOException when a valid simulation is not currently running
+     */
     public void captureGridState() throws IOException {
         try{
             SimulationSaver s = new SimulationSaver(this);

@@ -45,7 +45,6 @@ public abstract class GridGenerator {
      * Creates an XML file in the correct format to be loaded in Visualization
      * @throws IOException if a file is incorrectly loaded
      */
-    //TODO: exception here?
     public void createFile() throws IOException {
         PrintWriter writer = new PrintWriter(nameFile());
         writer.println("<?xml version=\"1.0\"?>");
