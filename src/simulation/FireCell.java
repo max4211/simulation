@@ -69,5 +69,8 @@ public class FireCell extends Cell {
     public double mapKey(double myState) {
         return myState;
     }
+
+    @Override
+    public String getTypeString(){ return "Spreading of Fire"; }
 }
 

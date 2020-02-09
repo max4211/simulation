@@ -202,4 +202,7 @@ public class PredatorPreyCell extends Cell{
     public double mapKey(double myState) {
         return Math.floor(myState);
     }
+
+    @Override
+    public String getTypeString(){ return "Predator Prey"; }
 }

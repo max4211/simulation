@@ -37,6 +37,7 @@ public abstract class Cell {
     public abstract void createStateMap();
     public abstract void determineNextState(Collection<Cell> neighbors);
     public abstract double mapKey(double myState);
+    public abstract String getTypeString();
 
     public void updateState() { this.myState = this.nextState; }
 

@@ -133,6 +133,7 @@ public class Configuration {
         mySimulation.setGrid(myGrid);
         mySimulation.setHeight(myHeight);
         mySimulation.setWidth(myWidth);
+        mySimulation.setNeighborhood(myNeighborType);
     }
 
     private void fillGrid(List<String> initialCells) {

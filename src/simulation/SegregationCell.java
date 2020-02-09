@@ -103,6 +103,9 @@ public class SegregationCell extends Cell{
         changedAlready = false;
     }
 
+    @Override
+    public String getTypeString(){ return "Segregation"; }
+
 
     private void findVacantCell(){
         int height = myCurrentSim.getHeight();

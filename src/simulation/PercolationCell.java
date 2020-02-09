@@ -69,4 +69,7 @@ public class PercolationCell extends Cell {
         return myState;
     }
 
+    @Override
+    public String getTypeString(){ return "Percolation"; }
+
 }

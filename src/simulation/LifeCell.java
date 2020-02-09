@@ -66,4 +66,7 @@ public class LifeCell extends Cell {
         return myState;
     }
 
+    @Override
+    public String getTypeString(){ return "Game of Life"; }
+
 }

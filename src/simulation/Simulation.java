@@ -1,5 +1,8 @@
 package simulation;
 
+import configuration.SimulationSaver;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ public class Simulation {
     private int[] COL_DELTA;
     private int SIMULATION_HEIGHT;
     private int SIMULATION_WIDTH;
+    private String NEIGHBORHOOD_TYPE;
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
@@ -33,6 +37,7 @@ public class Simulation {
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
     public void setHeight(int height) {SIMULATION_HEIGHT = height;}
     public void setWidth(int width) {SIMULATION_WIDTH = width;}
+    public void setNeighborhood(String n){ NEIGHBORHOOD_TYPE = n; }
 
     public void setCell(int r, int c, Cell cell){
         myGrid.get(r).set(c, cell);
@@ -41,6 +46,7 @@ public class Simulation {
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
+    public String getNeighborhood(){ return NEIGHBORHOOD_TYPE; }
 
     public void updateGrid() {
         determineUpdates();
@@ -65,11 +71,12 @@ public class Simulation {
     }
 
     /**
-     * TODO: implement so that an xml file is output reflecting the current state of the grid
+     * TODO: handle exception here (invalid simulation?)
      * Will likely need to implement a new class for this
      */
-    public void captureGridState(){
-
+    public void captureGridState() throws IOException {
+        SimulationSaver s = new SimulationSaver(this);
+        s.capture();
     }
 
     private void determineUpdates() {
