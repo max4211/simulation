@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class Simulation {
 
-    private ArrayList<ArrayList<Cell>> myGrid;
-    private int[] ROW_DELTA;
-    private int[] COL_DELTA;
-    private int SIMULATION_HEIGHT;
-    private int SIMULATION_WIDTH;
-    private String NEIGHBORHOOD_TYPE;
+    protected ArrayList<ArrayList<Cell>> myGrid;
+    protected int[] ROW_DELTA;
+    protected int[] COL_DELTA;
+    protected int SIMULATION_HEIGHT;
+    protected int SIMULATION_WIDTH;
+    protected String NEIGHBORHOOD_TYPE;
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
@@ -86,7 +86,7 @@ public class Simulation {
 
     }
 
-    private void determineUpdates() {
+    protected void determineUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
                 getCell(row, col).determineNextState(getNeighbors(row, col));
@@ -94,7 +94,7 @@ public class Simulation {
         }
     }
 
-    private void implementUpdates() {
+    protected void implementUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
                 getCell(row, col).updateState();
@@ -102,7 +102,7 @@ public class Simulation {
         }
     }
 
-    private boolean inBounds(int row, int col) {
+    protected boolean inBounds(int row, int col) {
         return (row < getHeight()) && (col < getWidth())
                 && (row >= 0) && (col >= 0);
     }
@@ -112,7 +112,7 @@ public class Simulation {
      * @param col column cell whose neighbors are being requested
      * @return list of neighbors states in order of ROW_DELTA and COL_DELTA
      */
-    private Map<Pair<Integer, Integer>, Cell> getNeighbors(int row, int col) {
+    protected Map<Pair<Integer, Integer>, Cell> getNeighbors(int row, int col) {
         Map<Pair<Integer, Integer>, Cell> neighbors = new HashMap<>();
         int r2; int c2;
         for (int i = 0; i < ROW_DELTA.length; i ++) {

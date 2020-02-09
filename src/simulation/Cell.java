@@ -37,7 +37,6 @@ public abstract class Cell {
         this.myState = initialState;
         this.myRow = row;
         this.myCol = col;
-
     }
 
     //protected abstract boolean checkValidState(double initialState);
