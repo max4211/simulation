@@ -31,6 +31,10 @@ public abstract class Cell {
 
     }
 
+    public Cell(int row, int col) {
+        this(0.0, row, col);
+    }
+
     //protected abstract boolean checkValidState(double initialState);
 
     public abstract void createColorMap();
