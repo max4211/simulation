@@ -24,6 +24,8 @@ public class StateChart extends LineChart {
         xAxis.setLabel("Step");
         yAxis.setLabel("Total");
         seriesFlag = false;
+        this.setLegendVisible(true);
+        this.setLegendSide(Side.RIGHT);
     }
 
     // TODO: Style Series (with CSS styling)
@@ -56,8 +58,6 @@ public class StateChart extends LineChart {
             int count = allStates.get(name);
             appendSeries(name, count);
         }
-        this.setLegendVisible(true);
-        this.setLegendSide(Side.RIGHT);
     }
 
     private void traverseMap(Map<String, Integer> myMap) {

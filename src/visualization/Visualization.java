@@ -61,6 +61,7 @@ public class Visualization extends Application {
     private CustomToggle myStepButton;
     private CustomToggle myLoadButton;
     private CustomToggle myExitButton;
+    private CustomToggle mySaveButton;
     private StateChart myChart;
 
     // Simulation metadata
@@ -146,6 +147,7 @@ public class Visualization extends Application {
         myStepButton = new CustomToggle(myResources.getString("StepButton"), group, event -> stepSelected());
         myLoadButton = new CustomToggle(myResources.getString("LoadButton"), group, event -> loadSelected());
         myExitButton = new CustomToggle(myResources.getString("ExitButton"), group, event -> exitSelected());
+        mySaveButton = new CustomToggle(myResources.getString("SaveButton"), group, event -> saveSelected());
         styleButtons();
         pauseSelected();
         box.getChildren().add(myPauseButton);
@@ -153,6 +155,7 @@ public class Visualization extends Application {
         box.getChildren().add(myStepButton);
         box.getChildren().add(myLoadButton);
         box.getChildren().add(myExitButton);
+        box.getChildren().add(mySaveButton);
         return box;
     }
 
@@ -177,6 +180,16 @@ public class Visualization extends Application {
     }
 
     private void pauseSelected(){;}
+
+    private void saveSelected(){
+        /*
+        try {
+            mySimulation.save();
+        } catch (IOException e) {
+            ;
+        }
+         */
+    }
 
     private void playSelected() {
         if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
