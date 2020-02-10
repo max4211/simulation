@@ -73,25 +73,12 @@ public class PredatorPreyCell extends Cell{
 
     }
 
-    @Override
-    protected boolean checkValidState(double initialState) {
-        return initialState <= MAX_POSSIBLE_STATE;
-    }
-
-    @Override
-    public void createColorMap() {
-        myColorMap.put(0.0, BLUE);
-        myColorMap.put(1.0, YELLOW);
-        myColorMap.put(2.0, GREEN);
-    }
-
-    @Override
-    public void createStateMap() {
-        myStateMap.put(0.0, new State("Water", BLUE));
-        myStateMap.put(1.0, new State("Shark", YELLOW));
-        myStateMap.put(2.0, new State("Fish", GREEN));
-    }
-
+    /**
+     * This method determines if/where this cell "move" for the next frame of the game and whether it will reproduce.
+     * Based on that decision, it determines the next values for this cell and the cells in its neighborhood.
+     *
+     * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
+     */
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
         if(Math.floor(myState) != 0) {
@@ -124,6 +111,51 @@ public class PredatorPreyCell extends Cell{
     }
 
     /**
+     * Updates the cell's state and all of its information from its previous information to the information it should
+     * have in the next frame of the simulation
+     */
+    @Override
+    public void updateState() {
+        this.myState = this.nextState;
+        this.age = this.nextAge;
+        this.energy = this.nextEnergy;
+        this.reproductiveAge = this.nextReproductiveAge;
+        this.energyGainFromFish = this.nextEnergyGainFromFish;
+    }
+
+    /**
+     * Reports what type of cell this cell is as a string
+     * @return the cell's type
+     */
+    @Override
+    public String getTypeString(){ return "Predator Prey"; }
+
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState <= MAX_POSSIBLE_STATE;
+    }
+
+
+    @Override
+    public void createColorMap() {
+        myColorMap.put(0.0, BLUE);
+        myColorMap.put(1.0, YELLOW);
+        myColorMap.put(2.0, GREEN);
+    }
+
+    @Override
+    public void createStateMap() {
+        myStateMap.put(0.0, new State("Water", BLUE));
+        myStateMap.put(1.0, new State("Shark", YELLOW));
+        myStateMap.put(2.0, new State("Fish", GREEN));
+    }
+
+    @Override
+    public double mapKey(double myState) {
+        return Math.floor(myState);
+    }
+
+    /**
      * Method takes a list of possible locations and randomly decides which to move to, then decides if this cell should
      * leave a new "baby" in this space when it leaves. It controls all of the movement of informaiton for these processes
      * like setting the target cell's "next" values and the current cell's next values
@@ -151,15 +183,6 @@ public class PredatorPreyCell extends Cell{
         }
     }
 
-    @Override
-    public void updateState() {
-        this.myState = this.nextState;
-        this.age = this.nextAge;
-        this.energy = this.nextEnergy;
-        this.reproductiveAge = this.nextReproductiveAge;
-        this.energyGainFromFish = this.nextEnergyGainFromFish;
-    }
-
     private PredatorPreyCell pickRandomEntry(ArrayList<Cell> sublist) {
         Random r = new Random();
         return (PredatorPreyCell) sublist.get(r.nextInt(sublist.size()));
@@ -181,12 +204,4 @@ public class PredatorPreyCell extends Cell{
     private void setNextEnergy(int energy) { this.nextEnergy = energy;}
     private void setNextEnergyGainFromFish(int energyGain) { this.nextEnergyGainFromFish = energyGain;}
     private void setNextAge(int age) { this.nextAge = age;}
-
-    @Override
-    public double mapKey(double myState) {
-        return Math.floor(myState);
-    }
-
-    @Override
-    public String getTypeString(){ return "Predator Prey"; }
 }

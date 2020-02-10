@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
 /**
  * Class meant to encapsulate raw data on initial simulation configuration pulled from .xml file.
  * This class is meant to keep the extraction of data from the .xml file separate from the Simulation class.
@@ -87,7 +88,7 @@ public class Configuration {
     private File loadFile() {
         Stage fileStage = new Stage();
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Simulation XML File");
+        fileChooser.setTitle(myResources.getString("LoadTitle"));
         File dir = new File (SIMULATION_FILES);
         fileChooser.setInitialDirectory(dir);
         File simFile = fileChooser.showOpenDialog(fileStage);
@@ -188,7 +189,7 @@ public class Configuration {
 
     private void createSimulation() {
         for(int r = 0; r < myHeight; r++){
-            myGrid.add(new ArrayList<Cell>(myWidth));
+            myGrid.add(new ArrayList<>(myWidth));
             for(int c = 0; c < myWidth; c++){
                 myGrid.get(r).add(null);
             }
@@ -238,12 +239,12 @@ public class Configuration {
                 case (PREDATOR_PREY):
                     return new PredatorPreyCell(state, row, col);
                 default:
-                    throw new IllegalArgumentException("Unexpected simulation value: " + mySimType);
+                    throw new IllegalArgumentException(String.format(myResources.getString("InvalidSimType"), mySimType));
             }
         } catch (IllegalStateException e) {
-            throw new IllegalArgumentException("Illegal state: " + state);
+            System.out.println(String.format(myResources.getString("InvalidState"), state, row, col, CELL_DEFAULT_STATE));
+            return createCell(row, col, CELL_DEFAULT_STATE);
         }
-
     }
 
     private void createDeltaArrays (String neighborType) {
@@ -260,10 +261,11 @@ public class Configuration {
                 mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 0});
                 mySimulation.setRowDelta(new int[]{0, -1, -1, 0, 1, 1});
             default:
-                System.out.println("Default neighborhood invalid/not given, defaulting to: " + DEFAULT_NEIGHBOR);
+                System.out.println(String.format(myResources.getString("NeighborhoodNotGiven"), DEFAULT_NEIGHBOR));
                 createDeltaArrays(DEFAULT_NEIGHBOR);
         }
     }
+
 
     /**
      * @return Simulation object that was created throughout configuration process
