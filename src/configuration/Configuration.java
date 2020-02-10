@@ -1,7 +1,7 @@
 package configuration;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import simulation.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -191,7 +190,7 @@ public class Configuration {
 
     }
 
-    private void setCell(int r, int c, Cell cell){
+    private void setCell(int r, int c, Cell cell) {
         myGrid.get(r).set(c, cell);
     }
 
