@@ -245,7 +245,7 @@ public class Configuration {
             }
         } catch (IllegalStateException e) {
             // TODO: Prompt for valid state in viz
-            throw new IllegalArgumentException("Illegal state: " + state);
+            System.out.println(String.format(myResources.getString("InvalidState"), state, row, col, CELL_DEFAULT_STATE));
         }
 
     }

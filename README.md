@@ -25,8 +25,8 @@ Max Smith
 - User interface design and development
 - Controller design and development
 
-Braedan Ward
-
+Braeden Ward
+- Simulation design and development 
  
 
 ### Resources Used
@@ -49,7 +49,7 @@ Features implemented:
     - Allow different arrangements of neighbors (hexagonal)
     - Allow different kind of grid eges (finite and toroidal)
 - Configuration
-    - Implemented error checking
+    - Error checking
         - Incorrect file/simulation or non existent simulation deprecate load, prompted for new file
         - Default cell values to 0.0 (existent state in all Simulations) if incorrect value given
     - Simulation configurations
