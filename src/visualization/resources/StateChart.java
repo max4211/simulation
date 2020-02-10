@@ -2,7 +2,6 @@ package visualization.resources;
 
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,19 +25,14 @@ public class StateChart extends LineChart {
         seriesFlag = false;
     }
 
-    public StateChart() {
-        super(new NumberAxis(), new NumberAxis());
-    }
-
     // TODO: Style Series (with CSS styling)
     public void createSeries(Map<String, Integer> allStates) {
-        System.out.println("creating series...");
         for (String name: allStates.keySet()) {
             if (!(mySeries.containsKey(name))) {
                 XYChart.Series series = new XYChart.Series();
                 series.setName(name);
                 this.getData().add(series);
-                mySeries.put(name, new XYChart.Series());
+                mySeries.put(name, series);
             }
         }
     }
@@ -50,6 +44,7 @@ public class StateChart extends LineChart {
     }
 
     public void populateChart(Map<String, Integer> allStates) {
+        traverseMap(allStates);
         if (!(seriesFlag)) {
             createSeries(allStates);
             seriesFlag = true;
@@ -59,6 +54,12 @@ public class StateChart extends LineChart {
         for (String name: allStates.keySet()) {
             int count = allStates.get(name);
             appendSeries(name, count);
+        }
+    }
+
+    private void traverseMap(Map<String, Integer> myMap) {
+        for (String s: myMap.keySet()) {
+            System.out.printf("State: %s, Count: %d \n", s, myMap.get(s));
         }
     }
 }
