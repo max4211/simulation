@@ -43,6 +43,7 @@ public class Configuration {
     private static final String RESOURCES = "configuration/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String LANGUAGE = "English";
+    private static final double CELL_DEFAULT_STATE =0.0;
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     private File myFile;
@@ -186,6 +187,14 @@ public class Configuration {
             int col = Integer.parseInt(cellData[1]);
             double state = Double.parseDouble(cellData[2]);
             setCell(row, col, createCell(row, col, state));
+        }
+        // fill all remaining null spaces with cells with a default state
+        for(int row=0; row<myHeight; row++){
+            for(int col=0; col<myWidth; col++){
+                if(myGrid.get(row).get(col) == null){
+                    myGrid.get(row).set(col, createCell(row, col, CELL_DEFAULT_STATE));
+                }
+            }
         }
 
     }

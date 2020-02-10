@@ -178,9 +178,9 @@ public class PredatorPreyCell extends Cell{
         dest.setNextAge(age + 1);
     }
 
-    private void setNextReproductiveAge(int repAge) { this.reproductiveAge = repAge;}
+    private void setNextReproductiveAge(int repAge) { this.nextReproductiveAge = repAge;}
     private void setNextEnergy(int energy) { this.nextEnergy = energy;}
-    private void setNextEnergyGainFromFish(int energyGain) { this.energyGainFromFish = energyGain;}
+    private void setNextEnergyGainFromFish(int energyGain) { this.nextEnergyGainFromFish = energyGain;}
     private void setNextAge(int age) { this.nextAge = age;}
 
     @Override
