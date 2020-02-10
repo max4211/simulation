@@ -15,7 +15,8 @@ Hours Spent: 72 hours (~12 hours per person per week over 2 weeks)
 
 ### Primary Roles
 
-*NOTE - Overall programmatic design decisions were made collectively. Individual roles had their associated components and design decisions were made on a local level (e.g. structure of JavaFX objects in GUI).*
+*NOTE - Overall programmatic design decisions were made collectively. Individual roles had their associated components 
+and design decisions were made on a local level (e.g. structure of JavaFX objects in GUI).*
 
 James Rumsey
 
@@ -38,7 +39,8 @@ Braedan Ward
 
 Main class: ```Visualization.java```
 
-Data files needed: All properties files are package local in the corresponding ```resources``` folder. Any Simulation file from the ```data``` folder can be used. When starting up the program, select any valid XML file to start a Simulation.
+Data files needed: All properties files are package local in the corresponding ```resources``` folder. Any Simulation 
+file from the ```data``` folder can be used. When starting up the program, select any valid XML file to start a Simulation.
 
 Features implemented:
 
@@ -57,7 +59,8 @@ Features implemented:
 - Visualization
     - Implemented a graph displaying populations of all the cell types over time (steps) in the simulation
     - Dynamic user interaction with Simulation
-        - User can click on any rectangle in the grid, putting a selection (toggle) box on top in place of the chart, where the user can then select and confirm an update
+        - User can click on any rectangle in the grid, putting a selection (toggle) box on top in place of the chart, 
+        where the user can then select and confirm an update
 
 
 ### Notes/Assumptions
@@ -72,8 +75,14 @@ Interesting data files:
 
 Known Bugs:
 
+- Once in cell editing mode, multiple cells can be selected to change but only the last selected cell is updated
+
 Extra credit:
 
 
 ### Impressions
 
+Great exercise for learning inheritance heirarchies and delegating assignments across a team. This was all of our first
+ experiences working on a large code base from scratch, with a GUI adhering to the MVC model. We believe that our extensive 
+ design phase at the start of the project paid dividends long term, making our ```Basic``` implementation much more streamlined, 
+ and really helping us out on the backend in the ```Complete``` implementation.

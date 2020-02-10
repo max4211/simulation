@@ -1,10 +1,6 @@
 package visualization;
 
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.text.Font;
-import simulation.Simulation;
 
 public class AnimationSlider extends Slider {
 
