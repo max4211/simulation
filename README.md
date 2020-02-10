@@ -20,6 +20,7 @@ and design decisions were made on a local level (e.g. structure of JavaFX object
 
 James Rumsey
 
+
 Max Smith
 - User interface design and development
 - Controller design and development
@@ -68,6 +69,7 @@ Features implemented:
 Assumptions or Simplifications:
 
 - All cell states can be mapped to a double value
+- User screen resolution will be greater than 700x550 pixels
 
 Interesting data files: 
 
