@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
-//TODO: Incorrect file type, incomplete/incorrect formatting, incorrect states
-
 /**
  * Class meant to encapsulate raw data on initial simulation configuration pulled from .xml file.
  * This class is meant to keep the extraction of data from the .xml file separate from the Simulation class.

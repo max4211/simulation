@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-// TODO: test this with viz
 public class SimulationSaver extends GridGenerator{
 
     private Simulation mySimulation;
