@@ -246,8 +246,8 @@ public class Configuration {
         } catch (IllegalStateException e) {
             // TODO: Prompt for valid state in viz
             System.out.println(String.format(myResources.getString("InvalidState"), state, row, col, CELL_DEFAULT_STATE));
+            return createCell(row, col, CELL_DEFAULT_STATE);
         }
-
     }
 
     private void createDeltaArrays (String neighborType) {
