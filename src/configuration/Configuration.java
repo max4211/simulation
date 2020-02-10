@@ -176,7 +176,8 @@ public class Configuration {
     }
 
     public void addCellToRow(int r, int c, Cell cell){
-        if(myGrid.get(r).size() <= c){ myGrid.get(r).add(cell); }
+        // TODO: change the way this adds cells and remove this error
+        if(myGrid.get(r).size() <= c){ myGrid.get(r).set(c, cell); }
         else { throw new IndexOutOfBoundsException("Invalid cell order"); }
     }
 
