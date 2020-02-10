@@ -39,12 +39,6 @@ public class Simulation {
     public void setWidth(int width) {SIMULATION_WIDTH = width;}
     public void setNeighborhood(String n){ NEIGHBORHOOD_TYPE = n; }
 
-    /*
-    public void setCell(int r, int c, Cell cell){
-        myGrid.get(r).set(c, cell);
-    }
-
-     */
 
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }
@@ -79,14 +73,8 @@ public class Simulation {
      * @throws IOException when a valid simulation is not currently running
      */
     public void captureGridState() throws IOException {
-        try{
-            SimulationSaver s = new SimulationSaver(this);
-            s.createFile();
-        }
-        catch(IOException e){
-            //TODO: Some type of popup thrown here indicating that a valid simulation is not currently running
-        }
-
+        SimulationSaver s = new SimulationSaver(this);
+        s.createFile();
     }
 
     protected void determineUpdates() {
@@ -126,5 +114,4 @@ public class Simulation {
         }
         return neighbors;
     }
-
 }

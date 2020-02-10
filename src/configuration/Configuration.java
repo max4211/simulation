@@ -1,7 +1,7 @@
 package configuration;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import simulation.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +165,12 @@ public class Configuration {
     }
 
     private void createSimulation() {
-        for(int i = 0; i < myHeight; i++){ myGrid.add(new ArrayList<Cell>(myWidth)); }
+        for(int r = 0; r < myHeight; r++){
+            myGrid.add(new ArrayList<Cell>(myWidth));
+            for(int c = 0; c < myWidth; c++){
+                myGrid.get(r).add(null);
+            }
+        }
         fillGrid(initialCells);
         createDeltaArrays(myNeighborType);
         mySimulation.setGrid(myGrid);
@@ -181,14 +185,13 @@ public class Configuration {
             int row = Integer.parseInt(cellData[0]);
             int col = Integer.parseInt(cellData[1]);
             double state = Double.parseDouble(cellData[2]);
-            addCellToRow(row, col, createCell(row, col, state));
+            setCell(row, col, createCell(row, col, state));
         }
 
     }
 
-    public void addCellToRow(int r, int c, Cell cell){
-        if(myGrid.get(r).size() <= c){ myGrid.get(r).add(cell); }
-        else { throw new IndexOutOfBoundsException("Invalid cell order"); }
+    private void setCell(int r, int c, Cell cell) {
+        myGrid.get(r).set(c, cell);
     }
 
     private Cell createCell(int row, int col, double state) {
