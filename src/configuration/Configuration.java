@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
  *         <width>1</width> // integer
  *         <type>Spreading of Fire</type> // String
  *         <neighborType>MOORE</neighborType> // String
- *         <cell>0 0 0</cell> // String in the format "x-coord y-coord state" where state is an integer
+ *         <cell>0 0 0</cell> // String in the format "row col state" where state is an integer
  *         <cell>0 1 0</cell>
  * </Configuration>
  *
@@ -103,7 +103,7 @@ public class Configuration {
             NodeList nodeList = doc.getElementsByTagName("SimulationConfig");
             readTags(nodeList);
         } catch (Exception e) {
-            throw new IllegalArgumentException(myResources.getString("InvalidFile"));
+            throw new IllegalArgumentException(myResources.getString("InvalidFile") + "\n" + e.getMessage());
         }
     }
 
@@ -119,9 +119,38 @@ public class Configuration {
 
             // Initial cell states
             NodeList cellList = eElement.getElementsByTagName("cell");
+            // check of list is right length
+            if(cellList.getLength() > this.myHeight * this.myWidth){
+                throw new ConfigException(String.format(myResources.getString("CellNumMismatch"),
+                        cellList.getLength(), this.myHeight * this.myWidth));
+            }
+
             for(int cellItr = 0; cellItr < cellList.getLength(); cellItr++){
                 Element initialCell = (Element) cellList.item(cellItr);
+                checkValidCellLocation(cellList, cellItr, initialCell);
                 initialCells.add(initialCell.getTextContent());
+            }
+
+        }
+    }
+
+    private void checkValidCellLocation(NodeList cellList, int cellItr, Element initialCell) {
+        // check if cell is in bounds
+        int initialCellRow = Integer.parseInt(initialCell.getTextContent().split(" ")[0]);
+        int initialCellCol = Integer.parseInt(initialCell.getTextContent().split(" ")[1]);
+        if(initialCellRow >= this.myHeight || initialCellCol >= this.myWidth){
+            throw new ConfigException(String.format(myResources.getString("CellOutOfBounds"),
+                    cellItr, initialCellRow, initialCellCol, this.myHeight, this.myWidth));
+        }
+
+        // check if cell is a repeat
+        for(int cellCheckItr=0; cellCheckItr<cellItr; cellCheckItr++){
+            Element checkCell = (Element) cellList.item(cellCheckItr);
+            int checkCellRow = Integer.parseInt(checkCell.getTextContent().split(" ")[0]);
+            int checkCellCol = Integer.parseInt(checkCell.getTextContent().split(" ")[1]);
+            if(initialCellRow == checkCellRow && initialCellCol == checkCellCol){
+                throw new ConfigException(String.format(myResources.getString("RepeatedCellCoordinates"),
+                        cellCheckItr, cellItr, initialCellRow, initialCellCol));
             }
         }
     }
@@ -143,6 +172,7 @@ public class Configuration {
             double state = Double.parseDouble(cellData[2]);
             addCellToRow(row, col, createCell(row, col, state));
         }
+
     }
 
     public void addCellToRow(int r, int c, Cell cell){
