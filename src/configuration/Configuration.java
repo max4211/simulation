@@ -258,9 +258,27 @@ public class Configuration {
         }
     }
 
+    /**
+     * @return Simulation object that was created throughout configuration process
+     */
     public Simulation getSimulation() { return mySimulation; }
+
+    /**
+     *
+     * @return height of simulation to Visualization class
+     */
     public int getHeight(){ return this.myHeight; }
+
+    /**
+     *
+     * @return width of simulation to Visualization class
+     */
     public int getWidth(){ return this.myWidth; }
+
+    /**
+     *
+     * @return types of neighbors to determine get neighbor states for simulation rule and step updates
+     */
     public String getNeighborType(){ return this.myNeighborType; }
 
 }

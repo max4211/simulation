@@ -3,7 +3,9 @@ package configuration;
 import java.io.IOException;
 import java.util.Random;
 
-
+/**
+ * Extension of general file generator class to create Fire specific simulation XML files
+ */
 public class FireGenerator extends GridGenerator {
 
     private static final int POSSIBLE_STATES = 3;
