@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class ToroidalSimulation extends Simulation {
 
+    public ToroidalSimulation(){ super(); }
+
     public ToroidalSimulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         super(grid, rdelta, cdelta);
     }
