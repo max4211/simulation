@@ -43,7 +43,6 @@ public class Configuration {
     private static final String RESOURCES = "configuration/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String LANGUAGE = "English";
-    private static final double CELL_DEFAULT_STATE =0.0;
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     private File myFile;
@@ -67,6 +66,9 @@ public class Configuration {
     private static final String FIRE = "Spreading of Fire";
     private static final String SEGREGATION = "Segregation";
     private static final String PREDATOR_PREY = "Predator Prey";
+
+    // Cells
+    private static final double CELL_DEFAULT_STATE =0.0;
 
 
     /**
