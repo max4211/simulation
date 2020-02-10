@@ -61,6 +61,7 @@ public class SegregationCell extends Cell{
         myStateMap.put(2.0, new State("Blue", BLUE));
     }
 
+    //TODO: fix if-else tree
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
         if(! changedAlready){
@@ -75,10 +76,8 @@ public class SegregationCell extends Cell{
                     }
                 }
                 boolean satisfied = true;
-                if(totalNeighbors > 0){
+                if(totalNeighbors > 0)
                     satisfied = likeNeighbors/totalNeighbors >= getPercentTolerance();
-                    System.out.println(likeNeighbors/totalNeighbors);
-                }
                 if(!satisfied)
                     findVacantCell();
                 else

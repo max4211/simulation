@@ -30,7 +30,7 @@ public class Simulation {
         COL_DELTA = cdelta;
     }
 
-    public void setGrid(ArrayList<ArrayList<Cell>> grid) { myGrid = grid;}
+    public void setGrid(List<ArrayList<Cell>> grid) { myGrid = grid;}
     public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
     public void setHeight(int height) {SIMULATION_HEIGHT = height;}

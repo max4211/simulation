@@ -3,6 +3,7 @@ package simulation;
 import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ToroidalSimulation extends Simulation {
@@ -12,8 +13,9 @@ public class ToroidalSimulation extends Simulation {
         EDGE_TYPE = "TOROIDAL";
     }
 
-    public ToroidalSimulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
+    public ToroidalSimulation(List<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         super(grid, rdelta, cdelta);
+        EDGE_TYPE = "TOROIDAL";
     }
 
     @Override
