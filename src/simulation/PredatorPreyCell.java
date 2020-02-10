@@ -34,15 +34,17 @@ import java.util.*;
  * */
 public class PredatorPreyCell extends Cell{
     // TODO: change to PRIVATE
-    public int reproductiveAge;
-    public int energyGainFromFish;
-    public int energy;
-    public int age;
+    private int reproductiveAge;
+    private int energyGainFromFish;
+    private int energy;
+    private int age;
 
-    public int nextReproductiveAge;
-    public int nextEnergyGainFromFish;
-    public int nextEnergy;
-    public int nextAge;
+    private int nextReproductiveAge;
+    private int nextEnergyGainFromFish;
+    private int nextEnergy;
+    private int nextAge;
+
+    private final double MAX_POSSIBLE_STATE = 2.999999;
 
     /**
      * Creates new PredatorPreyCell
@@ -73,6 +75,11 @@ public class PredatorPreyCell extends Cell{
     }
 
     @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState <= MAX_POSSIBLE_STATE;
+    }
+
+    @Override
     public void createColorMap() {
         myColorMap.put(0.0, BLUE);
         myColorMap.put(1.0, YELLOW);
@@ -88,59 +95,50 @@ public class PredatorPreyCell extends Cell{
 
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
-        // for sharks
-        if(Math.floor(myState) == 1) {
+        if(Math.floor(myState) != 0) {
             // make subsets of cells that are fish and empty
             ArrayList<Cell> fishCellSublist = new ArrayList<>();
             ArrayList<Cell> emptyCellSublist = new ArrayList<>();
             for (Cell cell : neighbors.values()) {
                 if (Math.floor(cell.getState()) == 2) fishCellSublist.add(cell);
-                if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
+                if (Math.floor(cell.getState()) == 0 && cell.getNextState() == 0) emptyCellSublist.add(cell);
             }
 
-            // if you're out of energy, die :(
-            if(energy <= 0){
+            // if you're a shark out of energy, die :(
+            if (Math.floor(myState) == 1 && energy <= 0) {
                 nextState = 0;
             }
-            // otherwise try to move
-            // if there are fish, move into a random fish's cell
-            else if(fishCellSublist.size()>0){
+            // else if you're a shark and there are fish, move into a random fish's cell
+            else if (Math.floor(myState) == 1 && fishCellSublist.size() > 0) {
                 moveIntoRandomTryToReproduce(fishCellSublist);
             }
-            // if there are no fish, move into a random empty cell
-            else if(emptyCellSublist.size()>0){
+            // else move into a random empty cell
+            else if (emptyCellSublist.size() > 0) {
                 moveIntoRandomTryToReproduce(emptyCellSublist);
             }
             // if there is no where to move just update energy and age
-            else{
-                nextEnergy = energy -1;
-                nextAge = age + 1;
-            }
-        }
-
-        // for fish
-        if (Math.floor(myState) == 2){
-            // make sublist of empty cells
-            ArrayList<Cell> emptyCellSublist = new ArrayList<>();
-            for (Cell cell : neighbors.values()) {
-                if (Math.floor(cell.getState()) == 0 && cell.nextState==0) emptyCellSublist.add(cell);
-            }
-
-            // if there is space move into a random empty cell
-            if(emptyCellSublist.size()>0){
-                moveIntoRandomTryToReproduce(emptyCellSublist);
-            }
-
-            // if there is no where to move just update energy and age
-            else{
+            else {
+                nextEnergy = energy - 1;
                 nextAge = age + 1;
             }
         }
     }
 
-    private void moveIntoRandomTryToReproduce(ArrayList<Cell> fishCellSublist) {
-        PredatorPreyCell cellPicked = pickRandomEntry(fishCellSublist);
-        if(Math.floor(cellPicked.getState()) == 2 && Math.floor(cellPicked.nextState) == 2) energy += energyGainFromFish;
+    /**
+     * Method takes a list of possible locations and randomly decides which to move to, then decides if this cell should
+     * leave a new "baby" in this space when it leaves. It controls all of the movement of informaiton for these processes
+     * like setting the target cell's "next" values and the current cell's next values
+     *
+     * @param cellList: list of cells into which this creature could move
+     */
+    private void moveIntoRandomTryToReproduce(ArrayList<Cell> cellList) {
+        PredatorPreyCell cellPicked = pickRandomEntry(cellList);
+        if(Math.floor(cellPicked.getState()) == 2 && Math.floor(cellPicked.getNextState()) == 2) energy += energyGainFromFish;
+        reproduceIfOldEnough();
+        moveInfoInto(cellPicked);
+    }
+
+    private void reproduceIfOldEnough() {
         if(age >= reproductiveAge) {
             age = 0;
             nextState = myState;
@@ -152,7 +150,6 @@ public class PredatorPreyCell extends Cell{
             nextAge = 0;
             nextEnergy = 0;
         }
-        moveInfoInto(cellPicked);
     }
 
     @Override
@@ -174,12 +171,17 @@ public class PredatorPreyCell extends Cell{
      * @param dest: cell to be overridden
      */
     private void moveInfoInto(PredatorPreyCell dest) {
-        dest.nextState = myState;
-        dest.nextReproductiveAge = reproductiveAge;
-        dest.nextEnergy = energy - 1;
-        dest.nextEnergyGainFromFish = energyGainFromFish;
-        dest.nextAge = age + 1;
+        dest.setNextState(myState);
+        dest.setNextReproductiveAge(reproductiveAge);
+        dest.setNextEnergy(energy - 1);
+        dest.setNextEnergyGainFromFish(energyGainFromFish);
+        dest.setNextAge(age + 1);
     }
+
+    private void setNextReproductiveAge(int repAge) { this.nextReproductiveAge = repAge;}
+    private void setNextEnergy(int energy) { this.nextEnergy = energy;}
+    private void setNextEnergyGainFromFish(int energyGain) { this.nextEnergyGainFromFish = energyGain;}
+    private void setNextAge(int age) { this.nextAge = age;}
 
     @Override
     public double mapKey(double myState) {

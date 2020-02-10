@@ -67,13 +67,29 @@ public class PercolationCell extends Cell {
 
     }
 
-    // unsure what type of state to double mapping we should do here?
+    /**
+     *
+     * @param myState
+     * @return myState
+     */
     @Override
     public double mapKey(double myState){
         return myState;
     }
 
+    /**
+     * @return "Percolation" as String for XML output
+     */
     @Override
     public String getTypeString(){ return "Percolation"; }
 
+    /**
+     * A valid state for Percolation is 0 (blocked), 1 (empty), 2 (percolating)
+     * @param initialState
+     * @return true if valid
+     */
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState==0.0 || initialState==1.0 || initialState==2.0;
+    }
 }

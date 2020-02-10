@@ -72,6 +72,9 @@ public class Configuration {
     private static final String SEGREGATION = "Segregation";
     private static final String PREDATOR_PREY = "Predator Prey";
 
+    // Cells
+    private static final double CELL_DEFAULT_STATE =0.0;
+
 
     /**
      * Constructs a Configuration file to prepare for simulation
@@ -208,6 +211,14 @@ public class Configuration {
             int col = Integer.parseInt(cellData[1]);
             double state = Double.parseDouble(cellData[2]);
             setCell(row, col, createCell(row, col, state));
+        }
+        // fill all remaining null spaces with cells with a default state
+        for(int row=0; row<myHeight; row++){
+            for(int col=0; col<myWidth; col++){
+                if(myGrid.get(row).get(col) == null){
+                    myGrid.get(row).set(col, createCell(row, col, CELL_DEFAULT_STATE));
+                }
+            }
         }
 
     }

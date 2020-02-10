@@ -9,12 +9,14 @@ import java.util.Map;
  *  This class represents a cell in a Conway's Game of Life Simulation.
  *
  *  Possible cell states: 0 (Dead), 1 (Alive)
- *  Neighborhood Type: Moore
+ *  Default Neighborhood Type: Moore
+ *
  *  Rules:
  *  Any live cell with two or three neighbors survives.
  *  Any dead cell with three live neighbors becomes a live cell.
  *  All other live cells die in the next generation. Similarly, all other dead cells stay dead.
  *
+ *  Full rules described here: https://en.wikipedia.org/wiki/Conway's_Game_of_Life
  */
 public class LifeCell extends Cell {
 
@@ -29,18 +31,31 @@ public class LifeCell extends Cell {
         myTypeString = "Game of Life";
     }
 
+
+    /**
+     * Colors:
+     * White - Dead
+     * Black - Alive
+     */
     @Override
     public void createColorMap(){
         myColorMap.put(0.0, WHITE);
         myColorMap.put(1.0, BLACK);
     }
 
+    /**
+     * Initializes State mappings (Dead, Alive)
+     */
     @Override
     public void createStateMap() {
         myStateMap.put(0.0, new State("Dead", WHITE));
         myStateMap.put(1.0, new State("Alive", BLACK));
     }
 
+    /**
+     * Determines next state for cell based on rules above
+     * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
+     */
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors){
         int numAlive = 0;
@@ -64,13 +79,30 @@ public class LifeCell extends Cell {
         }
     }
 
-    // unsure what type of state to double mapping we should do here?
+    /**
+     * Required by Cell abstract class.
+     * Returns myState, which is the map key for Game of Lie
+     * @param myState
+     * @return myState
+     */
     @Override
     public double mapKey(double myState){
         return myState;
     }
 
+    /**
+     * @return "Game of Life" as String for XML files
+     */
     @Override
     public String getTypeString(){ return "Game of Life"; }
 
+    /**
+     * A valid state for Game of Life is 0 (dead) or 1 (alive)
+     * @param initialState
+     * @return true if state is valid
+     */
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState == 0.0 || initialState == 1.0;
+    }
 }

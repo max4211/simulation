@@ -27,6 +27,7 @@ import java.util.Random;
 public class SegregationCell extends Cell{
     private Simulation myCurrentSim;
     private boolean changedAlready = false;
+    private final double BOUNDARY_OF_POSSIBLE_STATES = 3.0;
 
     /**
      * Creates a new SegregationCell
@@ -45,6 +46,11 @@ public class SegregationCell extends Cell{
 
     public boolean isOccupied(){
         return Math.floor(myState) != 0;
+    }
+
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState < BOUNDARY_OF_POSSIBLE_STATES;
     }
 
     @Override
