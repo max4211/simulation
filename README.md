@@ -19,7 +19,8 @@ Hours Spent: 72 hours (~12 hours per person per week over 2 weeks)
 and design decisions were made on a local level (e.g. structure of JavaFX objects in GUI).*
 
 James Rumsey
-
+- Simulation design and development
+- Configuration design and development.
 
 Max Smith
 - User interface design and development
@@ -46,8 +47,8 @@ file from the ```data``` folder can be used. When starting up the program, selec
 Features implemented:
 
 - Simulation
-    - Allow different arrangements of neighbors (hexagonal)
-    - Allow different kind of grid eges (finite and toroidal)
+    - Allow different arrangements of neighbors (hexagonal, with opportunity for more to be added)
+    - Allow different kind of grid edges (finite and toroidal with opportunity for more to be added)
 - Configuration
     - Error checking
         - Incorrect file/simulation or non existent simulation deprecate load, prompted for new file
@@ -88,7 +89,7 @@ Extra credit:
 
 ### Impressions
 
-Great exercise for learning inheritance heirarchies and delegating assignments across a team. This was all of our first
+Great exercise for learning inheritance hierarchies and delegating assignments across a team. This was all of our first
  experiences working on a large code base from scratch, with a GUI adhering to the MVC model. We believe that our extensive 
  design phase at the start of the project paid dividends long term, making our ```Basic``` implementation much more streamlined, 
  and really helping us out on the backend in the ```Complete``` implementation.
