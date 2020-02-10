@@ -20,7 +20,7 @@ public class FireGenerator extends GridGenerator {
 
     @Override
     // possible states: 0.0, 1.0, 2.0 plus probCatch ([0, 1.0))
-    public double generateRandomState(){
+    protected double generateRandomState(){
         return new Random().nextInt(POSSIBLE_STATES) + Math.random();
     }
 

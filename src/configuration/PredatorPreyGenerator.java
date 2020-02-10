@@ -24,7 +24,7 @@ public class PredatorPreyGenerator extends GridGenerator {
     }
 
     @Override
-    public double generateRandomState() {
+    protected double generateRandomState() {
         return new Random().nextInt(POSSIBLE_STATES) + ENERGY_GAIN/1000 + REPRODUCTIVE_AGE/1000000;
     }
 

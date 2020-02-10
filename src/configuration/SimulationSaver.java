@@ -27,7 +27,7 @@ public class SimulationSaver extends GridGenerator{
     public String getNeighborString(){ return myNeighborType; }
 
     @Override
-    public double generateRandomState(){ return 0.0; }
+    protected double generateRandomState(){ return 0.0; }
 
     @Override
     protected String getEdgeType(){ return mySimulation.getEdgeType(); }

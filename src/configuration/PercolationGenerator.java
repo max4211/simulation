@@ -19,7 +19,7 @@ public class PercolationGenerator extends GridGenerator {
     public String getNeighborString(){ return "MOORE"; }
 
     @Override
-    public double generateRandomState(){
+    protected double generateRandomState(){
         return new Random().nextInt(POSSIBLE_STATES);
     }
 

@@ -244,7 +244,6 @@ public class Configuration {
                     throw new IllegalArgumentException("Unexpected simulation value: " + mySimType);
             }
         } catch (IllegalStateException e) {
-            // TODO: Prompt for valid state in viz
             throw new IllegalArgumentException("Illegal state: " + state);
         }
 

@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.Random;
 
 /**
+ * Abstract class that creates a randomly generated XML file compatible with our simulation
  * Based on LevelGenerator.java by
  * @author Max Smith
  */
@@ -50,7 +51,7 @@ public abstract class GridGenerator {
      * Generates a random cell state
      * @return A random state as a double valid for simulation type
      */
-    public abstract double generateRandomState();
+    protected abstract double generateRandomState();
 
     /**
      * Creates an XML file in the correct format to be loaded in Visualization

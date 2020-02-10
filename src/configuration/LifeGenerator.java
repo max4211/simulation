@@ -20,7 +20,7 @@ public class LifeGenerator extends GridGenerator {
 
     @Override
     // possible states: 0.0 or 1.0
-    public double generateRandomState(){
+    protected double generateRandomState(){
         return new Random().nextInt(POSSIBLE_STATES);
     }
 
