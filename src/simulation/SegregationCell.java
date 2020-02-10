@@ -1,7 +1,10 @@
 package simulation;
 
 
+import javafx.util.Pair;
+
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -36,6 +39,7 @@ public class SegregationCell extends Cell{
     public SegregationCell(double initialState, int row, int col, Simulation sim){
         super(initialState, row, col);
         myCurrentSim = sim;
+        myTypeString = "Segregation";
     }
 
     public double getPercentTolerance(){ return myState - Math.floor(myState); }
@@ -64,12 +68,12 @@ public class SegregationCell extends Cell{
     }
 
     @Override
-    public void determineNextState(Collection<Cell> neighbors) {
+    public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
         if(! changedAlready){
             if(Math.floor(myState)!=0){
                 double likeNeighbors = 0;
                 double totalNeighbors = 0;
-                for (Cell n : neighbors){
+                for (Cell n : neighbors.values()){
                     double neighborState = Math.floor(n.getState());
                     if(neighborState != 0){
                         totalNeighbors++;
@@ -108,6 +112,9 @@ public class SegregationCell extends Cell{
         this.myState = this.nextState;
         changedAlready = false;
     }
+
+    @Override
+    public String getTypeString(){ return "Segregation"; }
 
 
     private void findVacantCell(){

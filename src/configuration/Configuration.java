@@ -1,7 +1,7 @@
 package configuration;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import simulation.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ import java.util.ResourceBundle;
  * </Configuration>
  *
  * Based on code from https://www.javatpoint.com/how-to-read-xml-file-in-java
- *
  */
 
 public class Configuration {
@@ -56,11 +54,22 @@ public class Configuration {
     private ArrayList<ArrayList<Cell>> myGrid = new ArrayList<ArrayList<Cell>>();
     private Simulation mySimulation = new Simulation();
 
-    // Setting defaults
-    private final String DEFAULT_NEIGHBOR = "MOORE";
+    // Neighborhoods
+    private static final String DEFAULT_NEIGHBOR = "MOORE";
+    private static final String MOORE = "MOORE";
+    private static final String VON_NEUMANN = "VON NEUMANN";
+    private static final String HEXAGONAL = "HEXAGONAL";
+
+    //Simulation Types
+    private static final String GAME_OF_LIFE = "Game of Life";
+    private static final String PERCOLATION = "Percolation";
+    private static final String FIRE = "Spreading of Fire";
+    private static final String SEGREGATION = "Segregation";
+    private static final String PREDATOR_PREY = "Predator Prey";
+
 
     /**
-     * Constructs a Configuration file to prepare for simluation
+     * Constructs a Configuration file to prepare for simulation
      * Uses FileChooser to select a file each time
      */
     public Configuration(){
@@ -156,12 +165,18 @@ public class Configuration {
     }
 
     private void createSimulation() {
-        for(int i = 0; i < myHeight; i++){ myGrid.add(new ArrayList<Cell>(myWidth)); }
+        for(int r = 0; r < myHeight; r++){
+            myGrid.add(new ArrayList<Cell>(myWidth));
+            for(int c = 0; c < myWidth; c++){
+                myGrid.get(r).add(null);
+            }
+        }
         fillGrid(initialCells);
         createDeltaArrays(myNeighborType);
         mySimulation.setGrid(myGrid);
         mySimulation.setHeight(myHeight);
         mySimulation.setWidth(myWidth);
+        mySimulation.setNeighborhood(myNeighborType);
     }
 
     private void fillGrid(List<String> initialCells) {
@@ -170,35 +185,33 @@ public class Configuration {
             int row = Integer.parseInt(cellData[0]);
             int col = Integer.parseInt(cellData[1]);
             double state = Double.parseDouble(cellData[2]);
-            addCellToRow(row, col, createCell(row, col, state));
+            setCell(row, col, createCell(row, col, state));
         }
 
     }
 
-    public void addCellToRow(int r, int c, Cell cell){
-        // TODO: change the way this adds cells and remove this error
-        if(myGrid.get(r).size() <= c){ myGrid.get(r).set(c, cell); }
-        else { throw new IndexOutOfBoundsException("Invalid cell order"); }
+    private void setCell(int r, int c, Cell cell) {
+        myGrid.get(r).set(c, cell);
     }
 
     private Cell createCell(int row, int col, double state) {
         try {
             switch (mySimType) {
-                case ("Spreading of Fire"):
+                case (FIRE):
                     return new FireCell(state, row, col);
-                case ("Game of Life"):
+                case (GAME_OF_LIFE):
                     return new LifeCell(state, row, col);
-                case ("Percolation"):
+                case (PERCOLATION):
                     return new PercolationCell(state, row, col);
-                case ("Segregation"):
+                case (SEGREGATION):
                     return new SegregationCell(state, row, col, mySimulation);
-                case ("Predator Prey"):
+                case (PREDATOR_PREY):
                     return new PredatorPreyCell(state, row, col);
                 default:
                     throw new IllegalArgumentException("Unexpected value: " + mySimType);
             }
         } catch (IllegalStateException e) {
-            // TODO: Prompt for valid state
+            // TODO: Prompt for valid state in viz
             throw new IllegalArgumentException("Illegal state: " + state);
         }
 
@@ -206,14 +219,17 @@ public class Configuration {
 
     private void createDeltaArrays (String neighborType) {
         switch (neighborType) {
-            case("MOORE"):
+            case(MOORE):
                 mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 1, 0, -1});
                 mySimulation.setRowDelta(new int[]{0, -1, -1, -1, 0, 1, 1, 1});
                 break;
-            case("VON NEUMANN"):
+            case(VON_NEUMANN):
                 mySimulation.setColDelta(new int[]{-1, 0, 1, 0});
                 mySimulation.setRowDelta(new int[]{0, -1, 0, 1});
                 break;
+            case(HEXAGONAL):
+                mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 0});
+                mySimulation.setRowDelta(new int[]{0, -1, -1, 0, 1, 1});
             default:
                 System.out.println("Default neighborhood invalid/not given, defaulting to: " + DEFAULT_NEIGHBOR);
                 createDeltaArrays(DEFAULT_NEIGHBOR);

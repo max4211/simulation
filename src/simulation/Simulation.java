@@ -1,5 +1,8 @@
 package simulation;
 
+import configuration.SimulationSaver;
+import javafx.util.Pair;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,11 +10,12 @@ import java.util.Map;
 
 public class Simulation {
 
-    private ArrayList<ArrayList<Cell>> myGrid;
-    private int[] ROW_DELTA;
-    private int[] COL_DELTA;
-    private int SIMULATION_HEIGHT;
-    private int SIMULATION_WIDTH;
+    protected ArrayList<ArrayList<Cell>> myGrid;
+    protected int[] ROW_DELTA;
+    protected int[] COL_DELTA;
+    protected int SIMULATION_HEIGHT;
+    protected int SIMULATION_WIDTH;
+    protected String NEIGHBORHOOD_TYPE;
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
@@ -33,14 +37,13 @@ public class Simulation {
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
     public void setHeight(int height) {SIMULATION_HEIGHT = height;}
     public void setWidth(int width) {SIMULATION_WIDTH = width;}
+    public void setNeighborhood(String n){ NEIGHBORHOOD_TYPE = n; }
 
-    public void setCell(int r, int c, Cell cell){
-        myGrid.get(r).set(c, cell);
-    }
 
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
+    public String getNeighborhood(){ return NEIGHBORHOOD_TYPE; }
 
     public void updateGrid() {
         determineUpdates();
@@ -64,7 +67,17 @@ public class Simulation {
         return myMap;
     }
 
-    private void determineUpdates() {
+    /**
+     * Creates an instance of the SimulationSaver class, which outputs the current state of
+     * the grid to an XML file that can be read to the simulation.
+     * @throws IOException when a valid simulation is not currently running
+     */
+    public void captureGridState() throws IOException {
+        SimulationSaver s = new SimulationSaver(this);
+        s.createFile();
+    }
+
+    protected void determineUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
                 getCell(row, col).determineNextState(getNeighbors(row, col));
@@ -72,7 +85,7 @@ public class Simulation {
         }
     }
 
-    private void implementUpdates() {
+    protected void implementUpdates() {
         for(int row=0; row<getHeight(); row++){
             for(int col=0; col<getWidth(); col++){
                 getCell(row, col).updateState();
@@ -80,7 +93,7 @@ public class Simulation {
         }
     }
 
-    private boolean inBounds(int row, int col) {
+    protected boolean inBounds(int row, int col) {
         return (row < getHeight()) && (col < getWidth())
                 && (row >= 0) && (col >= 0);
     }
@@ -90,16 +103,15 @@ public class Simulation {
      * @param col column cell whose neighbors are being requested
      * @return list of neighbors states in order of ROW_DELTA and COL_DELTA
      */
-    private Collection<Cell> getNeighbors(int row, int col) {
-        Collection<Cell> neighbors = new ArrayList<Cell>();
+    protected Map<Pair<Integer, Integer>, Cell> getNeighbors(int row, int col) {
+        Map<Pair<Integer, Integer>, Cell> neighbors = new HashMap<>();
         int r2; int c2;
         for (int i = 0; i < ROW_DELTA.length; i ++) {
             r2 = row + ROW_DELTA[i]; c2 = col + COL_DELTA[i];
             if (inBounds(r2, c2)) {
-                neighbors.add(getCell(r2, c2));
+                neighbors.put(new Pair(r2, c2), getCell(r2, c2));
             }
         }
         return neighbors;
     }
-
 }
