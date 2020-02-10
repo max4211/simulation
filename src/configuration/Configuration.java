@@ -139,7 +139,7 @@ public class Configuration {
             }
 
 
-            mySimulation = initalizeSim();
+            mySimulation = initializeSim();
             // Initial cell states
             NodeList cellList = eElement.getElementsByTagName("cell");
             // check of list is right length
@@ -156,7 +156,7 @@ public class Configuration {
         }
     }
 
-    private Simulation initalizeSim(){
+    private Simulation initializeSim(){
         switch(myEdgeType){
             case(TOROIDAL_EDGES):
                 return new ToroidalSimulation();
