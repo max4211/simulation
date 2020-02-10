@@ -30,16 +30,12 @@ public class LifeCell extends Cell {
         myTypeString = "Game of Life";
     }
 
+
     /**
      * Colors:
      * White - Dead
      * Black - Alive
      */
-    @Override
-    protected boolean checkValidState(double initialState) {
-        return initialState == 0.0 || initialState == 1.0;
-    }
-
     @Override
     public void createColorMap(){
         myColorMap.put(0.0, WHITE);
@@ -82,13 +78,30 @@ public class LifeCell extends Cell {
         }
     }
 
-    // unsure what type of state to double mapping we should do here?
+    /**
+     * Required by Cell abstract class.
+     * Returns myState, which is the map key for Game of Lie
+     * @param myState
+     * @return myState
+     */
     @Override
     public double mapKey(double myState){
         return myState;
     }
 
+    /**
+     * @return "Game of Life" as String for XML files
+     */
     @Override
     public String getTypeString(){ return "Game of Life"; }
 
+    /**
+     * A valid state for Game of Life is 0 (dead) or 1 (alive)
+     * @param initialState
+     * @return
+     */
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState == 0.0 || initialState == 1.0;
+    }
 }
