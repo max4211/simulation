@@ -12,7 +12,7 @@ import java.util.Map;
 public class StateChart extends LineChart {
 
     private Map<String, XYChart.Series> mySeries = new HashMap<String, XYChart.Series>();
-    private final String LEGEND_STYLE = "-fx-wrap-text: true;\n"; // +
+    private final String LEGEND_STYLE = "-fx-wrap-text: false;\n"; // +
                                // "-fx-background-color: transparent\n;" +
                                // "-fx-text-size: 4";
     private boolean seriesFlag;
@@ -29,9 +29,9 @@ public class StateChart extends LineChart {
         xAxis.setLabel("Step");
         yAxis.setLabel("Total");
         seriesFlag = false;
-        this.setLegendVisible(true);
-        this.setLegendSide(Side.RIGHT);
-        this.getLegend().setStyle(LEGEND_STYLE);
+        // this.setLegendVisible(true);
+        // this.setLegendSide(Side.LEFT);
+        // this.getLegend().setStyle(LEGEND_STYLE);
     }
 
     // TODO: Style Series (with CSS styling)
@@ -85,6 +85,5 @@ public class StateChart extends LineChart {
                 }
             }
         }
-
     }
 }
