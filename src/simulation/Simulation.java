@@ -3,14 +3,11 @@ package simulation;
 import configuration.SimulationSaver;
 import javafx.util.Pair;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Simulation {
 
-    protected ArrayList<ArrayList<Cell>> myGrid;
+    protected List<ArrayList<Cell>> myGrid;
     protected int[] ROW_DELTA;
     protected int[] COL_DELTA;
     protected int SIMULATION_HEIGHT;
@@ -27,7 +24,7 @@ public class Simulation {
         ;
     }
 
-    public Simulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
+    public Simulation(List<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         myGrid = grid;
         ROW_DELTA = rdelta;
         COL_DELTA = cdelta;
