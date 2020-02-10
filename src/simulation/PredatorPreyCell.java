@@ -41,6 +41,8 @@ public class PredatorPreyCell extends Cell{
     public int nextEnergy;
     public int nextAge;
 
+    private final double MAX_POSSIBLE_STATE = 2.999999;
+
     /**
      * Creates new PredatorPreyCell
      * @param initialState: the integer side is the cell's initial state (fish, shark, or water), the first three
@@ -66,6 +68,11 @@ public class PredatorPreyCell extends Cell{
         nextEnergy = energyGainFromFish;
         nextAge = age;
 
+    }
+
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState <= MAX_POSSIBLE_STATE;
     }
 
     @Override
