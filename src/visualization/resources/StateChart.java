@@ -2,6 +2,7 @@ package visualization.resources;
 
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,10 @@ public class StateChart extends LineChart {
         xAxis.setLabel("Step");
         yAxis.setLabel("Percent (%)");
         seriesFlag = false;
+    }
+
+    public StateChart() {
+        super(new NumberAxis(), new NumberAxis());
     }
 
     // TODO: Style Series (with CSS styling)

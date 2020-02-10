@@ -7,27 +7,20 @@ import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import simulation.Cell;
 import simulation.Simulation;
-import simulation.State;
 import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -39,13 +32,13 @@ public class Visualization extends Application {
     private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
+    protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
     private final double SCENE_HEIGHT = 700;
     private final double SCENE_WIDTH = 550;
-    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
-    private final double SIM_WIDTH = SCENE_WIDTH * 0.9;
+    protected final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
+    protected final double SIM_WIDTH = SCENE_WIDTH * 0.9;
     private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
     private final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
     private final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
@@ -57,17 +50,17 @@ public class Visualization extends Application {
     private final int BOTTOM_PAD = 5;
     private final int LEFT_PAD = 5;
     private final int RIGHT_PAD = 5;
-    private final int BUTTON_SPACING = 20;
+    protected final int BUTTON_SPACING = 30;
     private final int SLIDER_SPACING = 20;
     private final int VBOX_SPACING = 15;
 
-    // Viewer objects
-    private Slider mySlider;
-    private ToggleButton myPauseButton;
-    private ToggleButton myPlayButton;
-    private ToggleButton myStepButton;
-    private ToggleButton myLoadButton;
-    private ToggleButton myExitButton;
+    // Viewer custom objects
+    private AnimationSlider mySlider;
+    private CustomToggle myPauseButton;
+    private CustomToggle myPlayButton;
+    private CustomToggle myStepButton;
+    private CustomToggle myLoadButton;
+    private CustomToggle myExitButton;
     private StateChart myChart;
 
     // Simulation metadata
@@ -128,9 +121,9 @@ public class Visualization extends Application {
         HBox box = new HBox(SLIDER_SPACING);
         box.setAlignment((Pos.CENTER));
         mySlider = new AnimationSlider();
+        Label sliderUnits = new Label (myResources.getString("AnimationLabel"));
         Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
         sliderLabel.setFont(Font.font(24));
-        Label sliderUnits = new Label (myResources.getString("AnimationLabel"));
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
@@ -163,99 +156,10 @@ public class Visualization extends Application {
         return box;
     }
 
-    private void showSimGrid() {
-        GridPane simGrid = new GridPane();
-        simGrid.setAlignment(Pos.CENTER);
-        simGrid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
-        double regionHeight = SIM_HEIGHT / mySimulation.getHeight();
-        double regionWidth = SIM_WIDTH / mySimulation.getWidth();
-        for (int row = 0; row < mySimulation.getHeight(); row ++) {
-            for (int col = 0; col < mySimulation.getWidth(); col ++) {
-                Cell myCell = mySimulation.getCell(row, col);
-                simGrid.add(createRegion(regionWidth, regionHeight, myCell.getColor()), col, row );
-            }
-        }
-        addGridEvent(simGrid);
-        myRoot.setCenter(simGrid);
-    }
-
-    private void addGridEvent(GridPane simGrid) {
-        simGrid.getChildren().forEach(item -> {
-            item.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 1) {
-                    myPauseButton.setSelected(true);
-                    Node source = (Node) event.getSource();
-                    Integer col = GridPane.getColumnIndex(source);
-                    Integer row = GridPane.getRowIndex(source);
-                    System.out.printf("Mouse clicked cell [%d, %d] \n", col.intValue(), row.intValue());
-                    Cell myCell = mySimulation.getCell(row, col);
-                    Map<Double, State> myStates = myCell.getStateMap();
-                    printStates(myStates);
-                    SetCell options = new SetCell(myStates);
-                    List<CustomToggle> toggles = options.getList();
-                    myRoot.setTop(toggleBox(toggles, row, col));
-                }
-            });
-        });
-    }
-
-    private HBox toggleBox(List<CustomToggle> toggles, int row, int col) {
-        HBox box = new HBox();
-        for (ToggleButton b: toggles) {
-            box.getChildren().add(b);
-        }
-        box.getChildren().add(confirmButton(toggles, row, col));
-        return box;
-    }
-
-    private Button confirmButton(List<CustomToggle> toggles, int row, int col) {
-        Button button = new Button();
-        button.setText(myResources.getString("ConfirmButton"));
-        button.setOnAction(event -> {
-            Double state = selectedState(toggles);
-            System.out.printf("Setting cell [%d, %d] to state %f", row, col, state);
-            mySimulation.getCell(row, col).setState(state);
-            showSimGrid();
-            myRoot.setTop(myChart);
-        });
-        return button;
-    }
-
-    // TODO: Implement error handling for null return (current default is 0.state)
-    private Double selectedState(List<CustomToggle> toggles) {
-        for (CustomToggle b: toggles) {
-            if (b.isSelected()) {
-                return b.getState();
-            }
-        }
-        System.out.println("No toggle selected, defaulting to 0 state");
-        return toggles.get(0).getState();
-        // return null;
-    }
-
-    private void printStates(Map<Double, State> myStates) {
-        for (double d: myStates.keySet()) {
-            State state = myStates.get(d);
-            String string = state.getString();
-            String color = state.getColor();
-            System.out.printf("State double: %f, string: %s, color: %s \n", d, string, color);
-        }
-    }
-
-    private Region createRegion(double regionWidth, double regionHeight, String color) {
-        Region myRegion = new Region();
-        Insets myInsets = new Insets(regionHeight/50);
-        myRegion.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, myInsets)));
-        myRegion.setShape(new Rectangle(regionWidth, regionHeight));
-        myRegion.setPrefSize(regionWidth, regionHeight);
-        Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-        myRegion.setBorder(myBorder);
-        return myRegion;
-    }
-
     private void updateSimulation() {
         mySimulation.updateGrid();
-        // myChart.populateChart(mySimulation.countStates());
+        myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
+        myChart.populateChart(mySimulation.countStates());
     }
 
     private void setUpdateTime() {
@@ -269,7 +173,7 @@ public class Visualization extends Application {
     private void stepSelected() {
         myStepButton.setSelected(false);
         updateSimulation();
-        showSimGrid();
+
     }
 
     private void pauseSelected(){;}
@@ -278,7 +182,7 @@ public class Visualization extends Application {
         if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
         if (System.currentTimeMillis() >= updateTime) {
             updateSimulation();
-            showSimGrid();
+            myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
             setUpdateTime();
         }
     }
@@ -302,11 +206,11 @@ public class Visualization extends Application {
             mySimulation = new Configuration().getSimulation();
             myPauseButton.setSelected(true);
             createChart();
-            showSimGrid();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             createSimulation();
         }
+        myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
     }
 
     private void styleButtons() {

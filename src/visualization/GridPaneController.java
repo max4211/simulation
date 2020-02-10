@@ -1,17 +1,11 @@
 package visualization;
 
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-public class GridPaneController {
+public class GridPaneController extends Visualization {
 
-    @FXML
-    private void mouseEntered(MouseEvent e) {
-        Node source = (Node)e.getSource();
-        Integer col = GridPane.getColumnIndex(source);
-        Integer row = GridPane.getRowIndex(source);
-        System.out.printf("Mouse entered cell [%d, %d]", col.intValue(), row.intValue());
-    }
+    // TODO: Implement method to have control over sim grid pane
+
 }
