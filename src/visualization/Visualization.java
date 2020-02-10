@@ -29,7 +29,7 @@ public class Visualization extends Application {
     private static final String RESOURCES = "visualization/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    private static final String LANGUAGE = "English";
+    private static final String LANGUAGE = "Image";
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
@@ -237,6 +237,7 @@ public class Visualization extends Application {
         styleButton(myLoadButton);
         styleButton(myExitButton);
         styleButton(myStepButton);
+        styleButton(mySaveButton);
     }
 
     private void styleButton(ToggleButton button) {
