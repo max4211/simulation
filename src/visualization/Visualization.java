@@ -69,6 +69,7 @@ public class Visualization extends Application {
     // Simulation metadata
     private static final int SLIDER_FONT = 24;
     private static final int FRAME_RATE = 20;
+    private static final int SEC_TO_MILLI = 1000;
     private long updateTime;
     private BorderPane myRoot;
     private Simulation mySimulation;
@@ -209,7 +210,7 @@ public class Visualization extends Application {
     private double getAnimationRate() {
         double val = mySlider.getValue();
         if (val == 0) { return Math.sqrt(Integer.MAX_VALUE); }
-        else { return Math.pow(val, -1) * 1000; }
+        else { return Math.pow(val, -1) * SEC_TO_MILLI; }
     }
 
     private void loadSelected() {
