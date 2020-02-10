@@ -7,22 +7,31 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Class that saves the current state of a Simulation as a correctly formatted XML file
+ * that is readable by the program. Implements functionality from GridGenerator.
+ */
 public class SimulationSaver extends GridGenerator{
 
     private Simulation mySimulation;
-    private String myNeighborType;
 
+    /**
+     * @param s a paused Simulation currently running
+     * @throws IOException if an output error occurs
+     */
     public SimulationSaver(Simulation s) throws IOException {
         super(s.getHeight(), s.getWidth(), "running");
         mySimulation = s;
-        myNeighborType = s.getNeighborhood();
     }
 
+    /**
+     * @return Simulation type as a string from the current simulation
+     */
     @Override
-    public String getTypeString(){ return mySimulation.getCell(0,0).getTypeString(); }
+    protected String getTypeString(){ return mySimulation.getCell(0,0).getTypeString(); }
 
     @Override
-    public String getNeighborString(){ return myNeighborType; }
+    protected String getNeighborString(){ return mySimulation.getNeighborhood(); }
 
     @Override
     protected double generateRandomState(){ return 0.0; }
