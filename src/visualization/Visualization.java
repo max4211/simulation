@@ -18,9 +18,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
-import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -163,6 +165,7 @@ public class Visualization extends Application {
         mySimulation.updateGrid();
         updateSimPane();
         myChart.populateChart(mySimulation.countStates());
+        myChart.styleChart(mySimulation.getCell(0,0).getStateMap());
     }
 
     private void setUpdateTime() {
@@ -176,19 +179,19 @@ public class Visualization extends Application {
     private void stepSelected() {
         myStepButton.setSelected(false);
         updateSimulation();
-
+        myChart.populateChart(mySimulation.countStates());
     }
 
     private void pauseSelected(){;}
 
     private void saveSelected(){
-        /*
         try {
-            mySimulation.save();
+            mySimulation.captureGridState();
+            System.out.println(myResources.getString("SaveSuccess") + new SimpleDateFormat("MM-dd-HH-mm").format(new Date()));
         } catch (IOException e) {
-            ;
+            System.out.println(myResources.getString("SaveError"));
         }
-         */
+
     }
 
     private void playSelected() {
@@ -237,6 +240,7 @@ public class Visualization extends Application {
         styleButton(myLoadButton);
         styleButton(myExitButton);
         styleButton(myStepButton);
+        styleButton(mySaveButton);
     }
 
     private void styleButton(ToggleButton button) {
