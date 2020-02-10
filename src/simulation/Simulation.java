@@ -3,19 +3,17 @@ package simulation;
 import configuration.SimulationSaver;
 import javafx.util.Pair;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Simulation {
 
-    protected ArrayList<ArrayList<Cell>> myGrid;
+    protected List<ArrayList<Cell>> myGrid;
     protected int[] ROW_DELTA;
     protected int[] COL_DELTA;
     protected int SIMULATION_HEIGHT;
     protected int SIMULATION_WIDTH;
     protected String NEIGHBORHOOD_TYPE;
+    protected String EDGE_TYPE = "HARD";
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
@@ -26,13 +24,13 @@ public class Simulation {
         ;
     }
 
-    public Simulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
+    public Simulation(List<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         myGrid = grid;
         ROW_DELTA = rdelta;
         COL_DELTA = cdelta;
     }
 
-    public void setGrid(ArrayList<ArrayList<Cell>> grid) { myGrid = grid;}
+    public void setGrid(List<ArrayList<Cell>> grid) { myGrid = grid;}
     public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
     public void setHeight(int height) {SIMULATION_HEIGHT = height;}
@@ -44,6 +42,7 @@ public class Simulation {
     public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
     public String getNeighborhood(){ return NEIGHBORHOOD_TYPE; }
+    public String getEdgeType(){ return EDGE_TYPE; }
 
     public void updateGrid() {
         determineUpdates();

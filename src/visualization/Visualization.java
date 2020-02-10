@@ -18,9 +18,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
-import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -35,24 +37,24 @@ public class Visualization extends Application {
     protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
-    private final double SCENE_HEIGHT = 700;
-    private final double SCENE_WIDTH = 550;
-    protected final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
-    protected final double SIM_WIDTH = SCENE_WIDTH * 0.9;
-    private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
-    private final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
-    private final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
-    private final double IMAGE_DIMENSIONS = VBOX_HEIGHT * 0.4;
-    private final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
+    private static final double SCENE_HEIGHT = 700;
+    private static final double SCENE_WIDTH = 550;
+    protected static final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
+    protected static final double SIM_WIDTH = SCENE_WIDTH * 0.9;
+    private static final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
+    private static final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
+    private static final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
+    private static final double IMAGE_DIMENSIONS = VBOX_HEIGHT * 0.4;
+    private static final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
 
     // Padding values
-    private final int TOP_PAD = 5;
-    private final int BOTTOM_PAD = 5;
-    private final int LEFT_PAD = 5;
-    private final int RIGHT_PAD = 5;
-    protected final int BUTTON_SPACING = 30;
-    private final int SLIDER_SPACING = 20;
-    private final int VBOX_SPACING = 15;
+    private static final int TOP_PAD = 5;
+    private static final int BOTTOM_PAD = 5;
+    private static final int LEFT_PAD = 5;
+    private static final int RIGHT_PAD = 5;
+    protected static final int BUTTON_SPACING = 30;
+    private static final int SLIDER_SPACING = 20;
+    private static final int VBOX_SPACING = 15;
 
     // Viewer custom objects
     private AnimationSlider mySlider;
@@ -65,7 +67,9 @@ public class Visualization extends Application {
     private StateChart myChart;
 
     // Simulation metadata
-    private final int FRAME_RATE = 20;
+    private static final int SLIDER_FONT = 24;
+    private static final int FRAME_RATE = 20;
+    private static final int SEC_TO_MILLI = 1000;
     private long updateTime;
     private BorderPane myRoot;
     private Simulation mySimulation;
@@ -124,7 +128,7 @@ public class Visualization extends Application {
         mySlider = new AnimationSlider();
         Label sliderUnits = new Label (myResources.getString("AnimationLabel"));
         Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
-        sliderLabel.setFont(Font.font(24));
+        sliderLabel.setFont(Font.font(SLIDER_FONT));
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
@@ -163,6 +167,7 @@ public class Visualization extends Application {
         mySimulation.updateGrid();
         updateSimPane();
         myChart.populateChart(mySimulation.countStates());
+        myChart.styleChart(mySimulation.getCell(0,0).getStateMap());
     }
 
     private void setUpdateTime() {
@@ -176,19 +181,19 @@ public class Visualization extends Application {
     private void stepSelected() {
         myStepButton.setSelected(false);
         updateSimulation();
-
+        myChart.populateChart(mySimulation.countStates());
     }
 
     private void pauseSelected(){;}
 
     private void saveSelected(){
-        /*
         try {
-            mySimulation.save();
+            mySimulation.captureGridState();
+            System.out.println(myResources.getString("SaveSuccess") + new SimpleDateFormat("MM-dd-HH-mm").format(new Date()));
         } catch (IOException e) {
-            ;
+            System.out.println(myResources.getString("SaveError"));
         }
-         */
+
     }
 
     private void playSelected() {
@@ -205,7 +210,7 @@ public class Visualization extends Application {
     private double getAnimationRate() {
         double val = mySlider.getValue();
         if (val == 0) { return Math.sqrt(Integer.MAX_VALUE); }
-        else { return Math.pow(val, -1) * 1000; }
+        else { return Math.pow(val, -1) * SEC_TO_MILLI; }
     }
 
     private void loadSelected() {
@@ -237,6 +242,7 @@ public class Visualization extends Application {
         styleButton(myLoadButton);
         styleButton(myExitButton);
         styleButton(myStepButton);
+        styleButton(mySaveButton);
     }
 
     private void styleButton(ToggleButton button) {
