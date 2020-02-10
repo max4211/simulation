@@ -20,6 +20,9 @@ import javafx.util.Duration;
 import simulation.Simulation;
 
 import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -182,13 +185,13 @@ public class Visualization extends Application {
     private void pauseSelected(){;}
 
     private void saveSelected(){
-        /*
         try {
-            mySimulation.save();
+            mySimulation.captureGridState();
+            System.out.println(myResources.getString("SaveSuccess") + new SimpleDateFormat("MM-dd-HH-mm").format(new Date()));
         } catch (IOException e) {
-            ;
+            System.out.println(myResources.getString("SaveError"));
         }
-         */
+
     }
 
     private void playSelected() {
