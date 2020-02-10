@@ -2,6 +2,7 @@ package configuration;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
@@ -13,7 +14,7 @@ import java.util.Random;
 public abstract class GridGenerator {
 
 
-    protected final int UNIQUE_ID =  new Random().nextInt(100) + 1;;
+    protected final static int UNIQUE_ID =  new Random().nextInt(100) + 1;;
     protected String SIM_TYPE;
     protected int myHeight;
     protected int myWidth;
@@ -22,21 +23,29 @@ public abstract class GridGenerator {
         myHeight = height;
         myWidth = width;
         SIM_TYPE = simType;
-        createFile();
     }
 
+    /**
+     * @return Type of simulation as a one-word String
+     */
     public abstract String getTypeString();
+
+    /**
+     * @return Type of neighborhood as a one-word String
+     */
     public abstract String getNeighborString();
+
+    /**
+     * Generates a random cell state
+     * @return A random state as a double valid for simulation type
+     */
     public abstract double generateRandomState();
 
-    protected String nameFile() throws IOException {
-        String fileName = "data/" + SIM_TYPE + UNIQUE_ID + ".xml";
-        File file = new File(fileName);
-        file.createNewFile();
-        return fileName;
-    }
-
-    protected void createFile() throws IOException {
+    /**
+     * Creates an XML file in the correct format to be loaded in Visualization
+     * @throws IOException if a file is incorrectly loaded
+     */
+    public void createFile() throws IOException {
         PrintWriter writer = new PrintWriter(nameFile());
         writer.println("<?xml version=\"1.0\"?>");
         writer.println("<SimulationConfig>");
@@ -45,6 +54,13 @@ public abstract class GridGenerator {
         generateCells(writer);
         writer.println("</SimulationConfig>");
         writer.close();
+    }
+
+    protected String nameFile() throws IOException {
+        String fileName = "data/" + SIM_TYPE + UNIQUE_ID + ".xml";
+        File file = new File(fileName);
+        file.createNewFile();
+        return fileName;
     }
 
     protected void generateCells(PrintWriter w){

@@ -1,6 +1,9 @@
 package simulation;
 
+import javafx.util.Pair;
+
 import java.util.Collection;
+import java.util.Map;
 
 /**
  *  This class represents a cell in a Conway's Game of Life Simulation.
@@ -22,7 +25,8 @@ public class LifeCell extends Cell {
      * @param col: x-coordinate of cell
      */
     public LifeCell(double initialState, int row, int col) {
-       super(initialState, row, col);
+        super(initialState, row, col);
+        myTypeString = "Game of Life";
     }
 
     @Override
@@ -38,9 +42,9 @@ public class LifeCell extends Cell {
     }
 
     @Override
-    public void determineNextState(Collection<Cell> neighbors){
+    public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors){
         int numAlive = 0;
-        for(Cell cell: neighbors){
+        for(Cell cell: neighbors.values()){
             numAlive += (int) cell.getState();
         }
 
@@ -65,5 +69,8 @@ public class LifeCell extends Cell {
     public double mapKey(double myState){
         return myState;
     }
+
+    @Override
+    public String getTypeString(){ return "Game of Life"; }
 
 }

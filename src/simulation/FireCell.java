@@ -1,7 +1,10 @@
 package simulation;
 
 
+import javafx.util.Pair;
+
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -26,14 +29,15 @@ public class FireCell extends Cell {
         super(Math.floor(initialState), row, col);
         this.probCatch = (initialState - Math.floor(initialState));
         createColorMap();
+        myTypeString = "Spreading of Fire";
     }
 
     public double getProbCatch() { return this.probCatch; }
 
     @Override
-    public void determineNextState(Collection<Cell> neighbors) {
+    public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
         boolean hasBurningNeighbor = false;
-        for(Cell n: neighbors){
+        for(Cell n: neighbors.values()){
             if(n.getState()==2){
                 hasBurningNeighbor = true;
                 break;
@@ -69,5 +73,6 @@ public class FireCell extends Cell {
     public double mapKey(double myState) {
         return myState;
     }
+
 }
 
