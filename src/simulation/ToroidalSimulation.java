@@ -14,16 +14,28 @@ import java.util.Map;
 public class ToroidalSimulation extends Simulation {
 
     /**
-     * Empty constructor, initializes a Simulation without setting parameters.
+     * Empty constructor, initializes a ToroidalSimulation without setting parameters.
      */
     public ToroidalSimulation(){
         super();
-        EDGE_TYPE = "TOROIDAL";
     }
 
+    /**
+     * Construct Toroidal Simulation same as Simulation
+     * @param grid
+     * @param rdelta
+     * @param cdelta
+     */
     public ToroidalSimulation(List<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         super(grid, rdelta, cdelta);
-        EDGE_TYPE = "TOROIDAL";
+    }
+
+    /**
+     * @return "TOROIDAL" as edge type
+     */
+    @Override
+    public String getEdgeType() {
+        return "TOROIDAL";
     }
 
     @Override

@@ -96,5 +96,4 @@ public abstract class GridGenerator {
         }
     }
 
-    protected String getEdgeType(){ return myEdgeType; }
 }

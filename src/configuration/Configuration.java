@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
  *         <width>1</width> // integer
  *         <type>Spreading of Fire</type> // String
  *         <neighborType>MOORE</neighborType> // String
+ *         <edgeType>HARD</edgeType> //String, optional
  *         <cell>0 0 0</cell> // String in the format "row col state" where state is an integer
  *         <cell>0 1 0</cell>
  * </Configuration>
