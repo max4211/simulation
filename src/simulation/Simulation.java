@@ -16,9 +16,7 @@ public class Simulation {
     protected String EDGE_TYPE = "HARD";
 
     /**
-     * Constructs myGrid depending on the simulation type and according to the
-     * information from SimulationConfig. Also builds ROW_DELTA and COL_DELTA.
-     *
+     * Empty constructor, initializes a Simulation without setting parameters.
      */
     public Simulation() {
         ;
@@ -30,25 +28,72 @@ public class Simulation {
         COL_DELTA = cdelta;
     }
 
+    /**
+     * Mutator method for grid
+     * @param List of ArrayLists of Cells representing a "grid"
+     */
     public void setGrid(List<ArrayList<Cell>> grid) { myGrid = grid;}
+
+    /**
+     * Sets column delta based on neighbor type.
+     * @param cdelta array of change in column values
+     */
     public void setColDelta(int[] cdelta) {COL_DELTA = cdelta;}
+
+    /**
+     * Sets row delta based on neighbor type
+     * @param rdelta array of change in row values
+     */
     public void setRowDelta(int[] rdelta) {ROW_DELTA = rdelta;}
+
+    /**
+     * Sets height of simulation
+     * @param height number of rows
+     */
     public void setHeight(int height) {SIMULATION_HEIGHT = height;}
+
+    /**
+     * Sets width of simulation
+     * @param width number of columns
+     */
     public void setWidth(int width) {SIMULATION_WIDTH = width;}
+
+    /**
+     * Sets neighborhood type of simulation
+     * @param n
+     */
     public void setNeighborhood(String n){ NEIGHBORHOOD_TYPE = n; }
 
 
+    /**
+     * Accessor methods for above instance variables, including edge type
+     */
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }
-    public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
     public String getNeighborhood(){ return NEIGHBORHOOD_TYPE; }
     public String getEdgeType(){ return EDGE_TYPE; }
 
+    /**
+     * Return Cell object that exists at row r and column c in grid
+     * @param r
+     * @param c
+     * @return Cell at r, c in grid
+     */
+    public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
+
+    /**
+     * Determine which updates must be done cell by cell (set nextState) and then
+     * implement those updates (set myState to nextState)
+     */
     public void updateGrid() {
         determineUpdates();
         implementUpdates();
     }
 
+    /**
+     * Used to get count for each state for graphing purposes
+     * @return a map of Strings (states) and their corresponding counts as Integers
+     */
     public Map<String, Integer> countStates() {
         Map<String, Integer> myMap = new HashMap<String, Integer>();
         for (int row = 0; row < getHeight(); row++) {

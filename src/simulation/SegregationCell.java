@@ -1,9 +1,6 @@
 package simulation;
 
-
 import javafx.util.Pair;
-
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
@@ -14,6 +11,8 @@ import java.util.Random;
  * 0 = empty (white)
  * 1 = race 1 (red)
  * 2 = race 2 (blue)
+ *
+ * Number after decimal place * 100 is the percentage of like neighbors an agent needs to be "satisfied"
  *
  *  Rules:
  *  If the percentage of cells around this cell that are a different race is greater than the cell's
@@ -42,32 +41,22 @@ public class SegregationCell extends Cell{
         myTypeString = "Segregation";
     }
 
+    /**
+     * @return Percentage tolerance of like neighbors as a double
+     */
     public double getPercentTolerance(){ return myState - Math.floor(myState); }
 
+    /**
+     * @return true if a cell is occupied by an agent (state is not 0)
+     */
     public boolean isOccupied(){
         return Math.floor(myState) != 0;
     }
 
-    @Override
-    protected boolean checkValidState(double initialState) {
-        return initialState < BOUNDARY_OF_POSSIBLE_STATES;
-    }
-
-    @Override
-    public void createColorMap() {
-        myColorMap.put(0.0, WHITE);
-        myColorMap.put(1.0, RED);
-        myColorMap.put(2.0, BLUE);
-    }
-
-    @Override
-    public void createStateMap() {
-        myStateMap.put(0.0, new State("Open", WHITE));
-        myStateMap.put(1.0, new State("Red", RED));
-        myStateMap.put(2.0, new State("Blue", BLUE));
-    }
-
-    //TODO: fix if-else tree
+    /**
+     * Determines next state based on rules above.
+     * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
+     */
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors) {
         if(! changedAlready){
@@ -91,26 +80,57 @@ public class SegregationCell extends Cell{
         }
     }
 
-    @Override
-    public double mapKey(double myState) {
-        return Math.floor(myState);
-    }
 
+    /**
+     * Same as Cell class, but sets "changedAlready" flag to true to indicate
+     * that this cell is not able to be changed anymore in this step
+     * @param state: a double that maps to a valid state for the cell type
+     */
     @Override
     public void setNextState(double state){
         this.nextState = state;
         changedAlready = true;
     }
 
+    /**
+     * Same as Cell class, but sets "changedAlready" flag to false to indicate
+     * that this cell is now able to be changed by a potential swap in agents.
+     */
     @Override
     public void updateState() {
         this.myState = this.nextState;
         changedAlready = false;
     }
 
+    /**
+     * @return "Segregation" as String for XML output
+     */
     @Override
     public String getTypeString(){ return "Segregation"; }
 
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState < BOUNDARY_OF_POSSIBLE_STATES;
+    }
+
+    @Override
+    protected double mapKey(double myState) {
+        return Math.floor(myState);
+    }
+
+    @Override
+    protected void createColorMap() {
+        myColorMap.put(0.0, WHITE);
+        myColorMap.put(1.0, RED);
+        myColorMap.put(2.0, BLUE);
+    }
+
+    @Override
+    protected void createStateMap() {
+        myStateMap.put(0.0, new State("Open", WHITE));
+        myStateMap.put(1.0, new State("Red", RED));
+        myStateMap.put(2.0, new State("Blue", BLUE));
+    }
 
     private void findVacantCell(){
         int height = myCurrentSim.getHeight();

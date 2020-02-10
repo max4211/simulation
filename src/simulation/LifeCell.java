@@ -31,27 +31,6 @@ public class LifeCell extends Cell {
         myTypeString = "Game of Life";
     }
 
-
-    /**
-     * Colors:
-     * White - Dead
-     * Black - Alive
-     */
-    @Override
-    public void createColorMap(){
-        myColorMap.put(0.0, WHITE);
-        myColorMap.put(1.0, BLACK);
-    }
-
-    /**
-     * Initializes State mappings (Dead, Alive)
-     */
-    @Override
-    public void createStateMap() {
-        myStateMap.put(0.0, new State("Dead", WHITE));
-        myStateMap.put(1.0, new State("Alive", BLACK));
-    }
-
     /**
      * Determines next state for cell based on rules above
      * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
@@ -79,16 +58,6 @@ public class LifeCell extends Cell {
         }
     }
 
-    /**
-     * Required by Cell abstract class.
-     * Returns myState, which is the map key for Game of Lie
-     * @param myState
-     * @return myState
-     */
-    @Override
-    public double mapKey(double myState){
-        return myState;
-    }
 
     /**
      * @return "Game of Life" as String for XML files
@@ -104,5 +73,36 @@ public class LifeCell extends Cell {
     @Override
     protected boolean checkValidState(double initialState) {
         return initialState == 0.0 || initialState == 1.0;
+    }
+
+    /**
+     * Colors:
+     * White - Dead
+     * Black - Alive
+     */
+    @Override
+    protected void createColorMap(){
+        myColorMap.put(0.0, WHITE);
+        myColorMap.put(1.0, BLACK);
+    }
+
+    /**
+     * Initializes State mappings (Dead, Alive)
+     */
+    @Override
+    protected void createStateMap() {
+        myStateMap.put(0.0, new State("Dead", WHITE));
+        myStateMap.put(1.0, new State("Alive", BLACK));
+    }
+
+    /**
+     * Required by Cell abstract class.
+     * Returns myState, which is the map key for Game of Life
+     * @param myState
+     * @return myState
+     */
+    @Override
+    protected double mapKey(double myState){
+        return myState;
     }
 }
