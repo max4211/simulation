@@ -32,6 +32,11 @@ public class FireCell extends Cell {
         myTypeString = "Spreading of Fire";
     }
 
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState==0.0 || initialState==1.0 || initialState==2.0;
+    }
+
     public double getProbCatch() { return this.probCatch; }
 
     @Override

@@ -49,6 +49,10 @@ public abstract class Cell {
     public Cell(double initialState, int row, int col) {
         createColorMap();
         createStateMap();
+
+        if (!checkValidState(initialState))
+          throw new IllegalArgumentException("Invalid Cell type");
+
         this.myState = initialState;
         this.myRow = row;
         this.myCol = col;
@@ -63,10 +67,12 @@ public abstract class Cell {
         this(0.0, row, col);
     }
 
+
     /**
      * Checks if a cell state is valid based on simulation rules
      */
-    //protected abstract boolean checkValidState(double initialState);
+    protected abstract boolean checkValidState(double initialState);
+
 
     /**
      * Creates mapping of Doubles to hexadecimal color Strings

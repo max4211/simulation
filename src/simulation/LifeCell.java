@@ -36,6 +36,11 @@ public class LifeCell extends Cell {
      * Black - Alive
      */
     @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState == 0.0 || initialState == 1.0;
+    }
+
+    @Override
     public void createColorMap(){
         myColorMap.put(0.0, WHITE);
         myColorMap.put(1.0, BLACK);
