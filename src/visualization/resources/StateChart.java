@@ -1,5 +1,6 @@
 package visualization.resources;
 
+import javafx.geometry.Side;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -21,7 +22,7 @@ public class StateChart extends LineChart {
     public StateChart(Axis xAxis, Axis yAxis) {
         super(xAxis, yAxis);
         xAxis.setLabel("Step");
-        yAxis.setLabel("Percent (%)");
+        yAxis.setLabel("Total");
         seriesFlag = false;
     }
 
@@ -55,6 +56,8 @@ public class StateChart extends LineChart {
             int count = allStates.get(name);
             appendSeries(name, count);
         }
+        this.setLegendVisible(true);
+        this.setLegendSide(Side.RIGHT);
     }
 
     private void traverseMap(Map<String, Integer> myMap) {
