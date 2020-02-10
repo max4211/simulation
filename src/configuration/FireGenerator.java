@@ -6,6 +6,8 @@ import java.util.Random;
 
 public class FireGenerator extends GridGenerator {
 
+    private static final int POSSIBLE_STATES = 3;
+
     public FireGenerator(int height, int width) throws IOException {
         super(height, width, "fire");
     }
@@ -19,10 +21,7 @@ public class FireGenerator extends GridGenerator {
     @Override
     // possible states: 0.0, 1.0, 2.0 plus probCatch ([0, 1.0))
     public double generateRandomState(){
-        return new Random().nextInt(3) + Math.random();
+        return new Random().nextInt(POSSIBLE_STATES) + Math.random();
     }
 
-    public static void main(String[] args) throws IOException {
-        GridGenerator g = new FireGenerator(10, 10);
-    }
 }

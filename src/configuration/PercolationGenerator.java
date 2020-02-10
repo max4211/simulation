@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class PercolationGenerator extends GridGenerator {
 
+    private static final int POSSIBLE_STATES = 3;
 
     public PercolationGenerator(int height, int width) throws IOException {
         super(height, width, "percolation");
@@ -18,9 +19,8 @@ public class PercolationGenerator extends GridGenerator {
     public String getNeighborString(){ return "MOORE"; }
 
     @Override
-    // possible states: 0.0, 1.0, 2.0
     public double generateRandomState(){
-        return new Random().nextInt(3);
+        return new Random().nextInt(POSSIBLE_STATES);
     }
 
     public static void main(String[] args) throws IOException {
