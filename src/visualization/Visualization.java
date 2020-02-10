@@ -237,7 +237,6 @@ public class Visualization extends Application {
             System.out.println(e.getMessage());
             createSimulation();
         }
-
     }
 
 }
