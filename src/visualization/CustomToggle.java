@@ -5,10 +5,15 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
+import javax.imageio.ImageIO;
 
 /**
  * Customizable toggle button, used to help with design when only a single option should be selected a once
@@ -18,12 +23,20 @@ import javafx.scene.paint.Color;
  */
 public class CustomToggle extends ToggleButton {
 
+    private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
+    private static double BUTTON_RADIUS;
+    private static double IMAGE_DIMENSIONS;
+    private static String RESOURCE_FOLDER;
     private Double myState;
 
-    public CustomToggle(String text, ToggleGroup group, EventHandler<ActionEvent> handler) {
+    public CustomToggle(String text, ToggleGroup group, EventHandler<ActionEvent> handler, double dimensions, double radius, String resources) {
         super(text);
         this.setOnAction(handler);
         this.setToggleGroup(group);
+        IMAGE_DIMENSIONS = dimensions;
+        BUTTON_RADIUS = radius;
+        RESOURCE_FOLDER = resources;
+        this.styleButton();
     }
 
     /**
@@ -36,7 +49,6 @@ public class CustomToggle extends ToggleButton {
     public CustomToggle(String text, ToggleGroup group, String color, Double state) {
         super(text);
         this.setToggleGroup(group);
-        // Currently does nothing, over ridden by properties file (as expected)
         this.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, Insets.EMPTY)));
         this.myState = state;
     }
@@ -47,5 +59,15 @@ public class CustomToggle extends ToggleButton {
      * @return state of the toggle
      */
     public Double getState() {return this.myState;}
+
+    public void styleButton() {
+        String label = this.getText();
+        if (label.matches(IMAGEFILE_SUFFIXES)) {
+            this.setPrefSize(IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
+            this.setShape(new Circle(BUTTON_RADIUS));
+            this.setText("");
+            this.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(RESOURCE_FOLDER + label))));
+        }
+    }
 
 }
