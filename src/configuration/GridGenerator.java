@@ -50,22 +50,6 @@ public abstract class GridGenerator {
     }
 
     /**
-     * @return Type of simulation as a one-word String
-     */
-    public abstract String getTypeString();
-
-    /**
-     * @return Type of neighborhood as a one-word String
-     */
-    public abstract String getNeighborString();
-
-    /**
-     * Generates a random cell state
-     * @return A random state as a double valid for simulation type
-     */
-    protected abstract double generateRandomState();
-
-    /**
      * Creates an XML file in the correct format to be loaded in Visualization
      * @throws IOException if a file is incorrectly loaded
      */
@@ -80,6 +64,22 @@ public abstract class GridGenerator {
         writer.println("</SimulationConfig>");
         writer.close();
     }
+
+    /**
+     * @return Type of simulation as a one-word String
+     */
+    protected abstract String getTypeString();
+
+    /**
+     * @return Type of neighborhood as a one-word String
+     */
+    protected abstract String getNeighborString();
+
+    /**
+     * Generates a random cell state
+     * @return A random state as a double valid for simulation type
+     */
+    protected abstract double generateRandomState();
 
     protected String nameFile() throws IOException {
         String fileName = "data/" + SIM_TYPE + UNIQUE_ID + ".xml";
