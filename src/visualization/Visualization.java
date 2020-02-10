@@ -10,30 +10,29 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
 
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Main driver of the Cellular Automata program
+ * Visualization class extends Application and stores all visual components of the Simulation
+ */
 public class Visualization extends Application {
 
     // Resources for styling and properties
     private static final String RESOURCES = "visualization/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    private static final String LANGUAGE = "English";
+    private static final String LANGUAGE = "Image";
     private static final String STYLESHEET = "default.css";
-    private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
@@ -43,8 +42,6 @@ public class Visualization extends Application {
     protected static final double SIM_WIDTH = SCENE_WIDTH * 0.9;
     private static final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
     private static final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
-    private static final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
-    private static final double IMAGE_DIMENSIONS = VBOX_HEIGHT * 0.4;
     private static final String BACKGROUND_COLOR = "-fx-background-color: rgb(180, 180, 180)";
 
     // Padding values
@@ -66,6 +63,10 @@ public class Visualization extends Application {
     private CustomToggle mySaveButton;
     private StateChart myChart;
 
+    // Button metadata
+    private static final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
+    private static final double IMAGE_DIMENSIONS = VBOX_HEIGHT * 0.4;
+
     // Simulation metadata
     private static final int SLIDER_FONT = 24;
     private static final int FRAME_RATE = 20;
@@ -74,6 +75,10 @@ public class Visualization extends Application {
     private BorderPane myRoot;
     private Simulation mySimulation;
 
+    /**
+     * Application default method to construct stage that holds main scene
+     * @param stage the Stage object to hold the main scene
+     */
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
@@ -132,7 +137,7 @@ public class Visualization extends Application {
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
-            sliderLabel.setText(String.format("%.1f", new_val));
+            sliderLabel.setText(String.format("%.1f", (double) new_val));
             myPlayButton.setSelected(true);
             setUpdateTime();
         });
@@ -146,13 +151,12 @@ public class Visualization extends Application {
         HBox box = new HBox(BUTTON_SPACING);
         box.setAlignment((Pos.CENTER));
         ToggleGroup group = new ToggleGroup();
-        myPauseButton = new CustomToggle(myResources.getString("PauseButton"), group, event -> pauseSelected());
-        myPlayButton = new CustomToggle(myResources.getString("PlayButton"), group, event -> playSelected());
-        myStepButton = new CustomToggle(myResources.getString("StepButton"), group, event -> stepSelected());
-        myLoadButton = new CustomToggle(myResources.getString("LoadButton"), group, event -> loadSelected());
-        myExitButton = new CustomToggle(myResources.getString("ExitButton"), group, event -> exitSelected());
-        mySaveButton = new CustomToggle(myResources.getString("SaveButton"), group, event -> saveSelected());
-        styleButtons();
+        myPauseButton = new CustomToggle(myResources.getString("PauseButton"), group, event -> pauseSelected(), IMAGE_DIMENSIONS, BUTTON_RADIUS, DEFAULT_RESOURCE_FOLDER);
+        myPlayButton = new CustomToggle(myResources.getString("PlayButton"), group, event -> playSelected(), IMAGE_DIMENSIONS, BUTTON_RADIUS, DEFAULT_RESOURCE_FOLDER);
+        myStepButton = new CustomToggle(myResources.getString("StepButton"), group, event -> stepSelected(), IMAGE_DIMENSIONS, BUTTON_RADIUS, DEFAULT_RESOURCE_FOLDER);
+        myLoadButton = new CustomToggle(myResources.getString("LoadButton"), group, event -> loadSelected(), IMAGE_DIMENSIONS, BUTTON_RADIUS, DEFAULT_RESOURCE_FOLDER);
+        myExitButton = new CustomToggle(myResources.getString("ExitButton"), group, event -> exitSelected(), IMAGE_DIMENSIONS, BUTTON_RADIUS, DEFAULT_RESOURCE_FOLDER);
+        mySaveButton = new CustomToggle(myResources.getString("SaveButton"), group, event -> saveSelected(),IMAGE_DIMENSIONS, BUTTON_RADIUS, DEFAULT_RESOURCE_FOLDER);
         pauseSelected();
         box.getChildren().add(myPauseButton);
         box.getChildren().add(myPlayButton);
@@ -232,26 +236,6 @@ public class Visualization extends Application {
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             createSimulation();
-        }
-
-    }
-
-    private void styleButtons() {
-        styleButton(myPauseButton);
-        styleButton(myPlayButton);
-        styleButton(myLoadButton);
-        styleButton(myExitButton);
-        styleButton(myStepButton);
-        styleButton(mySaveButton);
-    }
-
-    private void styleButton(ToggleButton button) {
-        String label = button.getText();
-        if (label.matches(IMAGEFILE_SUFFIXES)) {
-            button.setPrefSize(IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
-            button.setShape(new Circle(BUTTON_RADIUS));
-            button.setText("");
-            button.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
         }
     }
 

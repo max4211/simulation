@@ -21,7 +21,6 @@ public class SimulationSaver extends GridGenerator{
     @Override
     public String getTypeString(){ return mySimulation.getCell(0,0).getTypeString(); }
 
-
     @Override
     public String getNeighborString(){ return myNeighborType; }
 

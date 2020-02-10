@@ -1,6 +1,5 @@
 package visualization;
 
-import javafx.geometry.Side;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -9,6 +8,10 @@ import simulation.State;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Chart at the top of the GUI that displays states over time.
+ * Main Object held is a LineChart, plus interactions with cell objects for series styling
+ */
 public class StateChart extends LineChart {
 
     private Map<String, XYChart.Series> mySeries = new HashMap<String, XYChart.Series>();
@@ -20,7 +23,7 @@ public class StateChart extends LineChart {
 
     /**
      * Construct a new LineChart with the given axis.
-     *
+     * Label the axes appropriately
      * @param xAxis  The x axis to use
      * @param yAxis The y axis to use
      */
@@ -34,8 +37,8 @@ public class StateChart extends LineChart {
         // this.getLegend().setStyle(LEGEND_STYLE);
     }
 
-    // TODO: Style Series (with CSS styling)
-    public void createSeries(Map<String, Integer> allStates) {
+
+    private void createSeries(Map<String, Integer> allStates) {
         for (String name: allStates.keySet()) {
             if (!(mySeries.containsKey(name))) {
                 XYChart.Series series = new XYChart.Series();
@@ -56,6 +59,10 @@ public class StateChart extends LineChart {
         series.getData().add(new XYChart.Data(STEP, count));
     }
 
+    /**
+     * Populates the chart series elements with the current simulation status (states and counts)
+     * @param allStates represent all states from the Simulation (count of current state strings and values
+     */
     public void populateChart(Map<String, Integer> allStates) {
         // traverseMap(allStates);
         if (!(seriesFlag)) {
@@ -76,6 +83,10 @@ public class StateChart extends LineChart {
         }
     }
 
+    /**
+     * Styles the series appropriately using the stateMap object inside of the base cell
+     * @param stateMap contains all states of the current cell simluation
+     */
     public void styleChart(Map<Double, State> stateMap) {
         for (State state: stateMap.values()) {
             for (String s: mySeries.keySet()) {
