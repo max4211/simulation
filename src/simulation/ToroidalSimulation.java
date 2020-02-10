@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class ToroidalSimulation extends Simulation {
 
+    public ToroidalSimulation(){ super(); }
+
     public ToroidalSimulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){
         super(grid, rdelta, cdelta);
     }
@@ -28,10 +30,8 @@ public class ToroidalSimulation extends Simulation {
         return neighbors;
     }
 
-    // TODO: finish this, actual formula more complex
     private int[] getToroidalNeighbor(int row, int col, int rowDelta, int colDelta){
         int r2; int c2;
-        // On bottom
         if(row + rowDelta < 0)
             r2 = SIMULATION_HEIGHT - 1;
         else if(row + rowDelta >= SIMULATION_HEIGHT)
