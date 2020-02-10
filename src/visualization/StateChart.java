@@ -1,15 +1,20 @@
-package visualization.resources;
+package visualization;
 
 import javafx.geometry.Side;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import simulation.State;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class StateChart extends LineChart {
 
     private Map<String, XYChart.Series> mySeries = new HashMap<String, XYChart.Series>();
+    private final String LEGEND_STYLE = "-fx-wrap-text: true;\n"; // +
+                               // "-fx-background-color: transparent\n;" +
+                               // "-fx-text-size: 4";
     private boolean seriesFlag;
     private int STEP = 0;
 
@@ -26,6 +31,7 @@ public class StateChart extends LineChart {
         seriesFlag = false;
         this.setLegendVisible(true);
         this.setLegendSide(Side.RIGHT);
+        this.getLegend().setStyle(LEGEND_STYLE);
     }
 
     // TODO: Style Series (with CSS styling)
@@ -40,20 +46,24 @@ public class StateChart extends LineChart {
         }
     }
 
+    private String formatColorString(String color) {
+        return String.format("-fx-stroke: %s", color);
+    }
+
     private void appendSeries(String name, int count) {
         Series series = mySeries.get(name);
-        System.out.println("Series: " + series.getName());
+        // System.out.println("Series: " + series.getName());
         series.getData().add(new XYChart.Data(STEP, count));
     }
 
     public void populateChart(Map<String, Integer> allStates) {
-        traverseMap(allStates);
+        // traverseMap(allStates);
         if (!(seriesFlag)) {
             createSeries(allStates);
             seriesFlag = true;
         }
         STEP ++;
-        System.out.println(STEP);
+        // System.out.println(STEP);
         for (String name: allStates.keySet()) {
             int count = allStates.get(name);
             appendSeries(name, count);
@@ -64,5 +74,17 @@ public class StateChart extends LineChart {
         for (String s: myMap.keySet()) {
             System.out.printf("State: %s, Count: %d \n", s, myMap.get(s));
         }
+    }
+
+    public void styleChart(Map<Double, State> stateMap) {
+        for (State state: stateMap.values()) {
+            for (String s: mySeries.keySet()) {
+                if (state.getString().equals(s)) {
+                    mySeries.get(s).getNode().setStyle(formatColorString(state.getColor()));
+                    // System.out.printf("Styled series to color: %s \n", state.getColor());
+                }
+            }
+        }
+
     }
 }

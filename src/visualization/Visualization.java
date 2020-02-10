@@ -18,7 +18,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.Simulation;
-import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
 import java.util.ResourceBundle;
@@ -29,7 +28,7 @@ public class Visualization extends Application {
     private static final String RESOURCES = "visualization/resources";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
-    private static final String LANGUAGE = "Image";
+    private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
     protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
@@ -163,6 +162,7 @@ public class Visualization extends Application {
         mySimulation.updateGrid();
         updateSimPane();
         myChart.populateChart(mySimulation.countStates());
+        myChart.styleChart(mySimulation.getCell(0,0).getStateMap());
     }
 
     private void setUpdateTime() {
@@ -176,7 +176,7 @@ public class Visualization extends Application {
     private void stepSelected() {
         myStepButton.setSelected(false);
         updateSimulation();
-
+        myChart.populateChart(mySimulation.countStates());
     }
 
     private void pauseSelected(){;}

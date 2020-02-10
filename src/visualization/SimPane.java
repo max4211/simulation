@@ -11,7 +11,6 @@ import javafx.scene.shape.Rectangle;
 import simulation.Cell;
 import simulation.Simulation;
 import simulation.State;
-import visualization.resources.StateChart;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,7 @@ public class SimPane extends Visualization {
     private BorderPane myRoot;
     private StateChart myChart;
     private CustomToggle myPauseButton;
+    private final String HIGHLIGHT_COLOR = "#FF1493";
 
     public SimPane(Simulation simulation, BorderPane root, StateChart chart, CustomToggle pause) {
         mySimulation = simulation;
@@ -54,18 +54,24 @@ public class SimPane extends Visualization {
                 if (event.getClickCount() == 1) {
                     myPauseButton.setSelected(true);
                     Node source = (Node) event.getSource();
-                    Integer col = GridPane.getColumnIndex(source);
-                    Integer row = GridPane.getRowIndex(source);
+                    int col = GridPane.getColumnIndex(source).intValue();
+                    int row = GridPane.getRowIndex(source).intValue();
                     // System.out.printf("Mouse clicked cell [%d, %d] \n", col.intValue(), row.intValue());
+                    highlightRegion(row, col, source, simGrid);
                     Cell myCell = mySimulation.getCell(row, col);
-                    Map<Double, State> myStates = myCell.getStateMap();
                     // printStates(myStates);
-                    SetCell options = new SetCell(myStates);
-                    List<CustomToggle> toggles = options.getList();
+                    List<CustomToggle> toggles = new SetCell(myCell.getStateMap()).getList();
                     myRoot.setTop(toggleBox(toggles, row, col));
                 }
             });
         });
+    }
+
+    private void highlightRegion(int row, int col, Node source, GridPane simGrid) {
+        if (source instanceof Region) {
+            Region r = (Region) source;
+            r.setBackground(new Background(new BackgroundFill(Color.web(HIGHLIGHT_COLOR), CornerRadii.EMPTY, Insets.EMPTY)));
+        }
     }
 
     private HBox toggleBox(List<CustomToggle> toggles, int row, int col) {
@@ -96,7 +102,7 @@ public class SimPane extends Visualization {
         button.setText(myResources.getString("ConfirmButton"));
         button.setOnAction(event -> {
             Double state = selectedState(toggles);
-            System.out.printf("Setting cell [%d, %d] to state %f", row, col, state);
+            // System.out.printf("Setting cell [%d, %d] to state %f", row, col, state);
             mySimulation.getCell(row, col).setState(state);
             myRoot.setCenter(updateGrid());
             myRoot.setTop(myChart);
@@ -110,7 +116,7 @@ public class SimPane extends Visualization {
                 return b.getState();
             }
         }
-        System.out.println("No toggle selected, defaulting to 0 state");
+        // System.out.println("No toggle selected, defaulting to 0 state");
         return toggles.get(0).getState();
     }
 
