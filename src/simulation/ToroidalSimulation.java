@@ -28,7 +28,7 @@ public class ToroidalSimulation extends Simulation {
         return neighbors;
     }
 
-    // TODO: finish
+    // TODO: finish this, actual formula more complex
     private int[] getToroidalNeighbor(int row, int col, int rowDelta, int colDelta){
         int r2; int c2;
         // On bottom
