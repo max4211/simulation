@@ -15,6 +15,11 @@ import simulation.State;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * SimPane Object encapsulates all funcitonality that is pertinent to the GridPane representing the simulation
+ * It stores a GridPane object and all other instance variables in that are relevant to GridPane activity
+ * (e.g. simulation must pause when the grid is clicked on)
+ */
 public class SimPane extends Visualization {
 
     private GridPane myPane;
@@ -25,6 +30,14 @@ public class SimPane extends Visualization {
     private static final String HIGHLIGHT_COLOR = "#FF1493";
     private static final boolean GRID_OUTLINE = true;
 
+    /**
+     * Constructor for a SimPane object which completely encapsulates all associated
+     * GridPane (for simulation) functionality.
+     * @param simulation simulation that is currently being processed
+     * @param root main border pane, to place simulation and chart
+     * @param chart chart to overlay over GridPane for sim when called
+     * @param pause pause button object to set when the GridPane is clicked on
+     */
     public SimPane(Simulation simulation, BorderPane root, StateChart chart, CustomToggle pause) {
         mySimulation = simulation;
         myRoot = root;
@@ -33,6 +46,10 @@ public class SimPane extends Visualization {
         myPauseButton = pause;
     }
 
+    /**
+     * Called from Visualizatoin to update the gridpane based on the next stage of the Simulation
+     * @return updated grid after an iteration over the simulation
+     */
     public GridPane updateGrid() {
         GridPane pane = new GridPane();
         pane.setAlignment(Pos.CENTER);
@@ -135,6 +152,10 @@ public class SimPane extends Visualization {
         }
     }
 
+    /**
+     * Called by Visualization to retrieve the GridPane object that SimPane holds
+     * @return GridPane object holding all simulation values
+     */
     public GridPane getPane() {return myPane;}
 
 }

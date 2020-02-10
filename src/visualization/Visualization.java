@@ -25,6 +25,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Main driver of the Cellular Automata program
+ * Visualization class extends Application and stores all visual components of the Simulation
+ */
 public class Visualization extends Application {
 
     // Resources for styling and properties
@@ -74,6 +78,10 @@ public class Visualization extends Application {
     private BorderPane myRoot;
     private Simulation mySimulation;
 
+    /**
+     * Application default method to construct stage that holds main scene
+     * @param stage the Stage object to hold the main scene
+     */
     @Override
     public void start(Stage stage) {
         Scene myScene = createScene();
