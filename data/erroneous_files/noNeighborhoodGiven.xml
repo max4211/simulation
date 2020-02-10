@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<SimulationConfig>
+    <height>3</height>
+    <width>3</width>
+    <type>Spreading of Fire</type>
+    <cell>0 0 1.5</cell>
+    <cell>0 1 1.5</cell>
+    <cell>0 2 1.5</cell>
+    <cell>1 0 1.5</cell>
+    <cell>1 1 2.0</cell>
+    <cell>1 2 1.5</cell>
+    <cell>2 0 1.5</cell>
+    <cell>2 1 1.5</cell>
+    <cell>2 2 1.5</cell>
+</SimulationConfig>

@@ -132,7 +132,7 @@ public class PredatorPreyCell extends Cell{
 
     @Override
     protected boolean checkValidState(double initialState) {
-        return initialState <= MAX_POSSIBLE_STATE;
+        return initialState <= MAX_POSSIBLE_STATE && initialState >= 0;
     }
 
 

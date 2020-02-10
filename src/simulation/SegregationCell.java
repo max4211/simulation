@@ -110,7 +110,7 @@ public class SegregationCell extends Cell{
 
     @Override
     protected boolean checkValidState(double initialState) {
-        return initialState < BOUNDARY_OF_POSSIBLE_STATES;
+        return initialState < BOUNDARY_OF_POSSIBLE_STATES && initialState>=0;
     }
 
     @Override

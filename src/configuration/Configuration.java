@@ -60,6 +60,7 @@ public class Configuration {
     private static final String HEXAGONAL = "HEXAGONAL";
 
     // Edge Types
+    private static final String DEFAULT_EDGES = "HARD";
     private static final String HARD_EDGES = "HARD";
     private static final String TOROIDAL_EDGES = "TOROIDAL";
 
@@ -96,7 +97,7 @@ public class Configuration {
         if (extension.equals("xml") || extension.equals("XML")) {
             return simFile;
         } else {
-            throw new IllegalArgumentException(myResources.getString("InvalidFile") + simFile);
+            throw new IllegalArgumentException(String.format(myResources.getString("InvalidFile"), simFile));
         }
     }
 
@@ -119,7 +120,7 @@ public class Configuration {
             NodeList nodeList = doc.getElementsByTagName("SimulationConfig");
             readTags(nodeList);
         } catch (Exception e) {
-            throw new IllegalArgumentException(myResources.getString("InvalidFile") + "\n" + e.getMessage());
+            throw new IllegalArgumentException(String.format(myResources.getString("InvalidFile"), this.myFile) + "\n" + e.getMessage());
         }
     }
 
@@ -131,12 +132,19 @@ public class Configuration {
             this.myHeight = Integer.parseInt(eElement.getElementsByTagName("height").item(0).getTextContent());
             this.myWidth = Integer.parseInt(eElement.getElementsByTagName("width").item(0).getTextContent());
             this.mySimType = eElement.getElementsByTagName("type").item(0).getTextContent();
-            this.myNeighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
+
+            try{
+                this.myNeighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
+            } catch(Exception e){
+                System.out.println(String.format(myResources.getString("NeighborhoodNotGiven"), DEFAULT_NEIGHBOR));
+                this.myNeighborType = DEFAULT_NEIGHBOR;
+            }
 
             try{
                 this.myEdgeType = eElement.getElementsByTagName("edgeType").item(0).getTextContent();
             } catch(Exception e){
-                this.myEdgeType = HARD_EDGES;
+                System.out.println(String.format(myResources.getString("EdgeTypeNotGiven"), DEFAULT_EDGES));
+                this.myEdgeType = DEFAULT_EDGES;
             }
 
 
@@ -239,11 +247,13 @@ public class Configuration {
                 case (PREDATOR_PREY):
                     return new PredatorPreyCell(state, row, col);
                 default:
-                    throw new IllegalArgumentException(String.format(myResources.getString("InvalidSimType"), mySimType));
+                    throw new ConfigException(String.format(myResources.getString("InvalidSimType"), mySimType));
             }
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println(String.format(myResources.getString("InvalidState"), state, row, col, CELL_DEFAULT_STATE));
             return createCell(row, col, CELL_DEFAULT_STATE);
+        } catch (ConfigException e){
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
@@ -261,7 +271,7 @@ public class Configuration {
                 mySimulation.setColDelta(new int[]{-1, -1, 0, 1, 1, 0});
                 mySimulation.setRowDelta(new int[]{0, -1, -1, 0, 1, 1});
             default:
-                System.out.println(String.format(myResources.getString("NeighborhoodNotGiven"), DEFAULT_NEIGHBOR));
+                System.out.println(String.format(myResources.getString("NeighborhoodInvalid"), DEFAULT_NEIGHBOR));
                 createDeltaArrays(DEFAULT_NEIGHBOR);
         }
     }

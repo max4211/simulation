@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<SimulationConfig>
+    <height>3</height>
+    <width>3</width>
+    <type>Spreading of Fire</type>
+    <neighborType>VON NEUMANN</neighborType>
+    <cell>1 1 2.0</cell>
+</SimulationConfig>
