@@ -8,8 +8,9 @@ import java.io.PrintWriter;
 import java.util.Random;
 
 /**
+ * Abstract class to help generate large XML files for Simulation running
  * Based on LevelGenerator.java by
- * @author Max Smith
+ * @author James Rumsey, Max Smith
  */
 public abstract class GridGenerator {
 
@@ -20,6 +21,13 @@ public abstract class GridGenerator {
     protected int myHeight;
     protected int myWidth;
 
+    /**
+     * GridGenerator basic constructor to create Simulation XML files
+     * @param height of the Simulation to construct
+     * @param width of the Simulation to construct
+     * @param simType determines which cells to make (and rules of update)
+     * @throws IOException
+     */
     public GridGenerator(int height, int width, String simType) throws IOException {
         myHeight = height;
         myWidth = width;
@@ -27,14 +35,19 @@ public abstract class GridGenerator {
         myEdgeType = "HARD";
     }
 
+    /**
+     * GridGenerator advanced constructor to create Simulation XML files, includes edgeType creation
+     * @param height of the Simulation to construct
+     * @param width of the Simulation to construct
+     * @param simType determines which cells to make (and rules of update)
+     * @throws IOException
+     */
     public GridGenerator(int height, int width, String simType, String edgeType) throws IOException {
         myHeight = height;
         myWidth = width;
         SIM_TYPE = simType;
         myEdgeType = edgeType;
     }
-
-
 
     /**
      * @return Type of simulation as a one-word String
@@ -50,7 +63,7 @@ public abstract class GridGenerator {
      * Generates a random cell state
      * @return A random state as a double valid for simulation type
      */
-    public abstract double generateRandomState();
+    protected abstract double generateRandomState();
 
     /**
      * Creates an XML file in the correct format to be loaded in Visualization

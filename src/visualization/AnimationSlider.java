@@ -2,6 +2,10 @@ package visualization;
 
 import javafx.scene.control.Slider;
 
+/**
+ * Class used to create an animation slider that controls the animation rate of the simulation
+ * Held by the Visualization class, and the logic is controlled in Visualization
+ */
 public class AnimationSlider extends Slider {
 
     // Slider metadata
@@ -10,6 +14,9 @@ public class AnimationSlider extends Slider {
     private static final double SLIDER_MAJOR_TICK = 2;
     private static final double SLIDER_MINOR_TICK = 0.2;
 
+    /**
+     * Animation slider constructor, sets all default values and booleans according to static final up top
+     */
     public AnimationSlider() {
         super();
         this.setMin(SLIDER_MIN);

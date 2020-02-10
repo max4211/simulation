@@ -67,13 +67,23 @@ public class FireCell extends Cell {
     }
 
     /**
+     * A valid state for Fire is 0 (empty), 1 (tree), 2 (fire)
+     * @param initialState
+     * @return true if state is valid
+     */
+    @Override
+    protected boolean checkValidState(double initialState) {
+        return initialState==0.0 || initialState==1.0 || initialState==2.0;
+    }
+
+    /**
      * Colors:
      * Yellow - empty
      * Green - tree
      * Red - burning
      */
     @Override
-    public void createColorMap() {
+    protected void createColorMap() {
         myColorMap.put(0.0, YELLOW);
         myColorMap.put(1.0, GREEN);
         myColorMap.put(2.0, RED);
@@ -83,7 +93,7 @@ public class FireCell extends Cell {
      * Initializes State mappings (Empty, Tree, Burned)
      */
     @Override
-    public void createStateMap() {
+    protected void createStateMap() {
         myStateMap.put(0.0, new State("Empty", YELLOW));
         myStateMap.put(1.0, new State("Tree", GREEN));
         myStateMap.put(2.0, new State("Burning", RED));
@@ -98,16 +108,6 @@ public class FireCell extends Cell {
     @Override
     public double mapKey(double myState) {
         return myState;
-    }
-
-    /**
-     * A valid state for Fire is 0 (empty), 1 (tree), 2 (fire)
-     * @param initialState
-     * @return true if state is valid
-     */
-    @Override
-    protected boolean checkValidState(double initialState) {
-        return initialState==0.0 || initialState==1.0 || initialState==2.0;
     }
 
 }

@@ -6,8 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Functions the same way as a standard (rectangular) Simulation, but uses toroidal edges rather than
+ * hard edges. Cells on the edge have "neighbors" that wrap around like a torus (donut) shape. Full details
+ * are explained here: http://golly.sourceforge.net/Help/bounded.html
+ */
 public class ToroidalSimulation extends Simulation {
 
+    /**
+     * Empty constructor, initializes a Simulation without setting parameters.
+     */
     public ToroidalSimulation(){
         super();
         EDGE_TYPE = "TOROIDAL";

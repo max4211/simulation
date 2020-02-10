@@ -69,33 +69,10 @@ public abstract class Cell {
 
 
     /**
-     * Checks if a cell state is valid based on simulation rules
-     */
-    protected abstract boolean checkValidState(double initialState);
-
-
-    /**
-     * Creates mapping of Doubles to hexadecimal color Strings
-     */
-    public abstract void createColorMap();
-
-    /**
-     * Creates mapping of Doubles to State objects
-     */
-    public abstract void createStateMap();
-
-    /**
      * Determines next state of cell based on simulation rules/
      * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
      */
     public abstract void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors);
-
-    /**
-     *
-     * @param myState
-     * @return
-     */
-    public abstract double mapKey(double myState);
 
     /**
      * Returns simulation type as a single word string, meant for creating an
@@ -150,4 +127,22 @@ public abstract class Cell {
     public Map<Double, State> getStateMap() {
         return this.myStateMap;
     }
+
+    /**
+     * Creates mapping of Doubles to hexadecimal color Strings
+     */
+    protected abstract void createColorMap();
+
+    /**
+     * Creates mapping of Doubles to State objects
+     */
+    protected abstract void createStateMap();
+
+
+    /**
+     * Checks if a cell state is valid based on simulation rules
+     */
+    protected abstract boolean checkValidState(double initialState);
+
+    protected abstract double mapKey(double myState);
 }

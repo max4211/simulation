@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-// TODO: test this with viz
 public class SimulationSaver extends GridGenerator{
 
     private Simulation mySimulation;
@@ -22,12 +21,11 @@ public class SimulationSaver extends GridGenerator{
     @Override
     public String getTypeString(){ return mySimulation.getCell(0,0).getTypeString(); }
 
-
     @Override
     public String getNeighborString(){ return myNeighborType; }
 
     @Override
-    public double generateRandomState(){ return 0.0; }
+    protected double generateRandomState(){ return 0.0; }
 
     @Override
     protected String getEdgeType(){ return mySimulation.getEdgeType(); }

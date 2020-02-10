@@ -1,8 +1,6 @@
 package simulation;
 
 import javafx.util.Pair;
-
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -35,20 +33,10 @@ public class PercolationCell extends Cell {
         myTypeString = "Percolation";
     }
 
-    @Override
-    public void createColorMap(){
-        myColorMap.put(0.0, BLACK);
-        myColorMap.put(1.0, WHITE);
-        myColorMap.put(2.0, SKYBLUE);
-    }
-
-    @Override
-    public void createStateMap() {
-        myStateMap.put(0.0, new State("Blocked", BLACK));
-        myStateMap.put(1.0, new State("Open", WHITE));
-        myStateMap.put(2.0, new State("Water", SKYBLUE));
-    }
-
+    /**
+     * Determine next state based on rules above
+     * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
+     */
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors){
         boolean neighborPercolates = false;
@@ -68,16 +56,6 @@ public class PercolationCell extends Cell {
     }
 
     /**
-     *
-     * @param myState
-     * @return myState
-     */
-    @Override
-    public double mapKey(double myState){
-        return myState;
-    }
-
-    /**
      * @return "Percolation" as String for XML output
      */
     @Override
@@ -91,5 +69,30 @@ public class PercolationCell extends Cell {
     @Override
     protected boolean checkValidState(double initialState) {
         return initialState==0.0 || initialState==1.0 || initialState==2.0;
+    }
+
+    @Override
+    protected void createColorMap(){
+        myColorMap.put(0.0, BLACK);
+        myColorMap.put(1.0, WHITE);
+        myColorMap.put(2.0, SKYBLUE);
+    }
+
+    @Override
+    protected void createStateMap() {
+        myStateMap.put(0.0, new State("Blocked", BLACK));
+        myStateMap.put(1.0, new State("Open", WHITE));
+        myStateMap.put(2.0, new State("Water", SKYBLUE));
+    }
+
+    /**
+     * Required by Cell abstract class.
+     * Returns myState, which is the map key for Percolation
+     * @param myState
+     * @return myState
+     */
+    @Override
+    protected double mapKey(double myState){
+        return myState;
     }
 }

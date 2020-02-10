@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-
 /**
  * Class meant to encapsulate raw data on initial simulation configuration pulled from .xml file.
  * This class is meant to keep the extraction of data from the .xml file separate from the Simulation class.
@@ -85,11 +84,6 @@ public class Configuration {
         myGrid = new ArrayList<>(myHeight);
         createSimulation();
     }
-
-    public Simulation getSimulation() { return mySimulation; }
-    public int getHeight(){ return this.myHeight; }
-    public int getWidth(){ return this.myWidth; }
-    public String getNeighborType(){ return this.myNeighborType; }
 
     private File loadFile() {
         Stage fileStage = new Stage();
@@ -271,5 +265,29 @@ public class Configuration {
                 createDeltaArrays(DEFAULT_NEIGHBOR);
         }
     }
+
+
+    /**
+     * @return Simulation object that was created throughout configuration process
+     */
+    public Simulation getSimulation() { return mySimulation; }
+
+    /**
+     *
+     * @return height of simulation to Visualization class
+     */
+    public int getHeight(){ return this.myHeight; }
+
+    /**
+     *
+     * @return width of simulation to Visualization class
+     */
+    public int getWidth(){ return this.myWidth; }
+
+    /**
+     *
+     * @return types of neighbors to determine get neighbor states for simulation rule and step updates
+     */
+    public String getNeighborType(){ return this.myNeighborType; }
 
 }
