@@ -1,18 +1,14 @@
 package visualization;
 
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.text.Font;
-import simulation.Simulation;
 
 public class AnimationSlider extends Slider {
 
     // Slider metadata
-    private final double SLIDER_MIN = 0;
-    private final double SLIDER_MAX = 10;
-    private final double SLIDER_MAJOR_TICK = 2;
-    private final double SLIDER_MINOR_TICK = 0.2;
+    private static final double SLIDER_MIN = 0;
+    private static final double SLIDER_MAX = 10;
+    private static final double SLIDER_MAJOR_TICK = 2;
+    private static final double SLIDER_MINOR_TICK = 0.2;
 
     public AnimationSlider() {
         super();

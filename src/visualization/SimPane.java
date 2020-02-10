@@ -22,8 +22,8 @@ public class SimPane extends Visualization {
     private BorderPane myRoot;
     private StateChart myChart;
     private CustomToggle myPauseButton;
-    private final String HIGHLIGHT_COLOR = "#FF1493";
-    private final boolean GRID_OUTLINE = true;
+    private static final String HIGHLIGHT_COLOR = "#FF1493";
+    private static final boolean GRID_OUTLINE = true;
 
     public SimPane(Simulation simulation, BorderPane root, StateChart chart, CustomToggle pause) {
         mySimulation = simulation;
