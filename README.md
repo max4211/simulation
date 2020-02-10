@@ -52,6 +52,8 @@ Features implemented:
     - Error checking
         - Incorrect file/simulation or non existent simulation deprecate load, prompted for new file
         - Default cell values to 0.0 (existent state in all Simulations) if incorrect value given
+        - If an error is thrown, it is thrown with helpful information describing where in the .xml file or where in the grid
+        the erroneous information was found
     - Simulation configurations
         - Simulation generator class that creates files based on pre set parameters
     - Simulation styling
@@ -78,6 +80,8 @@ Interesting data files:
 Known Bugs:
 
 - Once in cell editing mode, multiple cells can be selected to change but only the last selected cell is updated
+- When selecting the first file, you can't quit out by pressing cancel because the box keeps reopening until you end the 
+program
 
 Extra credit:
 
