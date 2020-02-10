@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class ToroidalSimulation extends Simulation {
 
+    protected String EDGE_TYPE = "TOROIDAL";
+
     public ToroidalSimulation(){ super(); }
 
     public ToroidalSimulation(ArrayList<ArrayList<Cell>> grid, int[] rdelta, int[] cdelta){

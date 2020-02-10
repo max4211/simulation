@@ -22,11 +22,15 @@ public class SimulationSaver extends GridGenerator{
     @Override
     public String getTypeString(){ return mySimulation.getCell(0,0).getTypeString(); }
 
+
     @Override
     public String getNeighborString(){ return myNeighborType; }
 
     @Override
     public double generateRandomState(){ return 0.0; }
+
+    @Override
+    protected String getEdgeType(){ return mySimulation.getEdgeType(); }
 
     @Override
     protected void generateCells(PrintWriter w){

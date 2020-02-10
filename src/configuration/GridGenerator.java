@@ -16,6 +16,7 @@ public abstract class GridGenerator {
 
     protected final static int UNIQUE_ID =  new Random().nextInt(100) + 1;;
     protected String SIM_TYPE;
+    protected String myEdgeType;
     protected int myHeight;
     protected int myWidth;
 
@@ -23,7 +24,17 @@ public abstract class GridGenerator {
         myHeight = height;
         myWidth = width;
         SIM_TYPE = simType;
+        myEdgeType = "HARD";
     }
+
+    public GridGenerator(int height, int width, String simType, String edgeType) throws IOException {
+        myHeight = height;
+        myWidth = width;
+        SIM_TYPE = simType;
+        myEdgeType = edgeType;
+    }
+
+
 
     /**
      * @return Type of simulation as a one-word String
@@ -51,6 +62,7 @@ public abstract class GridGenerator {
         writer.println("<SimulationConfig>");
         writer.printf("\t<height>%d</height>\n\t<width>%d</width>\n", myHeight, myWidth);
         writer.printf("\t<type>%s</type>\n\t<neighborType>%s</neighborType>\n", getTypeString(), getNeighborString());
+        writer.printf("\t<edgeType>%s</edgeType>\n", myEdgeType);
         generateCells(writer);
         writer.println("</SimulationConfig>");
         writer.close();
@@ -71,6 +83,5 @@ public abstract class GridGenerator {
         }
     }
 
-
-
+    protected String getEdgeType(){ return myEdgeType; }
 }
