@@ -20,7 +20,7 @@ public class SimulationSaver extends GridGenerator{
      * @throws IOException if an output error occurs
      */
     public SimulationSaver(Simulation s) throws IOException {
-        super(s.getHeight(), s.getWidth(), "running");
+        super(s.getHeight(), s.getWidth(), "running", s.getEdgeType());
         mySimulation = s;
     }
 
@@ -35,9 +35,6 @@ public class SimulationSaver extends GridGenerator{
 
     @Override
     protected double generateRandomState(){ return 0.0; }
-
-    @Override
-    protected String getEdgeType(){ return mySimulation.getEdgeType(); }
 
     @Override
     protected void generateCells(PrintWriter w){

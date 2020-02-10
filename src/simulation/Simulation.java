@@ -13,7 +13,6 @@ public class Simulation {
     protected int SIMULATION_HEIGHT;
     protected int SIMULATION_WIDTH;
     protected String NEIGHBORHOOD_TYPE;
-    protected String EDGE_TYPE = "HARD";
 
     /**
      * Empty constructor, initializes a Simulation without setting parameters.
@@ -71,7 +70,7 @@ public class Simulation {
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }
     public String getNeighborhood(){ return NEIGHBORHOOD_TYPE; }
-    public String getEdgeType(){ return EDGE_TYPE; }
+    public String getEdgeType(){ return "HARD"; }
 
     /**
      * Return Cell object that exists at row r and column c in grid
