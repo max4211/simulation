@@ -4,8 +4,8 @@
     <width>3</width>
     <type>Spreading of Fire</type>
     <neighborType>VON NEUMANN</neighborType>
-    <cell>0 0 1.5</cell>
     <cell>0 1 1.5</cell>
+    <cell>0 0 1.5</cell>
     <cell>0 2 1.5</cell>
     <cell>1 0 1.5</cell>
     <cell>1 1 2.0</cell>
