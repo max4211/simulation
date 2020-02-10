@@ -10,12 +10,13 @@ import java.util.Map;
  *
  *  Possible cell states: 0 (Dead), 1 (Alive)
  *  Default Neighborhood Type: Moore
+ *
  *  Rules:
  *  Any live cell with two or three neighbors survives.
  *  Any dead cell with three live neighbors becomes a live cell.
  *  All other live cells die in the next generation. Similarly, all other dead cells stay dead.
  *
- * @author James Rumsey
+ *  Full rules described here: https://en.wikipedia.org/wiki/Conway's_Game_of_Life
  */
 public class LifeCell extends Cell {
 
@@ -98,7 +99,7 @@ public class LifeCell extends Cell {
     /**
      * A valid state for Game of Life is 0 (dead) or 1 (alive)
      * @param initialState
-     * @return
+     * @return true if state is valid
      */
     @Override
     protected boolean checkValidState(double initialState) {
