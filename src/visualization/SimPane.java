@@ -23,6 +23,7 @@ public class SimPane extends Visualization {
     private StateChart myChart;
     private CustomToggle myPauseButton;
     private final String HIGHLIGHT_COLOR = "#FF1493";
+    private final boolean GRID_OUTLINE = true;
 
     public SimPane(Simulation simulation, BorderPane root, StateChart chart, CustomToggle pause) {
         mySimulation = simulation;
@@ -88,13 +89,18 @@ public class SimPane extends Visualization {
 
     private Region createRegion(double regionWidth, double regionHeight, String color) {
         Region myRegion = new Region();
-        Insets myInsets = new Insets(regionHeight/50);
-        myRegion.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, myInsets)));
+        myRegion.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, Insets.EMPTY)));
         myRegion.setShape(new Rectangle(regionWidth, regionHeight));
         myRegion.setPrefSize(regionWidth, regionHeight);
-        Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-        myRegion.setBorder(myBorder);
+        setBorder(myRegion);
         return myRegion;
+    }
+
+    private void setBorder(Region region) {
+        if (GRID_OUTLINE) {
+            Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+            region.setBorder(myBorder);
+        }
     }
 
     private Button confirmButton(List<CustomToggle> toggles, int row, int col) {
