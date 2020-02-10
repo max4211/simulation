@@ -103,41 +103,14 @@ public class PredatorPreyCell extends Cell{
                 nextState = 0;
             }
             // otherwise try to move
-            // if there are fish, move into a random fish's cell and eat it
+            // if there are fish, move into a random fish's cell
             else if(fishCellSublist.size()>0){
-                PredatorPreyCell cellPicked = pickRandomEntry(fishCellSublist);
-                if(Math.floor(cellPicked.nextState) == 2) energy += energyGainFromFish;
-                if(age >= reproductiveAge) {
-                    age = 0;
-                    nextState = myState;
-                    nextAge = 0;
-                    nextEnergy = energyGainFromFish;
-                }
-                else{
-                    nextState = 0;
-                    nextAge = 0;
-                    nextEnergy = 0;
-                }
-                moveInfoInto(cellPicked);
+                moveIntoRandomTryToReproduce(fishCellSublist);
             }
-
-            // if there are no fish, move into a random empty cell and lower energy
+            // if there are no fish, move into a random empty cell
             else if(emptyCellSublist.size()>0){
-                if(age >= reproductiveAge) {
-                    age = 0;
-                    nextState = myState;
-                    nextAge = 0;
-                    nextEnergy = energyGainFromFish;
-                }
-                else{
-                    nextState = 0;
-                    nextAge = 0;
-                    nextEnergy = 0;
-                }
-                PredatorPreyCell cellPicked = pickRandomEntry(emptyCellSublist);
-                moveInfoInto(cellPicked);
+                moveIntoRandomTryToReproduce(emptyCellSublist);
             }
-
             // if there is no where to move just update energy and age
             else{
                 nextEnergy = energy -1;
@@ -155,19 +128,7 @@ public class PredatorPreyCell extends Cell{
 
             // if there is space move into a random empty cell
             if(emptyCellSublist.size()>0){
-                if(age >= reproductiveAge) {
-                    age = 0;
-                    nextState = myState;
-                    nextAge = 0;
-                    nextEnergy = energyGainFromFish;
-                }
-                else{
-                    nextState = 0;
-                    nextAge = 0;
-                    nextEnergy = 0;
-                }
-                PredatorPreyCell cellPicked = pickRandomEntry(emptyCellSublist);
-                moveInfoInto(cellPicked);
+                moveIntoRandomTryToReproduce(emptyCellSublist);
             }
 
             // if there is no where to move just update energy and age
@@ -176,6 +137,24 @@ public class PredatorPreyCell extends Cell{
             }
         }
     }
+
+    private void moveIntoRandomTryToReproduce(ArrayList<Cell> fishCellSublist) {
+        PredatorPreyCell cellPicked = pickRandomEntry(fishCellSublist);
+        if(Math.floor(cellPicked.getState()) == 2 && Math.floor(cellPicked.nextState) == 2) energy += energyGainFromFish;
+        if(age >= reproductiveAge) {
+            age = 0;
+            nextState = myState;
+            nextAge = 0;
+            nextEnergy = energyGainFromFish;
+        }
+        else{
+            nextState = 0;
+            nextAge = 0;
+            nextEnergy = 0;
+        }
+        moveInfoInto(cellPicked);
+    }
+
     @Override
     public void updateState() {
         this.myState = this.nextState;

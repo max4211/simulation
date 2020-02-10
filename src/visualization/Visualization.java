@@ -8,26 +8,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.Chart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import simulation.Cell;
 import simulation.Simulation;
-import simulation.State;
 import visualization.resources.StateChart;
 
 import javax.imageio.ImageIO;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Visualization extends Application {
@@ -39,13 +32,13 @@ public class Visualization extends Application {
     private static final String LANGUAGE = "English";
     private static final String STYLESHEET = "default.css";
     private static final String IMAGEFILE_SUFFIXES = String.format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
+    protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGE);
 
     // Sim and scene metadata
     private final double SCENE_HEIGHT = 700;
     private final double SCENE_WIDTH = 550;
-    private final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
-    private final double SIM_WIDTH = SCENE_WIDTH * 0.9;
+    protected final double SIM_HEIGHT = SCENE_HEIGHT * 0.6;
+    protected final double SIM_WIDTH = SCENE_WIDTH * 0.9;
     private final double VBOX_HEIGHT = SCENE_HEIGHT * 0.1;
     private final double CHART_HEIGHT = SCENE_HEIGHT * 0.25;
     private final double BUTTON_RADIUS = SCENE_WIDTH * 0.17;
@@ -57,17 +50,18 @@ public class Visualization extends Application {
     private final int BOTTOM_PAD = 5;
     private final int LEFT_PAD = 5;
     private final int RIGHT_PAD = 5;
-    private final int BUTTON_SPACING = 20;
+    protected final int BUTTON_SPACING = 30;
     private final int SLIDER_SPACING = 20;
     private final int VBOX_SPACING = 15;
 
-    // Viewer objects
-    private Slider mySlider;
-    private ToggleButton myPauseButton;
-    private ToggleButton myPlayButton;
-    private ToggleButton myStepButton;
-    private ToggleButton myLoadButton;
-    private ToggleButton myExitButton;
+    // Viewer custom objects
+    private AnimationSlider mySlider;
+    private CustomToggle myPauseButton;
+    private CustomToggle myPlayButton;
+    private CustomToggle myStepButton;
+    private CustomToggle myLoadButton;
+    private CustomToggle myExitButton;
+    private CustomToggle mySaveButton;
     private StateChart myChart;
 
     // Simulation metadata
@@ -128,9 +122,9 @@ public class Visualization extends Application {
         HBox box = new HBox(SLIDER_SPACING);
         box.setAlignment((Pos.CENTER));
         mySlider = new AnimationSlider();
+        Label sliderUnits = new Label (myResources.getString("AnimationLabel"));
         Label sliderLabel = new Label(Integer.toString((int) mySlider.getValue()));
         sliderLabel.setFont(Font.font(24));
-        Label sliderUnits = new Label (myResources.getString("AnimationLabel"));
         mySlider.valueProperty().addListener((
                 ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) -> {
@@ -153,6 +147,7 @@ public class Visualization extends Application {
         myStepButton = new CustomToggle(myResources.getString("StepButton"), group, event -> stepSelected());
         myLoadButton = new CustomToggle(myResources.getString("LoadButton"), group, event -> loadSelected());
         myExitButton = new CustomToggle(myResources.getString("ExitButton"), group, event -> exitSelected());
+        mySaveButton = new CustomToggle(myResources.getString("SaveButton"), group, event -> saveSelected());
         styleButtons();
         pauseSelected();
         box.getChildren().add(myPauseButton);
@@ -160,38 +155,14 @@ public class Visualization extends Application {
         box.getChildren().add(myStepButton);
         box.getChildren().add(myLoadButton);
         box.getChildren().add(myExitButton);
+        box.getChildren().add(mySaveButton);
         return box;
-    }
-
-    private void showSimGrid() {
-        GridPane simGrid = new GridPane();
-        simGrid.setAlignment(Pos.CENTER);
-        simGrid.setPrefSize(SIM_WIDTH, SIM_HEIGHT);
-        double regionHeight = SIM_HEIGHT / mySimulation.getHeight();
-        double regionWidth = SIM_WIDTH / mySimulation.getWidth();
-        for (int row = 0; row < mySimulation.getHeight(); row ++) {
-            for (int col = 0; col < mySimulation.getWidth(); col ++) {
-                Cell myCell = mySimulation.getCell(row, col);
-                simGrid.add(createRegion(regionWidth, regionHeight, myCell.getColor()), col, row );
-            }
-        }
-        myRoot.setCenter(simGrid);
-    }
-
-    private Region createRegion(double regionWidth, double regionHeight, String color) {
-        Region myRegion = new Region();
-        Insets myInsets = new Insets(regionHeight/50);
-        myRegion.setBackground(new Background(new BackgroundFill(Color.web(color), CornerRadii.EMPTY, myInsets)));
-        myRegion.setShape(new Rectangle(regionWidth, regionHeight));
-        myRegion.setPrefSize(regionWidth, regionHeight);
-        Border myBorder = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-        myRegion.setBorder(myBorder);
-        return myRegion;
     }
 
     private void updateSimulation() {
         mySimulation.updateGrid();
-        // myChart.populateChart(mySimulation.countStates());
+        updateSimPane();
+        myChart.populateChart(mySimulation.countStates());
     }
 
     private void setUpdateTime() {
@@ -205,16 +176,26 @@ public class Visualization extends Application {
     private void stepSelected() {
         myStepButton.setSelected(false);
         updateSimulation();
-        showSimGrid();
+
     }
 
     private void pauseSelected(){;}
+
+    private void saveSelected(){
+        /*
+        try {
+            mySimulation.save();
+        } catch (IOException e) {
+            ;
+        }
+         */
+    }
 
     private void playSelected() {
         if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
         if (System.currentTimeMillis() >= updateTime) {
             updateSimulation();
-            showSimGrid();
+            updateSimPane();
             setUpdateTime();
         }
     }
@@ -233,16 +214,21 @@ public class Visualization extends Application {
         createSimulation();
     }
 
+    private void updateSimPane() {
+        myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
+    }
+
     private void createSimulation() {
         try {
             mySimulation = new Configuration().getSimulation();
             myPauseButton.setSelected(true);
             createChart();
-            showSimGrid();
+            updateSimPane();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             createSimulation();
         }
+
     }
 
     private void styleButtons() {

@@ -39,9 +39,12 @@ public class Simulation {
     public void setWidth(int width) {SIMULATION_WIDTH = width;}
     public void setNeighborhood(String n){ NEIGHBORHOOD_TYPE = n; }
 
+    /*
     public void setCell(int r, int c, Cell cell){
         myGrid.get(r).set(c, cell);
     }
+
+     */
 
     public int getHeight(){ return SIMULATION_HEIGHT; }
     public int getWidth(){ return SIMULATION_WIDTH; }
