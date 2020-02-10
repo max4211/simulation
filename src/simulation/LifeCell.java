@@ -9,12 +9,13 @@ import java.util.Map;
  *  This class represents a cell in a Conway's Game of Life Simulation.
  *
  *  Possible cell states: 0 (Dead), 1 (Alive)
- *  Neighborhood Type: Moore
+ *  Default Neighborhood Type: Moore
  *  Rules:
  *  Any live cell with two or three neighbors survives.
  *  Any dead cell with three live neighbors becomes a live cell.
  *  All other live cells die in the next generation. Similarly, all other dead cells stay dead.
  *
+ * @author James Rumsey
  */
 public class LifeCell extends Cell {
 
@@ -29,18 +30,30 @@ public class LifeCell extends Cell {
         myTypeString = "Game of Life";
     }
 
+    /**
+     * Colors:
+     * White - Dead
+     * Black - Alive
+     */
     @Override
     public void createColorMap(){
         myColorMap.put(0.0, WHITE);
         myColorMap.put(1.0, BLACK);
     }
 
+    /**
+     * Initializes State mappings (Dead, Alive)
+     */
     @Override
     public void createStateMap() {
         myStateMap.put(0.0, new State("Dead", WHITE));
         myStateMap.put(1.0, new State("Alive", BLACK));
     }
 
+    /**
+     * Determines next state for cell based on rules above
+     * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
+     */
     @Override
     public void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors){
         int numAlive = 0;

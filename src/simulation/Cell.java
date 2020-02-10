@@ -5,6 +5,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Cell abstract class represents a single cell in a simulation. These
+ * Cell objects are added to the grid in Simulation in the Configuration class.
+ * All classes that extend Cell represent different simulation types and are
+ * initialized based on the specifications of the XML file input.
+ *
+ * @author James Rumsey, Max Smith, Braeden Ward
+ */
 public abstract class Cell {
     protected static final String WHITE = "#FFFFFF";
     protected static final String BLACK = "#000000";
@@ -31,6 +39,13 @@ public abstract class Cell {
     protected Map<Double, State> myStateMap = new HashMap<>();
     protected String myTypeString;
 
+    /**
+     * Constructs Cell object by creating color and state mappings (doubles to color string/State),
+     * setting myState to its initial value, and setting row and column values
+     * @param initialState: a valid double that maps to a state, dependent on cell type
+     * @param row: row the cell is in
+     * @param col: column the cell is in
+     */
     public Cell(double initialState, int row, int col) {
         createColorMap();
         createStateMap();
@@ -39,44 +54,93 @@ public abstract class Cell {
         this.myCol = col;
     }
 
+    /**
+     * Constructs a cell without an initial state, using 0.0 as the default.
+     * @param row: row the cell is in
+     * @param col: column the cell is in
+     */
     public Cell(int row, int col) {
         this(0.0, row, col);
     }
 
+    /**
+     * Checks if a cell state is valid based on simulation rules
+     */
     //protected abstract boolean checkValidState(double initialState);
 
+    /**
+     * Creates mapping of Doubles to hexadecimal color Strings
+     */
     public abstract void createColorMap();
+
+    /**
+     * Creates mapping of Doubles to State objects
+     */
     public abstract void createStateMap();
+
+    /**
+     * Determines next state of cell based on simulation rules/
+     * @param neighbors: Map with Pair keys (representing coordinates) and Cell values
+     */
     public abstract void determineNextState(Map<Pair<Integer, Integer>, Cell> neighbors);
+
+    /**
+     *
+     * @param myState
+     * @return
+     */
     public abstract double mapKey(double myState);
 
+    /**
+     * Returns simulation type as a single word string, meant for creating an
+     * XML file
+     * @return simulation type as a single-word String
+     */
     public String getTypeString(){
         return myTypeString;
     }
 
+    /**
+     * Update myState so it is now the already determined nextState.
+     * Called on all cells sequentially after nextState has been updated.
+     */
     public void updateState() { this.myState = this.nextState; }
 
+    /**
+     * @return Current state
+     */
     public double getState() { return this.myState; }
 
+    /**
+     * @return Pre-determined next state
+     */
     public double getNextState(){ return this.nextState; }
 
+    /**
+     * Set the next state of the cell
+     * @param state: a double that maps to a valid state for the cell type
+     */
     public void setNextState(double state){ this.nextState = state; }
 
+    /**
+     * Set the current state of the cell
+     * @param state: a double that maps to a valid state for the cell type
+     */
     public void setState(double state){ this.myState = state; }
 
+    /**
+     * Get the color (as a hexadecimal String) for the cell based on state
+     * @return a hexidecimal String representing a color
+     */
     public String getColor() {
         double key = mapKey(this.myState);
         return this.myColorMap.get(key);
     }
 
     /**
-     *
-     * @return map of colors and states to simulation for chart processing
+     * Get map of doubles and their corresponding State objects
+     * @return map of state objects and colors for chart processing
      */
-    public Map<Double, String> getColorMap() {
-        return this.myColorMap;
-    }
-
     public Map<Double, State> getStateMap() {
         return this.myStateMap;
     }
