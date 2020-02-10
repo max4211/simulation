@@ -158,7 +158,7 @@ public class Visualization extends Application {
 
     private void updateSimulation() {
         mySimulation.updateGrid();
-        myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
+        updateSimPane();
         myChart.populateChart(mySimulation.countStates());
     }
 
@@ -182,7 +182,7 @@ public class Visualization extends Application {
         if (updateTime < System.currentTimeMillis() - getAnimationRate()) { setUpdateTime();}
         if (System.currentTimeMillis() >= updateTime) {
             updateSimulation();
-            myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
+            updateSimPane();
             setUpdateTime();
         }
     }
@@ -201,16 +201,21 @@ public class Visualization extends Application {
         createSimulation();
     }
 
+    private void updateSimPane() {
+        myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
+    }
+
     private void createSimulation() {
         try {
             mySimulation = new Configuration().getSimulation();
             myPauseButton.setSelected(true);
             createChart();
+            updateSimPane();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             createSimulation();
         }
-        myRoot.setCenter(new SimPane(mySimulation, myRoot, myChart, myPauseButton).getPane());
+
     }
 
     private void styleButtons() {
