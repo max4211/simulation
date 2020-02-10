@@ -16,6 +16,7 @@ public class Simulation {
     protected int SIMULATION_HEIGHT;
     protected int SIMULATION_WIDTH;
     protected String NEIGHBORHOOD_TYPE;
+    protected String EDGE_TYPE = "HARD";
 
     /**
      * Constructs myGrid depending on the simulation type and according to the
@@ -44,6 +45,7 @@ public class Simulation {
     public int getWidth(){ return SIMULATION_WIDTH; }
     public Cell getCell(int r, int c){ return myGrid.get(r).get(c); }
     public String getNeighborhood(){ return NEIGHBORHOOD_TYPE; }
+    public String getEdgeType(){ return EDGE_TYPE; }
 
     public void updateGrid() {
         determineUpdates();

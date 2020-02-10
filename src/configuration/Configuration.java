@@ -50,15 +50,20 @@ public class Configuration {
     private int myWidth;
     private String mySimType;
     private String myNeighborType;
+    private String myEdgeType;
     private List<String> initialCells = new ArrayList<>();
-    private ArrayList<ArrayList<Cell>> myGrid = new ArrayList<ArrayList<Cell>>();
-    private Simulation mySimulation = new Simulation();
+    private ArrayList<ArrayList<Cell>> myGrid;
+    private Simulation mySimulation;
 
     // Neighborhoods
     private static final String DEFAULT_NEIGHBOR = "MOORE";
     private static final String MOORE = "MOORE";
     private static final String VON_NEUMANN = "VON NEUMANN";
     private static final String HEXAGONAL = "HEXAGONAL";
+
+    // Edge Types
+    private static final String HARD_EDGES = "HARD";
+    private static final String TOROIDAL_EDGES = "TOROIDAL";
 
     //Simulation Types
     private static final String GAME_OF_LIFE = "Game of Life";
@@ -75,6 +80,7 @@ public class Configuration {
     public Configuration(){
         myFile = loadFile();
         buildDocument();
+        myGrid = new ArrayList<>(myHeight);
         createSimulation();
     }
 
@@ -126,6 +132,14 @@ public class Configuration {
             this.mySimType = eElement.getElementsByTagName("type").item(0).getTextContent();
             this.myNeighborType = eElement.getElementsByTagName("neighborType").item(0).getTextContent();
 
+            try{
+                this.myEdgeType = eElement.getElementsByTagName("edgeType").item(0).getTextContent();
+            } catch(Exception e){
+                this.myEdgeType = HARD_EDGES;
+            }
+
+
+            mySimulation = initializeSim();
             // Initial cell states
             NodeList cellList = eElement.getElementsByTagName("cell");
             // check of list is right length
@@ -139,7 +153,15 @@ public class Configuration {
                 checkValidCellLocation(cellList, cellItr, initialCell);
                 initialCells.add(initialCell.getTextContent());
             }
+        }
+    }
 
+    private Simulation initializeSim(){
+        switch(myEdgeType){
+            case(TOROIDAL_EDGES):
+                return new ToroidalSimulation();
+            default:
+                return new Simulation();
         }
     }
 
@@ -208,7 +230,7 @@ public class Configuration {
                 case (PREDATOR_PREY):
                     return new PredatorPreyCell(state, row, col);
                 default:
-                    throw new IllegalArgumentException("Unexpected value: " + mySimType);
+                    throw new IllegalArgumentException("Unexpected simulation value: " + mySimType);
             }
         } catch (IllegalStateException e) {
             // TODO: Prompt for valid state in viz
